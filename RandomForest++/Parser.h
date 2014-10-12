@@ -9,7 +9,7 @@
 #ifndef __RandomForest____Parser__
 #define __RandomForest____Parser__
 
-#include "RowSet.h";
+#include "RowSet.h"
 
 namespace HRF {
     
