@@ -11,7 +11,23 @@
 
 namespace bkp {
 
-    //http://en.wikipedia.org/wiki/Generator_%28computer_programming%29#C.2B.2B
+    class RangeIter {
+    private:
+        int i_;
+    public:
+        RangeIter(int i);
+        RangeIter(const RangeIter& copyFrom);
+        
+        RangeIter& operator++();
+        RangeIter operator++(int);
+        RangeIter& operator--();
+        RangeIter operator--(int);
+        
+        int operator*() const;
+        bool operator!=(const RangeIter&);
+        bool operator==(const RangeIter&);
+    };
+    
     class Range
     {
     private:
@@ -23,16 +39,9 @@ namespace bkp {
         Range(int end);
         Range(int begin, int end);
         
-        int size();
-        
-        // Iterable functions
-        const Range& begin() const;
-        const Range& end() const;
-        
-        // Iterator functions
-        bool operator!=(const Range&) const;
-        void operator++();
-        int operator*() const;
+        int size() const;
+        RangeIter begin() const;
+        RangeIter end() const;
     };
 
 }

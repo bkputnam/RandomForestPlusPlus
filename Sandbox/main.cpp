@@ -29,7 +29,8 @@ using namespace bkp;
 using namespace std;
 
 int main(int argc, const char * argv[]) {
-    Slice<OperationCounter> s(Range(0, 10));
-    auto s2 = s.MakeSlice(5, 10);
-    OperationCounter::PrintAll();
+    Range r(0, 10);
+    RangeIter iter = r.begin();
+    RangeIter end = r.end();
+    ++iter;
 }
