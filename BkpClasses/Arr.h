@@ -55,7 +55,7 @@ namespace bkp {
         // iterator constructor
         // Note: requires size() function on TContainer to work properly
         template<typename TContainer>
-        explicit Arr(TContainer srcCtnr) : Arr(srcCtnr.size(), srcCtnr.begin(), srcCtnr.end()) { }
+        explicit Arr(const TContainer& srcCtnr) : Arr(srcCtnr.size(), srcCtnr.begin(), srcCtnr.end()) { }
         
         // destructor
         virtual ~Arr() {
