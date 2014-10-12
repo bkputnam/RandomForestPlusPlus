@@ -12,6 +12,8 @@
 #include <string>
 #include "OperationCounter.h"
 #include "Arr.h"
+#include "Range.h"
+#include "Slice.h"
 
 using std::cout;
 using std::cin;
@@ -23,11 +25,11 @@ public:
     SomeClass() { }
 };
 
+using namespace bkp;
+using namespace std;
+
 int main(int argc, const char * argv[]) {
-    using std::shared_ptr;
-    using std::make_shared;
-    using bkp::OperationCounter;
-    
-    shared_ptr<OperationCounter> s = make_shared<OperationCounter>(OperationCounter(5));
+    Slice<OperationCounter> s(Range(0, 10));
+    auto s2 = s.MakeSlice(5, 10);
     OperationCounter::PrintAll();
 }
