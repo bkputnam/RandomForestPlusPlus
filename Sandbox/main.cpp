@@ -7,7 +7,9 @@
 //
 
 #include <iostream>
+#include <iomanip>
 #include <memory>
+#include <string>
 #include "OperationCounter.h"
 #include "Arr.h"
 
@@ -22,7 +24,10 @@ public:
 };
 
 int main(int argc, const char * argv[]) {
-    bkp::ResetOperationsCounter();
-    bkp::Arr<bkp::OperationCounter> foo(5);
-    cout << bkp::OperationCounter::default_constructors << endl;
+    using std::shared_ptr;
+    using std::make_shared;
+    using bkp::OperationCounter;
+    
+    shared_ptr<OperationCounter> s = make_shared<OperationCounter>(OperationCounter(5));
+    OperationCounter::PrintAll();
 }
