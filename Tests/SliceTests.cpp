@@ -20,3 +20,82 @@ TEST(SliceTest, DefaultConstructor) {
     EXPECT_EQ(nullptr, s.begin());
     EXPECT_DEATH(s[0], "^Assertion failed: .* size_ > 0");
 }
+
+TEST(SliceTest, SizeConstructor) {
+    ResetOperationsCounter();
+    {
+        Slice<OperationCounter> s(5);
+        EXPECT_EQ(5, OperationCounter::default_constructors);
+    }
+    EXPECT_EQ(5, OperationCounter::destructors);
+}
+
+TEST(SliceTest, IteratorConstructor) {
+    ResetOperationsCounter();
+    {
+        Slice<OperationCounter> s(Range(0, 5));
+        EXPECT_EQ(5, s.size());
+        EXPECT_EQ(5, OperationCounter::int_constructors);
+        for (int i=0; i<5; ++i) {
+            EXPECT_EQ(i, s[i].data);
+        }
+    }
+    EXPECT_EQ(5, OperationCounter::destructors);
+}
+
+TEST(SliceTest, ArrMoveConstructor) {
+    ResetOperationsCounter();
+    {
+        Arr<OperationCounter> a(Range(0, 5));
+        OperationCounter* dataPtr = a.begin();
+        
+        Slice<OperationCounter> s(std::move(a));
+        EXPECT_EQ(5, OperationCounter::int_constructors);
+        EXPECT_EQ(nullptr, a.begin());
+        EXPECT_EQ(0, a.size());
+        EXPECT_EQ(5, s.size());
+        EXPECT_EQ(dataPtr, s.begin());
+        for (int i=0; i<5; ++i) {
+            EXPECT_EQ(i, s[i].data);
+        }
+    }
+    EXPECT_EQ(5, OperationCounter::destructors);
+}
+
+TEST(SliceTest, Slicing) {
+    ResetOperationsCounter();
+    {
+        Slice<OperationCounter> s2;
+        {
+            Slice<OperationCounter> s(Range(0, 10));
+            s2 = s.MakeSlice(5, 10);
+        }
+        EXPECT_EQ(10, OperationCounter::int_constructors);
+        EXPECT_EQ(0, OperationCounter::destructors);
+        EXPECT_EQ(5, s2.size());
+        for (int i=0; i<5; i++) {
+            EXPECT_EQ(i+5, s2[i].data);
+        }
+    }
+    EXPECT_EQ(10, OperationCounter::destructors);
+}
+
+TEST(SliceTest, Iterating) {
+    ResetOperationsCounter();
+    {
+        Slice<OperationCounter> s2;
+        {
+            Slice<OperationCounter> s1(Range(0, 10));
+            s2 = s1.MakeSlice(5, 10);
+        }
+        auto iter = s2.begin();
+        auto end = s2.end();
+        int index = 0;
+        while (iter != end) {
+            EXPECT_EQ(index+5, s2[index].data);
+            index++;
+            iter++;
+        }
+        EXPECT_EQ(index, 5);
+    }
+}
