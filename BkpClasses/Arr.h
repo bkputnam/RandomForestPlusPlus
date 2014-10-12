@@ -57,6 +57,7 @@ namespace bkp {
         template<typename TContainer>
         Arr(TContainer srcCtnr) : Arr(srcCtnr.size(), srcCtnr.begin(), srcCtnr.end()) { }
         
+        // destructor
         virtual ~Arr() {
             DestructData();
         }
