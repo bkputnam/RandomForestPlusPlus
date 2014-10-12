@@ -25,7 +25,7 @@ namespace bkp {
         { }
         
         // size constructor: pass size to Arr<T>(int size) constructor to default-initialize backing_arr_
-        Slice(int size) :
+        explicit Slice(int size) :
         backing_arr_(std::make_shared<Arr<T>>(Arr<T>(size))),
         size_(backing_arr_->size()),
         start_ptr_(backing_arr_->begin())
@@ -33,7 +33,7 @@ namespace bkp {
         
         // iterator constructor: pass srcContainer to Arr<T>(TContainer) constructor
         template<typename TContainer>
-        Slice(TContainer srcCtnr)
+        explicit Slice(TContainer srcCtnr)
         : backing_arr_(std::make_shared<Arr<T>>(Arr<T>(srcCtnr))),
         size_(backing_arr_->size()),
         start_ptr_(backing_arr_->begin())

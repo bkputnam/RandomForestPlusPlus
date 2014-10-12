@@ -46,7 +46,7 @@ namespace bkp {
         Arr() : size_(0), data_(nullptr) { }
         
         // size constructor: initialize size items in data with T's default constructor
-        Arr(int size) : size_(size), data_(AllocData(size)) {
+        explicit Arr(int size) : size_(size), data_(AllocData(size)) {
             for (int i=0; i<size_; ++i) {
                 new(&data_[i]) T();
             }
@@ -55,7 +55,7 @@ namespace bkp {
         // iterator constructor
         // Note: requires size() function on TContainer to work properly
         template<typename TContainer>
-        Arr(TContainer srcCtnr) : Arr(srcCtnr.size(), srcCtnr.begin(), srcCtnr.end()) { }
+        explicit Arr(TContainer srcCtnr) : Arr(srcCtnr.size(), srcCtnr.begin(), srcCtnr.end()) { }
         
         // destructor
         virtual ~Arr() {
