@@ -11,9 +11,7 @@
 		3D9808E319E98C2B0016267F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9808DC19E98C2B0016267F /* main.cpp */; };
 		3D9808E619E98C500016267F /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9808A419E8B7070016267F /* gtest.framework */; };
 		3D9808EE19E98D080016267F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9808ED19E98D080016267F /* main.cpp */; };
-		3D98090A19E9A5180016267F /* Arr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D98090619E9A5180016267F /* Arr.cpp */; };
 		3D98090B19E9A5180016267F /* Arr.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D98090719E9A5180016267F /* Arr.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3D98090C19E9A5180016267F /* Slice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D98090819E9A5180016267F /* Slice.cpp */; };
 		3D98090D19E9A5180016267F /* Slice.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D98090919E9A5180016267F /* Slice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D98091219E9A5F40016267F /* OperationCounter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D98090E19E9A5F40016267F /* OperationCounter.cpp */; };
 		3D98091319E9A5F40016267F /* OperationCounter.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D98090F19E9A5F40016267F /* OperationCounter.h */; };
@@ -94,9 +92,7 @@
 		3D9808EB19E98D080016267F /* Sandbox */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Sandbox; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D9808ED19E98D080016267F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		3D9808F819E9A0120016267F /* libBkpClasses.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libBkpClasses.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		3D98090619E9A5180016267F /* Arr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Arr.cpp; sourceTree = "<group>"; };
 		3D98090719E9A5180016267F /* Arr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Arr.h; sourceTree = "<group>"; };
-		3D98090819E9A5180016267F /* Slice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Slice.cpp; sourceTree = "<group>"; };
 		3D98090919E9A5180016267F /* Slice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Slice.h; sourceTree = "<group>"; };
 		3D98090E19E9A5F40016267F /* OperationCounter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OperationCounter.cpp; sourceTree = "<group>"; };
 		3D98090F19E9A5F40016267F /* OperationCounter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationCounter.h; sourceTree = "<group>"; };
@@ -181,9 +177,7 @@
 				3D98090F19E9A5F40016267F /* OperationCounter.h */,
 				3D98091019E9A5F40016267F /* Range.cpp */,
 				3D98091119E9A5F40016267F /* Range.h */,
-				3D98090619E9A5180016267F /* Arr.cpp */,
 				3D98090719E9A5180016267F /* Arr.h */,
-				3D98090819E9A5180016267F /* Slice.cpp */,
 				3D98090919E9A5180016267F /* Slice.h */,
 			);
 			path = BkpClasses;
@@ -412,8 +406,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D98091219E9A5F40016267F /* OperationCounter.cpp in Sources */,
-				3D98090A19E9A5180016267F /* Arr.cpp in Sources */,
-				3D98090C19E9A5180016267F /* Slice.cpp in Sources */,
 				3D98091419E9A5F40016267F /* Range.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -621,6 +613,7 @@
 				3D9808D719E98BE90016267F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3D9808EF19E98D080016267F /* Build configuration list for PBXNativeTarget "Sandbox" */ = {
 			isa = XCConfigurationList;
@@ -629,6 +622,7 @@
 				3D9808F119E98D080016267F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3D98090019E9A0130016267F /* Build configuration list for PBXNativeTarget "BkpClasses" */ = {
 			isa = XCConfigurationList;
@@ -637,6 +631,7 @@
 				3D98090219E9A0130016267F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3DEF92EC19DF867D00E1110F /* Build configuration list for PBXProject "RandomForest++" */ = {
 			isa = XCConfigurationList;
