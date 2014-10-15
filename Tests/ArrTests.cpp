@@ -14,58 +14,123 @@
 #include "OperationCounter.h"
 #include "Range.h"
 
+using namespace bkp;
+
 TEST(ArrTest, IntConstructor) {
-    bkp::ResetOperationsCounter();
+    ResetOperationsCounter();
     {
-        bkp::Arr<bkp::OperationCounter> arr(bkp::Range(0, 5));
-        EXPECT_EQ(5, bkp::OperationCounter::int_constructors);
+        Arr<OperationCounter> arr(Range(0, 5));
+        EXPECT_EQ(5, OperationCounter::int_constructors);
     }
-    EXPECT_EQ(5, bkp::OperationCounter::destructors);
+    EXPECT_EQ(5, OperationCounter::destructors);
 }
 
 TEST(ArrTest, KitchenSink) {
-    bkp::ResetOperationsCounter();
+    ResetOperationsCounter();
     {
         // int constructor
-        bkp::Arr<bkp::OperationCounter> arr(bkp::Range(0, 5));
-        EXPECT_EQ(5, bkp::OperationCounter::int_constructors);
+        Arr<OperationCounter> arr(Range(0, 5));
+        EXPECT_EQ(5, OperationCounter::int_constructors);
 
         // copy constructor
-        bkp::Arr<bkp::OperationCounter> arr2(arr);
-        EXPECT_EQ(5, bkp::OperationCounter::copy_constructors);
+        Arr<OperationCounter> arr2(arr);
+        EXPECT_EQ(5, OperationCounter::copy_constructors);
         
         // copy assignment
-        bkp::Arr<bkp::OperationCounter> arr3(bkp::Range(0, 5));
+        Arr<OperationCounter> arr3(Range(0, 5));
         arr3 = arr2; //note: will use T's copy-assignment b/c arr3.size()==arr2.size()
-        EXPECT_EQ(10, bkp::OperationCounter::int_constructors);
-        EXPECT_EQ(5, bkp::OperationCounter::copy_assignments);
+        EXPECT_EQ(10, OperationCounter::int_constructors);
+        EXPECT_EQ(5, OperationCounter::copy_assignments);
         
         // copy assignment 2
-        bkp::Arr<bkp::OperationCounter> arr4;
+        Arr<OperationCounter> arr4;
         arr4 = arr3; //note: will use T's copy-constructor b/c arr4.size()!=arr3.size()
-        EXPECT_EQ(10, bkp::OperationCounter::copy_constructors);
+        EXPECT_EQ(10, OperationCounter::copy_constructors);
         
         // move constructor
-        bkp::Arr<bkp::OperationCounter> arr5(std::move(arr));
-        EXPECT_EQ(0, bkp::OperationCounter::move_constructors);
+        Arr<OperationCounter> arr5(std::move(arr));
+        EXPECT_EQ(0, OperationCounter::move_constructors);
 
         // move assignment
-        bkp::Arr<bkp::OperationCounter> arr6;
+        Arr<OperationCounter> arr6;
         arr6 = std::move(arr2);
-        EXPECT_EQ(0, bkp::OperationCounter::move_assignments);
+        EXPECT_EQ(0, OperationCounter::move_assignments);
         
         // default constructor
-        bkp::Arr<bkp::OperationCounter> arr7(5);
-        EXPECT_EQ(5, bkp::OperationCounter::default_constructors);
+        Arr<OperationCounter> arr7(5);
+        EXPECT_EQ(5, OperationCounter::default_constructors);
     }
-    EXPECT_EQ(5, bkp::OperationCounter::default_constructors);
-    EXPECT_EQ(10, bkp::OperationCounter::int_constructors);
-    EXPECT_EQ(25, bkp::OperationCounter::instance_count);
-    EXPECT_EQ(25, bkp::OperationCounter::destructors);
-    EXPECT_EQ(10, bkp::OperationCounter::copy_constructors);
-    EXPECT_EQ(0, bkp::OperationCounter::move_constructors);
-    EXPECT_EQ(5, bkp::OperationCounter::copy_assignments);
-    EXPECT_EQ(0, bkp::OperationCounter::move_assignments);
+    EXPECT_EQ(5, OperationCounter::default_constructors);
+    EXPECT_EQ(10, OperationCounter::int_constructors);
+    EXPECT_EQ(25, OperationCounter::instance_count);
+    EXPECT_EQ(25, OperationCounter::destructors);
+    EXPECT_EQ(10, OperationCounter::copy_constructors);
+    EXPECT_EQ(0, OperationCounter::move_constructors);
+    EXPECT_EQ(5, OperationCounter::copy_assignments);
+    EXPECT_EQ(0, OperationCounter::move_assignments);
+}
+
+TEST(ArrTest, ArrayCopyConstructor) {
+    ResetOperationsCounter();
+    {
+        Arr<OperationCounter> arr;
+        {
+            OperationCounter ops[] = {
+                OperationCounter(0),
+                OperationCounter(1),
+                OperationCounter(2),
+                OperationCounter(3),
+                OperationCounter(4)
+            };
+            arr = Arr<OperationCounter>(ops);
+            EXPECT_EQ(5, OperationCounter::int_constructors);
+            EXPECT_EQ(5, OperationCounter::copy_constructors);
+            EXPECT_EQ(0, OperationCounter::destructors);
+        }
+        EXPECT_EQ(5, OperationCounter::destructors);
+        
+        for (int i=0; i<5; i++) {
+            EXPECT_EQ(i, arr[i].data);
+        }
+    }
+    EXPECT_EQ(10, OperationCounter::destructors);
+}
+
+TEST(ArrTest, ArrayMoveConstructor) {
+    ResetOperationsCounter();
+    {
+        Arr<OperationCounter> arr;
+        {
+            OperationCounter ops[] = {
+                OperationCounter(0),
+                OperationCounter(1),
+                OperationCounter(2),
+                OperationCounter(3),
+                OperationCounter(4)
+            };
+            arr = Arr<OperationCounter>(std::move(ops));
+            EXPECT_EQ(5, OperationCounter::int_constructors);
+            EXPECT_EQ(5, OperationCounter::move_constructors);
+            EXPECT_EQ(0, OperationCounter::destructors);
+        }
+        EXPECT_EQ(5, OperationCounter::destructors);
+        
+        for (int i=0; i<5; i++) {
+            EXPECT_EQ(i, arr[i].data);
+        }
+    }
+    EXPECT_EQ(10, OperationCounter::destructors);
+}
+
+TEST(ArrTest, InitializerListConstructor) {
+    ResetOperationsCounter();
+    {
+        Arr<int> arr({1, 2, 3, 4, 5});
+        
+        for (int i=0; i<5; i++) {
+            EXPECT_EQ(i+1, arr[i]);
+        }
+    }
 }
 
 #endif /* defined(__RandomForest__Tests__ArrTests__) */
