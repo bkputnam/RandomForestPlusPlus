@@ -13,7 +13,6 @@ namespace bkp {
     // ---------- RangeIter ----------
     
     RangeIter::RangeIter(int i) : i_(i) { }
-    RangeIter::RangeIter(const RangeIter& copyFrom) : i_(copyFrom.i_) { }
     
     RangeIter& RangeIter::operator++() { ++i_; return *this; }
     RangeIter& RangeIter::operator--() { --i_; return *this; }
@@ -31,8 +30,8 @@ namespace bkp {
     
     int RangeIter::operator*() const { return i_; }
     
-    bool RangeIter::operator!=(const RangeIter& other) { return i_ != other.i_; }
-    bool RangeIter::operator==(const RangeIter& other) { return i_ == other.i_; }
+    bool RangeIter::operator!=(const RangeIter& other) const { return i_ != other.i_; }
+    bool RangeIter::operator==(const RangeIter& other) const { return i_ == other.i_; }
 
     
     // ---------- Range ----------
