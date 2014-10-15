@@ -16,7 +16,6 @@ namespace bkp {
         int i_;
     public:
         RangeIter(int i);
-        RangeIter(const RangeIter& copyFrom);
         
         RangeIter& operator++();
         RangeIter operator++(int);
@@ -24,8 +23,8 @@ namespace bkp {
         RangeIter operator--(int);
         
         int operator*() const;
-        bool operator!=(const RangeIter&);
-        bool operator==(const RangeIter&);
+        bool operator!=(const RangeIter&) const;
+        bool operator==(const RangeIter&) const;
     };
     
     class Range
