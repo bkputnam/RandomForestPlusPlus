@@ -133,4 +133,12 @@ TEST(ArrTest, InitializerListConstructor) {
     }
 }
 
+TEST(ArrTest, IteratorConstructor) {
+    Arr<int> arr(Range(0, 5));
+    EXPECT_EQ(5, arr.size());
+    for (int i=0; i<5; i++) {
+        EXPECT_EQ(i, arr[i]);
+    }
+}
+
 #endif /* defined(__RandomForest__Tests__ArrTests__) */
