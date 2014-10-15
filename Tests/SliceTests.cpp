@@ -62,6 +62,20 @@ TEST(SliceTest, ArrMoveConstructor) {
     EXPECT_EQ(5, OperationCounter::destructors);
 }
 
+TEST(SliceTest, SharedPtrConstructor) {
+    ResetOperationsCounter();
+    {
+        Slice<OperationCounter> s;
+        {
+            Slice<OperationCounter> s2(Range(0, 5));
+            s = Slice<OperationCounter>(s2.backing_arr());
+            EXPECT_EQ(5, OperationCounter::int_constructors);
+        }
+        EXPECT_EQ(0, OperationCounter::destructors); // test that the backing arr is not deleted prematurely
+    }
+    EXPECT_EQ(5, OperationCounter::destructors);
+}
+
 TEST(SliceTest, Slicing) {
     ResetOperationsCounter();
     {
