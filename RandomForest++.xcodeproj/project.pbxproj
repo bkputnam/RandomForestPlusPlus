@@ -23,6 +23,9 @@
 		3D98092219E9A96D0016267F /* SliceTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D98092019E9A96D0016267F /* SliceTests.cpp */; };
 		3D9BE33A19EB3DE100536407 /* ArrMask.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D9BE33819EB3DE100536407 /* ArrMask.h */; };
 		3D9BE34819EDD68300536407 /* ArrMaskTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9BE34619EDD68300536407 /* ArrMaskTests.cpp */; };
+		3D9BE34B19EEE89D00536407 /* Timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9BE34919EEE89D00536407 /* Timer.cpp */; };
+		3D9BE35119EEFC1400536407 /* FmtDurationTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9BE35019EEFC1400536407 /* FmtDurationTests.cpp */; };
+		3D9BE35419EEFD8000536407 /* Timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9BE34919EEE89D00536407 /* Timer.cpp */; };
 		3DEF92F519DF867D00E1110F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DEF92F419DF867D00E1110F /* main.cpp */; };
 		3DEF92FF19DFBC1100E1110F /* libcsv_parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DEF92FD19DFBC1100E1110F /* libcsv_parser.cpp */; };
 		3DEF930D19E0BB8500E1110F /* training.csv in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3DEF930319DFBE1C00E1110F /* training.csv */; };
@@ -103,6 +106,9 @@
 		3D98092019E9A96D0016267F /* SliceTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SliceTests.cpp; sourceTree = "<group>"; };
 		3D9BE33819EB3DE100536407 /* ArrMask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArrMask.h; sourceTree = "<group>"; };
 		3D9BE34619EDD68300536407 /* ArrMaskTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ArrMaskTests.cpp; sourceTree = "<group>"; };
+		3D9BE34919EEE89D00536407 /* Timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timer.cpp; sourceTree = "<group>"; };
+		3D9BE34A19EEE89D00536407 /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timer.h; sourceTree = "<group>"; };
+		3D9BE35019EEFC1400536407 /* FmtDurationTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FmtDurationTests.cpp; sourceTree = "<group>"; };
 		3DEF92F119DF867D00E1110F /* RandomForest++ */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "RandomForest++"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DEF92F419DF867D00E1110F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		3DEF92FD19DFBC1100E1110F /* libcsv_parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = libcsv_parser.cpp; sourceTree = "<group>"; };
@@ -163,6 +169,7 @@
 				3D9808DC19E98C2B0016267F /* main.cpp */,
 				3D98092019E9A96D0016267F /* SliceTests.cpp */,
 				3D9BE34619EDD68300536407 /* ArrMaskTests.cpp */,
+				3D9BE35019EEFC1400536407 /* FmtDurationTests.cpp */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -225,6 +232,8 @@
 				3DEF931219E2F69800E1110F /* Parser.h */,
 				3DEF931419E3911B00E1110F /* RowSet.cpp */,
 				3DEF931519E3911B00E1110F /* RowSet.h */,
+				3D9BE34919EEE89D00536407 /* Timer.cpp */,
+				3D9BE34A19EEE89D00536407 /* Timer.h */,
 			);
 			path = "RandomForest++";
 			sourceTree = "<group>";
@@ -396,6 +405,8 @@
 			files = (
 				3D9808E219E98C2B0016267F /* ArrTests.cpp in Sources */,
 				3D9BE34819EDD68300536407 /* ArrMaskTests.cpp in Sources */,
+				3D9BE35119EEFC1400536407 /* FmtDurationTests.cpp in Sources */,
+				3D9BE35419EEFD8000536407 /* Timer.cpp in Sources */,
 				3D9808E319E98C2B0016267F /* main.cpp in Sources */,
 				3D98092219E9A96D0016267F /* SliceTests.cpp in Sources */,
 			);
@@ -425,6 +436,7 @@
 				3DEF931319E2F69800E1110F /* Parser.cpp in Sources */,
 				3DEF92F519DF867D00E1110F /* main.cpp in Sources */,
 				3DEF92FF19DFBC1100E1110F /* libcsv_parser.cpp in Sources */,
+				3D9BE34B19EEE89D00536407 /* Timer.cpp in Sources */,
 				3DEF931619E3911B00E1110F /* RowSet.cpp in Sources */,
 				3DEF931019E0BC6C00E1110F /* HiggsCsvRow.cpp in Sources */,
 			);
