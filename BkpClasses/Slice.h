@@ -19,10 +19,7 @@ namespace bkp {
     public:
         
         // default constructor: 0-size slice to null
-        Slice() :
-        size_(0),
-        start_ptr_(nullptr)
-        { }
+        Slice() :size_(0), start_ptr_(nullptr) { }
         
         // size constructor: pass size to Arr<T>(int size) constructor to default-initialize backing_arr_
         explicit Slice(int size) :
@@ -41,13 +38,22 @@ namespace bkp {
         
         // Arr-move constructor: use an rvalue reference to an Arr<T> to initialize self.
         // Passed Arr<T> will be unusable after this operation.
-        Slice(Arr<T>&& srcArr) :
+        explicit Slice(Arr<T>&& srcArr) :
         backing_arr_(std::make_shared<Arr<T>>(Arr<T>(std::move(srcArr)))),
         size_(backing_arr_->size()),
         start_ptr_(backing_arr_->begin())
         { }
         
+        // Shared-ptr constructor: use an existing Arr<T> that is already
+        // managed by a std::shared_ptr
+        explicit Slice(std::shared_ptr<Arr<T>> srcArr) :
+        backing_arr_(srcArr),
+        size_(backing_arr_->size()),
+        start_ptr_(backing_arr_->begin())
+        { }
+        
         int size() { return size_; }
+        std::shared_ptr<Arr<T>> backing_arr() { return backing_arr_; }
         
         T& operator[](int i) { return index(i); }
         const T& operator[](int i) const { return index(i); }
