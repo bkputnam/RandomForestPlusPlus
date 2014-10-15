@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <cassert>
 #include <iterator>
+#include <initializer_list>
 
 namespace bkp {
     
@@ -49,6 +50,25 @@ namespace bkp {
         explicit Arr(int size) : size_(size), data_(AllocData(size)) {
             for (int i=0; i<size_; ++i) {
                 new(&data_[i]) T();
+            }
+        }
+        
+        // array-copy constructor (must be a type with a size; can't use a plain pointer)
+        template<int arr_size>
+        explicit Arr(const T (&src_arr)[arr_size]) : Arr(arr_size, std::begin(src_arr), std::end(src_arr)) { }
+        
+        // initializer lists - fancy new C++11 stuff!
+        Arr(std::initializer_list<T> l) : Arr(static_cast<int>(l.size()), l.begin(), l.end()) { }
+        
+        // array-move constructor. Can't really move the array, but we can move each item in the array
+        // (note: uses T's move-constructor, not its move-assignment)
+        template<int arr_size>
+        explicit Arr(T(&&src_arr)[arr_size]) :
+        size_(arr_size),
+        data_(AllocData(arr_size))
+        {
+            for (int i=0; i<arr_size; i++) {
+                new(&data_[i]) T(std::move(src_arr[i]));
             }
         }
         
@@ -118,8 +138,14 @@ namespace bkp {
         
         int size() const { return size_; }
         
-        T& operator[](int i) { return index(i); }
-        const T& operator[](int i) const { return index(i); }
+        T& operator[](int i) {
+            assert(i >= 0 && i < size_);
+            return data_[i];
+        }
+        const T& operator[](int i) const {
+            assert(i >= 0 && i < size_);
+            return data_[i];
+        }
         
         T* begin() { return data_; }
         const T* begin() const { return data_; }
@@ -156,11 +182,6 @@ namespace bkp {
                 ++iter;
                 ++dataPtr;
             }
-        }
-        
-        inline T& index(int i) {
-            assert(i >= 0 && i < size_);
-            return data_[i];
         }
         
         T* AllocData(int size) {
