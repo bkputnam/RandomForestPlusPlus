@@ -21,6 +21,8 @@
 		3D98091919E9A7330016267F /* libBkpClasses.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9808F819E9A0120016267F /* libBkpClasses.a */; };
 		3D98091C19E9A73D0016267F /* libBkpClasses.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9808F819E9A0120016267F /* libBkpClasses.a */; };
 		3D98092219E9A96D0016267F /* SliceTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D98092019E9A96D0016267F /* SliceTests.cpp */; };
+		3D9BE33A19EB3DE100536407 /* ArrMask.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D9BE33819EB3DE100536407 /* ArrMask.h */; };
+		3D9BE34819EDD68300536407 /* ArrMaskTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9BE34619EDD68300536407 /* ArrMaskTests.cpp */; };
 		3DEF92F519DF867D00E1110F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DEF92F419DF867D00E1110F /* main.cpp */; };
 		3DEF92FF19DFBC1100E1110F /* libcsv_parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DEF92FD19DFBC1100E1110F /* libcsv_parser.cpp */; };
 		3DEF930D19E0BB8500E1110F /* training.csv in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3DEF930319DFBE1C00E1110F /* training.csv */; };
@@ -99,6 +101,8 @@
 		3D98091019E9A5F40016267F /* Range.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Range.cpp; sourceTree = "<group>"; };
 		3D98091119E9A5F40016267F /* Range.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Range.h; sourceTree = "<group>"; };
 		3D98092019E9A96D0016267F /* SliceTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SliceTests.cpp; sourceTree = "<group>"; };
+		3D9BE33819EB3DE100536407 /* ArrMask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArrMask.h; sourceTree = "<group>"; };
+		3D9BE34619EDD68300536407 /* ArrMaskTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ArrMaskTests.cpp; sourceTree = "<group>"; };
 		3DEF92F119DF867D00E1110F /* RandomForest++ */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "RandomForest++"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DEF92F419DF867D00E1110F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		3DEF92FD19DFBC1100E1110F /* libcsv_parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = libcsv_parser.cpp; sourceTree = "<group>"; };
@@ -158,6 +162,7 @@
 				3D9808DA19E98C2B0016267F /* ArrTests.cpp */,
 				3D9808DC19E98C2B0016267F /* main.cpp */,
 				3D98092019E9A96D0016267F /* SliceTests.cpp */,
+				3D9BE34619EDD68300536407 /* ArrMaskTests.cpp */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -179,6 +184,7 @@
 				3D98091119E9A5F40016267F /* Range.h */,
 				3D98090719E9A5180016267F /* Arr.h */,
 				3D98090919E9A5180016267F /* Slice.h */,
+				3D9BE33819EB3DE100536407 /* ArrMask.h */,
 			);
 			path = BkpClasses;
 			sourceTree = "<group>";
@@ -262,6 +268,7 @@
 				3D98091319E9A5F40016267F /* OperationCounter.h in Headers */,
 				3D98091519E9A5F40016267F /* Range.h in Headers */,
 				3D98090D19E9A5180016267F /* Slice.h in Headers */,
+				3D9BE33A19EB3DE100536407 /* ArrMask.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -388,6 +395,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D9808E219E98C2B0016267F /* ArrTests.cpp in Sources */,
+				3D9BE34819EDD68300536407 /* ArrMaskTests.cpp in Sources */,
 				3D9808E319E98C2B0016267F /* main.cpp in Sources */,
 				3D98092219E9A96D0016267F /* SliceTests.cpp in Sources */,
 			);
