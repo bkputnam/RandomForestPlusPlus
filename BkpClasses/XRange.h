@@ -20,7 +20,7 @@ namespace bkp {
         const T end_;
         
     public:
-        class Iterator : public std::iterator<std::input_iterator_tag, T, T, T*, T> {
+        class Iterator : public std::iterator<std::input_iterator_tag, T, T, T*, T&> {
             
         public:
             typedef T value_type;
