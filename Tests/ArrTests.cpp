@@ -12,14 +12,14 @@
 #include "Arr.h"
 #include <gtest/gtest.h>
 #include "OperationCounter.h"
-#include "Range.h"
+#include "XRange.h"
 
 using namespace bkp;
 
 TEST(ArrTest, IntConstructor) {
     ResetOperationsCounter();
     {
-        Arr<OperationCounter> arr(Range(0, 5));
+        Arr<OperationCounter> arr(XRange(0, 5));
         EXPECT_EQ(5, OperationCounter::int_constructors);
     }
     EXPECT_EQ(5, OperationCounter::destructors);
@@ -29,7 +29,7 @@ TEST(ArrTest, KitchenSink) {
     ResetOperationsCounter();
     {
         // int constructor
-        Arr<OperationCounter> arr(Range(0, 5));
+        Arr<OperationCounter> arr(XRange(0, 5));
         EXPECT_EQ(5, OperationCounter::int_constructors);
 
         // copy constructor
@@ -37,7 +37,7 @@ TEST(ArrTest, KitchenSink) {
         EXPECT_EQ(5, OperationCounter::copy_constructors);
         
         // copy assignment
-        Arr<OperationCounter> arr3(Range(0, 5));
+        Arr<OperationCounter> arr3(XRange(0, 5));
         arr3 = arr2; //note: will use T's copy-assignment b/c arr3.size()==arr2.size()
         EXPECT_EQ(10, OperationCounter::int_constructors);
         EXPECT_EQ(5, OperationCounter::copy_assignments);
@@ -134,7 +134,7 @@ TEST(ArrTest, InitializerListConstructor) {
 }
 
 TEST(ArrTest, IteratorConstructor) {
-    Arr<int> arr(Range(0, 5));
+    Arr<int> arr(XRange(0, 5));
     EXPECT_EQ(5, arr.size());
     for (int i=0; i<5; i++) {
         EXPECT_EQ(i, arr[i]);

@@ -9,7 +9,7 @@
 #include <gtest/gtest.h>
 #include "Slice.h"
 #include "OperationCounter.h"
-#include "Range.h"
+#include "XRange.h"
 
 using namespace bkp;
 
@@ -33,7 +33,7 @@ TEST(SliceTest, SizeConstructor) {
 TEST(SliceTest, IteratorConstructor) {
     ResetOperationsCounter();
     {
-        Slice<OperationCounter> s(Range(0, 5));
+        Slice<OperationCounter> s(XRange(0, 5));
         EXPECT_EQ(5, s.size());
         EXPECT_EQ(5, OperationCounter::int_constructors);
         for (int i=0; i<5; ++i) {
@@ -46,7 +46,7 @@ TEST(SliceTest, IteratorConstructor) {
 TEST(SliceTest, ArrMoveConstructor) {
     ResetOperationsCounter();
     {
-        Arr<OperationCounter> a(Range(0, 5));
+        Arr<OperationCounter> a(XRange(0, 5));
         OperationCounter* dataPtr = a.begin();
         
         Slice<OperationCounter> s(std::move(a));
@@ -67,7 +67,7 @@ TEST(SliceTest, SharedPtrConstructor) {
     {
         Slice<OperationCounter> s;
         {
-            Slice<OperationCounter> s2(Range(0, 5));
+            Slice<OperationCounter> s2(XRange(0, 5));
             s = Slice<OperationCounter>(s2.backing_arr());
             EXPECT_EQ(5, OperationCounter::int_constructors);
         }
@@ -81,7 +81,7 @@ TEST(SliceTest, Slicing) {
     {
         Slice<OperationCounter> s2;
         {
-            Slice<OperationCounter> s(Range(0, 10));
+            Slice<OperationCounter> s(XRange(0, 10));
             s2 = s.MakeSlice(5, 10);
         }
         EXPECT_EQ(10, OperationCounter::int_constructors);
@@ -99,7 +99,7 @@ TEST(SliceTest, Iterating) {
     {
         Slice<OperationCounter> s2;
         {
-            Slice<OperationCounter> s1(Range(0, 10));
+            Slice<OperationCounter> s1(XRange(0, 10));
             s2 = s1.MakeSlice(5, 10);
         }
         auto iter = s2.begin();

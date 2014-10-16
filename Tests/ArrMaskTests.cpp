@@ -8,7 +8,7 @@
 
 #include <gtest/gtest.h>
 #include "OperationCounter.h"
-#include "Range.h"
+#include "XRange.h"
 #include "ArrMask.h"
 
 using namespace bkp;
@@ -27,7 +27,7 @@ TEST(ArrMaskTests, DefaultConstructor) {
 TEST(ArrMaskTests, ArrMoveConstructor) {
     ResetOperationsCounter();
     {
-        Arr<OperationCounter> arr1(Range(0, 5));
+        Arr<OperationCounter> arr1(XRange(0, 5));
         Arr<OperationCounter> arr2(arr1);
         EXPECT_EQ(5, OperationCounter::int_constructors);
         EXPECT_EQ(5, OperationCounter::copy_constructors);
@@ -47,7 +47,7 @@ TEST(ArrMaskTests, SharedPtrConstructor) {
     {
         ArrMask<OperationCounter> mask;
         {
-            auto shared_arr_ptr = std::make_shared<Arr<OperationCounter>>(Arr<OperationCounter>(Range(0, 5)));
+            auto shared_arr_ptr = std::make_shared<Arr<OperationCounter>>(Arr<OperationCounter>(XRange(0, 5)));
             mask = ArrMask<OperationCounter>(shared_arr_ptr);
         }
         EXPECT_EQ(5, OperationCounter::int_constructors);
@@ -65,7 +65,7 @@ TEST(ArrMaskTests, SharedPtrConstructor) {
 TEST(ArrMaskTests, FilteredArrMoveConstructor) {
     ResetOperationsCounter();
     {
-        Arr<OperationCounter> arr1(Range(0, 5));
+        Arr<OperationCounter> arr1(XRange(0, 5));
         Arr<OperationCounter> arr2(arr1);
         EXPECT_EQ(5, OperationCounter::int_constructors);
         EXPECT_EQ(5, OperationCounter::copy_constructors);
@@ -88,7 +88,7 @@ TEST(ArrMaskTests, FilteredSharedPtrConstructor) {
         ArrMask<OperationCounter> mask;
         {
             Arr<bool> filter({true, true, false, true, false});
-            auto shared_arr_ptr = std::make_shared<Arr<OperationCounter>>(Arr<OperationCounter>(Range(0, 5)));
+            auto shared_arr_ptr = std::make_shared<Arr<OperationCounter>>(Arr<OperationCounter>(XRange(0, 5)));
             mask = ArrMask<OperationCounter>(shared_arr_ptr, filter);
         }
         EXPECT_EQ(5, OperationCounter::int_constructors);
@@ -107,7 +107,7 @@ TEST(ArrMaskTests, FilteredSharedPtrConstructor) {
 TEST(ArrMaskTests, FilterFn) {
     ResetOperationsCounter();
     {
-        ArrMask<OperationCounter> mask1(Arr<OperationCounter>(Range(0, 5)));
+        ArrMask<OperationCounter> mask1(Arr<OperationCounter>(XRange(0, 5)));
         ArrMask<OperationCounter> mask2 = mask1.Filter(Arr<bool>({true, true, false, true, false}));
         
         EXPECT_EQ(5, OperationCounter::instance_count);

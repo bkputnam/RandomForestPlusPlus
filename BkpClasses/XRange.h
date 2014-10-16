@@ -14,10 +14,10 @@
 namespace bkp {
 
     template<typename T>
-    class XRange {
+    class GenericRange {
     private:
-        T begin_;
-        T end_;
+        const T begin_;
+        const T end_;
         
     public:
         class Iterator : public std::iterator<std::input_iterator_tag, T, T, T*, T> {
@@ -87,19 +87,21 @@ namespace bkp {
             //    // this is supposed to return a reference instead of a value_type, but
             //    // that isn't possible here because that doesn't exist in memory
             //    value_type operator[](size_type i) const { return value_ + i; }
-        };
+        }; // end class Iterator
         
         
-        XRange(T begin, T end) : begin_(begin), end_(end) { }
+        GenericRange(T begin, T end) : begin_(begin), end_(end) { }
         
-        Iterator begin() { return Iterator(begin_); }
-        Iterator end() { return Iterator(end_); }
+        Iterator begin() const { return Iterator(begin_); }
+        Iterator end() const { return Iterator(end_); }
         
         static Iterator begin(T i) { return Iterator(i); }
         static Iterator end(T i) { return Iterator(i); }
         
-        typename Iterator::difference_type size() { return end() - begin(); }
+        typename Iterator::difference_type size() const { return end_ - begin_; }
     };
+    
+    typedef GenericRange<int> XRange;
 
 }
     
