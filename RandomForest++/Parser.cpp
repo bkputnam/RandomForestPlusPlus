@@ -6,28 +6,38 @@
 //  Copyright (c) 2014 Brian Putnam. All rights reserved.
 //
 
-#include "Parser.h"
-#include "HiggsCsvRow.h"
 #include <vector>
 #include <deque>
 #include <memory>
+#include <cstdlib>
+#include <iostream>
+
+#include "Parser.h"
 
 namespace HRF {
     
-    ////////// public stuff (from Parser.h) //////////
-    
-    TrainingRowSet* LoadTrainingData() {
-        return nullptr;
-    }
-    
-    RowSet* LoadTestData() {
-        return nullptr;
-    }
-    
     ////////// private stuff //////////
     
+    inline bool FileExists (const std::string& name) {
+        if (FILE *file = fopen(name.c_str(), "r")) {
+            fclose(file);
+            return true;
+        } else {
+            return false;
+        }   
+    }
+    
+    inline void AssertFileExists(const std::string& filename) {
+        if (!FileExists(filename)) {
+            printf("Failed to open file '%s'\n", filename.c_str());
+            exit(-1);
+        }
+    }
+    
     template<class TRow>
-    std::shared_ptr<TRow[]> LoadRows(std::string filename) {
+    bkp::MaskedVector<TRow> LoadRows(std::string filename) {
+        
+        AssertFileExists(filename);
         
         csv_parser file_parser;
         file_parser.set_skip_lines(1);
@@ -43,6 +53,17 @@ namespace HRF {
             insert_deque.push_back(TRow(row));
         }
         
-        
+        std::vector<TRow> allData(insert_deque.begin(), insert_deque.end());
+        return bkp::MaskedVector<TRow>(std::move(allData));
+    }
+    
+    ////////// public stuff (from Parser.h) //////////
+    
+    bkp::MaskedVector<HiggsTrainingCsvRow> LoadTrainingData() {
+        return LoadRows<HiggsTrainingCsvRow>("data/training.csv");
+    }
+    
+    bkp::MaskedVector<HiggsCsvRow> LoadTestData() {
+        return LoadRows<HiggsCsvRow>("data/test.csv");
     }
 }

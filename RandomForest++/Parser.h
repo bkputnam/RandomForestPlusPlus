@@ -10,11 +10,13 @@
 #define __RandomForest____Parser__
 
 #include "RowSet.h"
+#include "MaskedVector.h"
+#include "HiggsCsvRow.h"
 
 namespace HRF {
     
-    TrainingRowSet* LoadTrainingData();
-    RowSet* LoadTestData();
+    bkp::MaskedVector<HiggsTrainingCsvRow> LoadTrainingData();
+    bkp::MaskedVector<HiggsCsvRow> LoadTestData();
     
 }
 

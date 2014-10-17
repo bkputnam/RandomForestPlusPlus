@@ -7,10 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3D6DE68419F078AE00B87BDF /* libboost_system-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D6DE68319F078AE00B87BDF /* libboost_system-mt.a */; };
-		3D6DE68619F078FD00B87BDF /* libboost_thread-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D6DE68519F078FD00B87BDF /* libboost_thread-mt.a */; };
-		3D6DE68719F092D900B87BDF /* libboost_thread-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D6DE68519F078FD00B87BDF /* libboost_thread-mt.a */; };
-		3D6DE68819F092D900B87BDF /* libboost_system-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D6DE68319F078AE00B87BDF /* libboost_system-mt.a */; };
 		3D6DE68919F092F300B87BDF /* libboost_thread-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D6DE68519F078FD00B87BDF /* libboost_thread-mt.a */; };
 		3D6DE68A19F092F300B87BDF /* libboost_system-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D6DE68319F078AE00B87BDF /* libboost_system-mt.a */; };
 		3D6DE68D19F0A40800B87BDF /* RandUtilsTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D6DE68B19F0A40800B87BDF /* RandUtilsTests.cpp */; };
@@ -162,8 +158,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D98091619E9A71B0016267F /* libBkpClasses.a in Frameworks */,
-				3D6DE68419F078AE00B87BDF /* libboost_system-mt.a in Frameworks */,
-				3D6DE68619F078FD00B87BDF /* libboost_thread-mt.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -181,8 +175,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D98091C19E9A73D0016267F /* libBkpClasses.a in Frameworks */,
-				3D6DE68719F092D900B87BDF /* libboost_thread-mt.a in Frameworks */,
-				3D6DE68819F092D900B87BDF /* libboost_system-mt.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -713,6 +705,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LIBRARY = "libc++";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/include,
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -725,6 +722,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LIBRARY = "libc++";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/include,
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",

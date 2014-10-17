@@ -7,16 +7,34 @@
 //
 
 #include <iostream>
+#include <random>
 
 #include "Timer.h"
 #include "HiggsCsvRow.h"
 #include "Parser.h"
+#include "RandUtils.h"
+
+using bkp::MaskedVector;
+using HRF::HiggsTrainingCsvRow;
+using HRF::HiggsCsvRow;
+
+const double VALIDATION_PCT = 0.2; // 20%
 
 int main(int argc, const char * argv[]) {
     
     StartTimer("Loading training data");
-    bkp::ArrMask<HRF::HiggsTrainingCsvRow> traindata = HRF::LoadTrainingData();
+    MaskedVector<HiggsTrainingCsvRow> alltraindata = HRF::LoadTrainingData();
     EndTimer();
+    
+    StartTimer("Splitting into validation and training sets");
+    auto validation_filter = bkp::random::RandBools(static_cast<int>(alltraindata.size()), VALIDATION_PCT);
+    MaskedVector<HiggsTrainingCsvRow> validation_set = alltraindata.Filter(validation_filter);
+    validation_filter.flip();
+    MaskedVector<HiggsTrainingCsvRow> train_set = alltraindata.Filter(validation_filter);
+    EndTimer();
+    
+    std::cout << "validation size: " << validation_set.size() << std::endl;
+    std::cout << "training size:   " << train_set.size() << std::endl;
     
     return 0;
 }
