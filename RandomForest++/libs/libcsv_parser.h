@@ -47,7 +47,7 @@
 #include <cstring>
 #include <cstdlib>
 
-using namespace std;
+//using namespace std;
 
 /**
  * @typedef csv_row
@@ -56,7 +56,7 @@ using namespace std;
  *
  * This is an alias for vector <string>
  */
-typedef vector <string> csv_row;
+typedef std::vector <std::string> csv_row;
 
 /**
  * @typedef csv_row_ptr

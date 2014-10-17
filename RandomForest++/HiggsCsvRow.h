@@ -50,8 +50,8 @@ public:
     HiggsCsvRow(const csv_row& row);
 
 protected:
-    static int parse_int(const string& str);
-    static double parse_double(const string& str);
+    static int parse_int(const std::string& str);
+    static double parse_double(const std::string& str);
 };
 
 class HiggsTrainingCsvRow : HiggsCsvRow {

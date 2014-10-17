@@ -188,7 +188,7 @@ void csv_parser::_get_fields_without_enclosure(csv_row_ptr row, const char * lin
                 /* This must be a null-terminated character array */
                 field[field_width] = 0x00;
                 
-                string field_string_obj = field;
+                std::string field_string_obj = field;
                 
                 row->push_back(field_string_obj);
                 
@@ -210,7 +210,7 @@ void csv_parser::_get_fields_without_enclosure(csv_row_ptr row, const char * lin
                 /* This must be a null-terminated character array */
                 field[field_width] = 0x00;
                 
-                string field_string_obj = field;
+                std::string field_string_obj = field;
                 
                 row->push_back(field_string_obj);
             }
@@ -286,7 +286,7 @@ void csv_parser::_get_fields_with_enclosure(csv_row_ptr row, const char * line, 
                     /* This must be a null-terminated character array */
                     field[field_width] = 0x00;
                     
-                    string field_string_obj = field;
+                    std::string field_string_obj = field;
                     
                     row->push_back(field_string_obj);
                     
@@ -302,7 +302,7 @@ void csv_parser::_get_fields_with_enclosure(csv_row_ptr row, const char * line, 
         /* If no enclosures were found in this line, the entire line becomes the only field. */
         if (0 == row->size())
         {
-            string entire_line = line;
+            std::string entire_line = line;
             
             row->push_back(entire_line);
             
@@ -325,7 +325,7 @@ void csv_parser::_get_fields_with_enclosure(csv_row_ptr row, const char * line, 
             /* This must be a null-terminated character array */
             field[field_width] = 0x00;
             
-            string field_string_obj = field;
+            std::string field_string_obj = field;
             
             row->push_back(field_string_obj);
         }
@@ -386,7 +386,7 @@ void csv_parser::_get_fields_with_optional_enclosure(csv_row_ptr row, const char
                 /* This must be a null-terminated character array */
                 field[field_width] = 0x00;
                 
-                string field_string_obj = field;
+                std::string field_string_obj = field;
                 
                 row->push_back(field_string_obj);
                 
@@ -418,7 +418,7 @@ void csv_parser::_get_fields_with_optional_enclosure(csv_row_ptr row, const char
                 /* This must be a null-terminated character array */
                 field[field_width] = 0x00;
                 
-                string field_string_obj = field;
+                std::string field_string_obj = field;
                 
                 row->push_back(field_string_obj);
             }

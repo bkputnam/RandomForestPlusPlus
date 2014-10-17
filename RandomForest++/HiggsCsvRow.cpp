@@ -45,11 +45,11 @@ namespace HRF {
     PRI_jet_all_pt(parse_double(row[30]))
     { }
     
-    int HiggsCsvRow::parse_int(const string& str) {
+    int HiggsCsvRow::parse_int(const std::string& str) {
         return std::stoi(str);
     }
     
-    double HiggsCsvRow::parse_double(const string& str) {
+    double HiggsCsvRow::parse_double(const std::string& str) {
         return std::stod(str);
     }
     

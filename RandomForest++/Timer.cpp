@@ -19,6 +19,7 @@ static std::stack<chrono::time_point<chrono::steady_clock>> start_stack;
 
 void StartTimer(const std::string& message) {
     std::printf("%s... ", message.c_str()); // no "\n"; we'll do that in EndTimer()
+    std::fflush(stdout);
     start_stack.push(chrono::steady_clock::now());
 }
 
