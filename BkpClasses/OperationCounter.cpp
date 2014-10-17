@@ -34,8 +34,16 @@ namespace bkp {
     OperationCounter::OperationCounter(int data) : data(data) { ++int_constructors; ++instance_count; }
     OperationCounter::~OperationCounter() { ++destructors; }
 
-    OperationCounter::OperationCounter(const OperationCounter& copyFrom) : data(copyFrom.data) { ++copy_constructors; ++instance_count; }
-    OperationCounter::OperationCounter(OperationCounter&& moveFrom) :data(moveFrom.data) { ++move_constructors; ++instance_count; }
+    OperationCounter::OperationCounter(const OperationCounter& copyFrom) :
+    data(copyFrom.data) {
+        ++copy_constructors;
+        ++instance_count;
+    }
+    OperationCounter::OperationCounter(OperationCounter&& moveFrom) :
+    data(moveFrom.data) {
+        ++move_constructors;
+        ++instance_count;
+    }
 
     OperationCounter& OperationCounter::operator=(const OperationCounter& copyFrom) { data=copyFrom.data; ++copy_assignments; return *this; }
     OperationCounter& OperationCounter::operator=(OperationCounter&& moveFrom) { data=moveFrom.data; ++move_assignments; return *this; }
@@ -44,9 +52,12 @@ namespace bkp {
         using std::cout;
         using std::endl;
         
+        bool printedAny = false;
+        
         cout << std::left;
         #define BKP_CONDITIONAL_PRINT(name) {\
             if (!(ignoreZeros && name==0)) {\
+                printedAny = true;\
                 cout << std::setw(20) << #name ":" << name << endl;\
             }\
         }
@@ -59,6 +70,10 @@ namespace bkp {
         BKP_CONDITIONAL_PRINT(move_constructors)
         BKP_CONDITIONAL_PRINT(copy_assignments)
         BKP_CONDITIONAL_PRINT(move_assignments)
+        
+        if (!printedAny) {
+            cout << "OperationCounter - no activity" << endl;
+        }
         
         // cleanup
         #undef BKP_CONDITIONAL_PRINT
