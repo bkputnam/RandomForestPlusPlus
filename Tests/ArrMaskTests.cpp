@@ -14,7 +14,7 @@
 using namespace bkp;
 
 TEST(ArrMaskTests, DefaultConstructor) {
-    ResetOperationsCounter();
+    OperationCounter::ResetCounts();
     {
         ArrMask<OperationCounter> arr;
         EXPECT_EQ(0, arr.size());
@@ -25,7 +25,7 @@ TEST(ArrMaskTests, DefaultConstructor) {
 }
 
 TEST(ArrMaskTests, ArrMoveConstructor) {
-    ResetOperationsCounter();
+    OperationCounter::ResetCounts();
     {
         Arr<OperationCounter> arr1(XRange(0, 5));
         Arr<OperationCounter> arr2(arr1);
@@ -43,7 +43,7 @@ TEST(ArrMaskTests, ArrMoveConstructor) {
 }
 
 TEST(ArrMaskTests, SharedPtrConstructor) {
-    ResetOperationsCounter();
+    OperationCounter::ResetCounts();
     {
         ArrMask<OperationCounter> mask;
         {
@@ -63,7 +63,7 @@ TEST(ArrMaskTests, SharedPtrConstructor) {
 }
 
 TEST(ArrMaskTests, FilteredArrMoveConstructor) {
-    ResetOperationsCounter();
+    OperationCounter::ResetCounts();
     {
         Arr<OperationCounter> arr1(XRange(0, 5));
         Arr<OperationCounter> arr2(arr1);
@@ -83,7 +83,7 @@ TEST(ArrMaskTests, FilteredArrMoveConstructor) {
 }
 
 TEST(ArrMaskTests, FilteredSharedPtrConstructor) {
-    ResetOperationsCounter();
+    OperationCounter::ResetCounts();
     {
         ArrMask<OperationCounter> mask;
         {
@@ -105,7 +105,7 @@ TEST(ArrMaskTests, FilteredSharedPtrConstructor) {
 }
 
 TEST(ArrMaskTests, FilterFn) {
-    ResetOperationsCounter();
+    OperationCounter::ResetCounts();
     {
         ArrMask<OperationCounter> mask1(Arr<OperationCounter>(XRange(0, 5)));
         ArrMask<OperationCounter> mask2 = mask1.Filter(Arr<bool>({true, true, false, true, false}));

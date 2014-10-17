@@ -14,7 +14,7 @@
 using namespace bkp;
 
 TEST(SliceTest, DefaultConstructor) {
-    ResetOperationsCounter();
+    OperationCounter::ResetCounts();
     Slice<OperationCounter> s;
     EXPECT_EQ(0, s.size());
     EXPECT_EQ(nullptr, s.begin());
@@ -22,7 +22,7 @@ TEST(SliceTest, DefaultConstructor) {
 }
 
 TEST(SliceTest, SizeConstructor) {
-    ResetOperationsCounter();
+    OperationCounter::ResetCounts();
     {
         Slice<OperationCounter> s(5);
         EXPECT_EQ(5, OperationCounter::default_constructors);
@@ -31,7 +31,7 @@ TEST(SliceTest, SizeConstructor) {
 }
 
 TEST(SliceTest, IteratorConstructor) {
-    ResetOperationsCounter();
+    OperationCounter::ResetCounts();
     {
         Slice<OperationCounter> s(XRange(0, 5));
         EXPECT_EQ(5, s.size());
@@ -44,7 +44,7 @@ TEST(SliceTest, IteratorConstructor) {
 }
 
 TEST(SliceTest, ArrMoveConstructor) {
-    ResetOperationsCounter();
+    OperationCounter::ResetCounts();
     {
         Arr<OperationCounter> a(XRange(0, 5));
         OperationCounter* dataPtr = a.begin();
@@ -63,7 +63,7 @@ TEST(SliceTest, ArrMoveConstructor) {
 }
 
 TEST(SliceTest, SharedPtrConstructor) {
-    ResetOperationsCounter();
+    OperationCounter::ResetCounts();
     {
         Slice<OperationCounter> s;
         {
@@ -77,7 +77,7 @@ TEST(SliceTest, SharedPtrConstructor) {
 }
 
 TEST(SliceTest, Slicing) {
-    ResetOperationsCounter();
+    OperationCounter::ResetCounts();
     {
         Slice<OperationCounter> s2;
         {
@@ -95,7 +95,7 @@ TEST(SliceTest, Slicing) {
 }
 
 TEST(SliceTest, Iterating) {
-    ResetOperationsCounter();
+    OperationCounter::ResetCounts();
     {
         Slice<OperationCounter> s2;
         {

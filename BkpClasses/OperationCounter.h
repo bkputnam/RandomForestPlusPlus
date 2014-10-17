@@ -38,9 +38,8 @@ namespace bkp {
         OperationCounter& operator=(OperationCounter&& moveFrom);
         
         static void PrintAll(bool ignoreZeros=true);
+        static void ResetCounts();
     };
-
-    void ResetOperationsCounter();
     
 }
 

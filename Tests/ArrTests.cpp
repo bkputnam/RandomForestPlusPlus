@@ -17,7 +17,7 @@
 using namespace bkp;
 
 TEST(ArrTest, IntConstructor) {
-    ResetOperationsCounter();
+    OperationCounter::ResetCounts();
     {
         Arr<OperationCounter> arr(XRange(0, 5));
         EXPECT_EQ(5, OperationCounter::int_constructors);
@@ -26,7 +26,7 @@ TEST(ArrTest, IntConstructor) {
 }
 
 TEST(ArrTest, KitchenSink) {
-    ResetOperationsCounter();
+    OperationCounter::ResetCounts();
     {
         // int constructor
         Arr<OperationCounter> arr(XRange(0, 5));
@@ -71,7 +71,7 @@ TEST(ArrTest, KitchenSink) {
 }
 
 TEST(ArrTest, ArrayCopyConstructor) {
-    ResetOperationsCounter();
+    OperationCounter::ResetCounts();
     {
         Arr<OperationCounter> arr;
         {
@@ -97,7 +97,7 @@ TEST(ArrTest, ArrayCopyConstructor) {
 }
 
 TEST(ArrTest, ArrayMoveConstructor) {
-    ResetOperationsCounter();
+    OperationCounter::ResetCounts();
     {
         Arr<OperationCounter> arr;
         {
@@ -123,7 +123,7 @@ TEST(ArrTest, ArrayMoveConstructor) {
 }
 
 TEST(ArrTest, InitializerListConstructor) {
-    ResetOperationsCounter();
+    OperationCounter::ResetCounts();
     {
         Arr<int> arr({1, 2, 3, 4, 5});
         

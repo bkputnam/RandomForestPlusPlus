@@ -19,7 +19,7 @@ namespace bkp {
     int OperationCounter::copy_assignments = 0;
     int OperationCounter::move_assignments = 0;
 
-    void ResetOperationsCounter() {
+    void OperationCounter::ResetCounts() {
         OperationCounter::default_constructors = 0;
         OperationCounter::int_constructors = 0;
         OperationCounter::instance_count = 0;
