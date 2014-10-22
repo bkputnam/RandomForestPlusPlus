@@ -9,15 +9,11 @@
 #include "RandUtils.h"
 #include <thread>
 #include <boost/thread.hpp>
-
-#include "XRange.h"
+#include <boost/iterator/counting_iterator.hpp>
 
 namespace bkp {
     
     namespace random {
-        
-        // don't access this directly; use generator() instead
-        
         
         std::default_random_engine& Generator() {
             static boost::thread_specific_ptr<std::default_random_engine> _generator;
@@ -34,7 +30,7 @@ namespace bkp {
         }
         
         std::vector<int> Choice(int n, int k) {
-            std::vector<int> indices(XRange::begin(0), XRange::end(n));
+            std::vector<int> indices(boost::counting_iterator<int>(0), boost::counting_iterator<int>(n));
             
             std::vector<int> result;
             result.reserve(k);
