@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <vector>
 #include <random>
+#include <array>
 
 namespace bkp {
     
@@ -23,6 +24,33 @@ namespace bkp {
         void Seed(int seed);
         
         int RandInt(int low, int high);
+        int RandInt(int high);
+        
+        template<unsigned int Size>
+        std::array<int, Size> RandInt(int low, int high) {
+            auto dist = std::uniform_int_distribution<int>(low, high);
+            auto gen = Generator();
+            
+            std::array<int, Size> result;
+            for (int i=0; i<Size; ++i) {
+                result[i] = dist(gen);
+            }
+            return result;
+        }
+        
+        double RandDouble(double low, double high);
+        
+        template<unsigned int Size>
+        std::array<double, Size> RandDouble(double low, double high) {
+            auto dist = std::uniform_real_distribution<double>(low, high);
+            auto gen = Generator();
+            
+            std::array<double, Size> result;
+            for (int i=0; i<Size; ++i) {
+                result[i] = dist(gen);
+            }
+            return result;
+        }
         
         std::vector<int> Choice(int n, int k);
         

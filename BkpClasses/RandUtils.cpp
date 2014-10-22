@@ -29,6 +29,14 @@ namespace bkp {
             return std::uniform_int_distribution<int>(low, high)(Generator());
         }
         
+        int RandInt(int high) {
+            return RandInt(0, high);
+        }
+        
+        double RandDouble(double low, double high) {
+            return std::uniform_real_distribution<double>(low, high)(Generator());
+        }
+        
         std::vector<int> Choice(int n, int k) {
             std::vector<int> indices(boost::counting_iterator<int>(0), boost::counting_iterator<int>(n));
             
