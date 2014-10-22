@@ -6,11 +6,15 @@
 //  Copyright (c) 2014 Brian Putnam. All rights reserved.
 //
 
+#include <array>
+#include <unordered_set>
+
 #include <gtest/gtest.h>
+
+#include <boost/iterator/counting_iterator.hpp>
 
 #include "MaskedVector.h"
 #include "OperationCounter.h"
-#include <boost/iterator/counting_iterator.hpp>
 
 using namespace bkp;
 
@@ -161,4 +165,92 @@ TEST(MaskedVectorTests, Iterators) {
         }
     }
     EXPECT_EQ(5, OperationCounter::destructors);
+}
+
+TEST(MaskedVectorTests, StlIteratorIntegration) {
+    OperationCounter::ResetCounts();
+    {
+        MaskedVector<OperationCounter> foo(MakeVector(5));
+        
+        std::vector<OperationCounter> bar(foo.begin(), foo.end());
+        EXPECT_EQ(10, OperationCounter::instance_count);
+        
+        auto num_even_size = std::count_if(foo.begin(), foo.end(), [](const OperationCounter& op) { return op.data % 2 == 0; });
+        int num_even = static_cast<int>(num_even_size);
+        EXPECT_EQ(3, num_even);
+    }
+}
+
+TEST(MaskedVectorTests, ConstIter) {
+    OperationCounter::ResetCounts();
+    {
+        const MaskedVector<OperationCounter> m(MakeVector(5));
+        
+        // MaskedVector<OperationCounter>::iterator fail_iter = m.end(); // should generate compile err - non-const iter
+        MaskedVector<OperationCounter>::const_iterator end = m.end(); // should work
+        
+        int dummy_int = 0; // just for something to do
+        for (auto iter = m.begin(); iter!=end; ++iter) {
+            // iter->data = 100; // should fail @ compile time - const iter shouldn't allow this
+            ++dummy_int;
+        }
+        EXPECT_EQ(5, dummy_int);
+    }
+    EXPECT_EQ(5, OperationCounter::destructors);
+}
+
+TEST(MaskedVectorTests, SliceTests) {
+    OperationCounter::ResetCounts();
+    {
+        MaskedVector<OperationCounter> m(MakeVector(10));
+        MaskedVector<OperationCounter>::Slice slice = m.MakeSlice();
+        
+        EXPECT_EQ(10, slice.size());
+        for (int i=0; i<10; i++) {
+            EXPECT_EQ(i, m[i].data);
+            EXPECT_EQ(i, slice[i].data);
+        }
+        
+        auto sub_slice = slice.MakeSlice(3, 5);
+        
+        EXPECT_EQ(5, sub_slice.size());
+        for (int i=0; i<5; i++) {
+            EXPECT_EQ(i+3, sub_slice[i].data);
+        }
+        EXPECT_DEATH(sub_slice[5], ".*");
+    }
+    EXPECT_EQ(10, OperationCounter::instance_count);
+    EXPECT_EQ(10, OperationCounter::destructors);
+}
+
+TEST(MaskedVectorTests, PredicateSort) {
+    OperationCounter::ResetCounts();
+    {
+        MaskedVector<OperationCounter> m(MakeVector(10));
+        auto slice = m.MakeSlice();
+        auto sub_slice = slice.MakeSlice(3, 5);
+        
+        sub_slice.PredicateSort([](const OperationCounter& op) { return op.data % 2 == 0; });
+        
+        // first 3 should be unchanged - not a part of sub-slice
+        EXPECT_EQ(0, m[0].data);
+        EXPECT_EQ(1, m[1].data);
+        EXPECT_EQ(2, m[2].data);
+        
+        // next 5 should be predicate sorted - evens before odds but no particular order after that
+        std::unordered_set<int> evens({4 , 6});
+        std::unordered_set<int> odds({3, 5, 7});
+        auto contains = [](std::unordered_set<int> set, int item) { return set.find(item) != set.end(); };
+        EXPECT_TRUE(contains(evens, m[3].data));
+        EXPECT_TRUE(contains(evens, m[4].data));
+        EXPECT_TRUE(contains(odds, m[5].data));
+        EXPECT_TRUE(contains(odds, m[6].data));
+        EXPECT_TRUE(contains(odds, m[7].data));
+        
+        // last 2 should be unchanged - just like first 3
+        EXPECT_EQ(8, m[8].data);
+        EXPECT_EQ(9, m[9].data);
+    }
+    EXPECT_EQ(10, OperationCounter::instance_count);
+    EXPECT_EQ(10, OperationCounter::destructors);
 }

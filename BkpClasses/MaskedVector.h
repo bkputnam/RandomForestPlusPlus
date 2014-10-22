@@ -13,6 +13,7 @@
 #include <memory>
 #include <algorithm>
 #include <cassert>
+#include <functional>
 
 #include <boost/iterator/transform_iterator.hpp>
 
@@ -63,10 +64,19 @@ namespace bkp {
         static T& IteratorTransformer(T* iter) {
             return *iter;
         }
-        
         typedef std::function<T&(T*)> IteratorTransformer_t;
         
+        static const T& ConstIteratorTransformer(const T* iter) {
+            return *iter;
+        }
+        typedef std::function<const T&(const T*)> ConstIteratorTransformer_t;
+        
     public:
+        
+        typedef typename PVector::size_type size_type;
+        
+        class Slice;
+        
         MaskedVector() = default;
         
         // vector-move constructor: passed vector will be unusable after constructor has finished
@@ -94,7 +104,7 @@ namespace bkp {
         { }
         
         // create a new MaskedVector by applying a filter to the items in this (which may already be filtered)
-        MaskedVector<T> Filter(const Mask& filter) const {
+        const MaskedVector<T> Filter(const Mask& filter) const {
             auto size = this->size();
             assert(filter.size() == size);
             
@@ -111,16 +121,22 @@ namespace bkp {
             return MaskedVector<T>(all_data_, std::move(resultPtrs));
         }
         
-        typename PVector::size_type size() const { return masked_data_.size(); }
+        Slice MakeSlice() {
+            return Slice(*this, 0, size());
+        }
         
-        T& operator[](int i) {
+        size_type size() const { return masked_data_.size(); }
+        
+        T& operator[](size_type i) {
             assert(i >= 0 && i < size());
             return *(masked_data_[i]);
         }
-        const T& operator[](int i) const {
+        const T& operator[](size_type i) const {
             assert(i >= 0 && i < size());
             return *(masked_data_[i]);
         }
+        
+        // ----- non-const iterators -----
         
         typedef boost::transform_iterator<IteratorTransformer_t, typename PVector::iterator> iterator;
         
@@ -129,6 +145,96 @@ namespace bkp {
         
         std::reverse_iterator<iterator> rbegin() { return std::reverse_iterator<iterator>(end()); }
         std::reverse_iterator<iterator> rend()   { return std::reverse_iterator<iterator>(begin()); }
+        
+        // ----- const iterators -----
+        
+        typedef boost::transform_iterator<ConstIteratorTransformer_t, typename PVector::const_iterator> const_iterator;
+        
+        const_iterator begin() const {
+            auto iter = const_cast<const PVector&>(masked_data_).begin();
+            return boost::make_transform_iterator(iter, ConstIteratorTransformer);
+        }
+        const_iterator end() const {
+            auto iter = const_cast<const PVector&>(masked_data_).end();
+            return boost::make_transform_iterator(iter, ConstIteratorTransformer);
+        }
+        
+        std::reverse_iterator<const_iterator> rbegin() const { return std::reverse_iterator<const_iterator>(end()); }
+        std::reverse_iterator<const_iterator> rend() const { return std::reverse_iterator<const_iterator>(begin()); }
+        
+        // Note: Slices are not responsible for keeping their parent in memory - i.e.
+        // the parent must outlive the Slice or you'll get a dangling reference.
+        class Slice {
+            friend class MaskedVector<T>;
+        public:
+            typedef MaskedVector<T>::size_type size_type;
+            
+        private:
+            MaskedVector<T>& backing_data_;
+            size_type start_;
+            size_type size_;
+            
+            T*& backing_ptr(size_type i) {
+                assert(i >=0 && i < size_);
+                return backing_data_.masked_data_[i + start_];
+            }
+            
+            Slice(MaskedVector<T>& parent, size_type start, size_type size) :
+            backing_data_(parent),
+            start_(start),
+            size_(size)
+            { }
+            
+        public:
+            
+            size_type size() {
+                return size_;
+            }
+            
+            T& operator[](size_type i) {
+                assert(i >= 0 && i < size_);
+                return backing_data_[i + start_];
+            }
+            
+            Slice MakeSlice(size_type start, size_type size) {
+                assert(start >= 0);
+                assert(start + size <= this->size());
+                return Slice(backing_data_, start + start_, size);
+            }
+            
+            std::pair<Slice, Slice> PredicateSort(std::function<bool(const T&)> pred) {
+                
+                size_type this_size = size();
+                size_type start_index = 0;
+                size_type end_index = this_size - 1;
+                T* swap = nullptr;
+                
+                while(true) {
+                    while (start_index < this_size && pred((*this)[start_index])) {
+                        ++start_index;
+                    }
+                    
+                    while (end_index >= 0 && !pred((*this)[end_index])) {
+                        --end_index;
+                    }
+                    
+                    if (start_index < end_index) {
+                        // swap pointers in parent
+                        swap = backing_ptr(start_index);
+                        backing_ptr(start_index) = backing_ptr(end_index);
+                        backing_ptr(end_index) = swap;
+                    }
+                    else {
+                        return std::make_pair(
+                            MakeSlice(0, start_index),
+                            MakeSlice(start_index, this_size-start_index)
+                        );
+                    }
+                }
+                
+            }
+            
+        };
     };
 }
 
