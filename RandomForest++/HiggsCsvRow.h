@@ -19,7 +19,8 @@ class HiggsCsvRow {
 public:
     const int EventId_;
     
-    std::array<double, 30> data_;
+    static const int NUM_FEATURES = 30;
+    std::array<double, NUM_FEATURES> data_;
     
 //    const double DER_mass_MMC;
 //    const double DER_mass_transverse_met_lep;

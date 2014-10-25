@@ -23,6 +23,7 @@ using hrf::HiggsTrainingCsvRow;
 using hrf::HiggsCsvRow;
 
 const double VALIDATION_PCT = 0.2; // 20%
+const double COLS_PER_MODEL = 3;
 
 int main(int argc, const char * argv[]) {
     
