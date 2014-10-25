@@ -23,7 +23,6 @@ namespace HRF {
         int npoints_;
         
         std::shared_ptr<std::vector<int>> target_features_;
-        std::shared_ptr<std::vector<bool>> include_max_;
         std::shared_ptr<std::vector<double>> min_corner_;
         std::shared_ptr<std::vector<double>> max_corner_;
         
@@ -62,7 +61,6 @@ namespace HRF {
              std::shared_ptr<std::vector<int>> target_features,
              std::shared_ptr<std::vector<double>> min_corner,
              std::shared_ptr<std::vector<double>> max_corner,
-             std::shared_ptr<std::vector<bool>> include_max,
              double normalizing_constant
              );
     

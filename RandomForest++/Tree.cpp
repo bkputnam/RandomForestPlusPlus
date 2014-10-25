@@ -28,29 +28,16 @@ namespace HRF {
         std::shared_ptr<std::vector<int>> target_features,
         std::shared_ptr<std::vector<double>> min_corner,
         std::shared_ptr<std::vector<double>> max_corner,
-        std::shared_ptr<std::vector<bool>> include_max,
         double normalizing_constant
     ) :
     ndim_(static_cast<int>(target_features->size())), // NOTE: ndim_ is initialized before target_features_, otherwise I would have to pull size() from the member not the parameter (parameter is invalid after std::move)
     npoints_(static_cast<int>(train_points->size())), // NOTE: ditto for npoints_, initialize from parameter over member due to initialization order and unique_ptr moves
     target_features_(target_features),
-    include_max_(include_max),
     min_corner_(min_corner),
     max_corner_(max_corner),
     normalizing_constant_(normalizing_constant),
     train_points_(std::move(train_points))
     {
-        // by default, all trees contain their min-edges, but only contain their
-        // max-edges if there is no greater tree/box on the other side of the edge
-        // (for whom the edge would be a min-edge).
-        // If no include_max parameter was passed, assume that this is the root/largest
-        // tree/box and that we therefore want to include all max-edges. Child trees/boxes
-        // will include specific max-edges based on whether or not that particular edge is
-        // an overall max-edge.
-        if (!include_max_) {
-            include_max_ = std::make_shared<std::vector<bool>>(ndim_, true);
-        }
-        
         if (isnan(normalizing_constant_)) {
             normalizing_constant_ = npoints_;
         }
@@ -79,7 +66,6 @@ namespace HRF {
          std::make_shared<std::vector<int>>(std::move(target_features)),
          std::make_shared<std::vector<double>>(std::move(min_corner)),
          std::make_shared<std::vector<double>>(std::move(max_corner)),
-         nullptr,
          std::numeric_limits<double>::quiet_NaN() // NaN should trigger default initializer
     )
     { }
@@ -155,12 +141,8 @@ namespace HRF {
             target_features_,
             upper_min_corner,
             max_corner_,
-            include_max_,
             normalizing_constant_
         ));
-        
-        auto lower_include_max = std::make_shared<std::vector<bool>>(include_max_->begin(), include_max_->end());
-        (*lower_include_max)[best_local_dim_index] = false;
         
         // filter = !filter
         std::transform(filter.begin(), filter.end(), filter.begin(), [](bool b) { return !b; });
@@ -171,7 +153,6 @@ namespace HRF {
             target_features_,
             min_corner_,
             lower_max_corner,
-            lower_include_max,
             normalizing_constant_
          ));
         
@@ -286,6 +267,9 @@ namespace HRF {
         }
         
         TrainHelper(max_depth, min_pts);
+        
+        // release our training data to allow it to be freed, evenutally
+        train_points_ = nullptr;
     }
     
     void Tree::TrainHelper(int max_depth, int min_pts) {
