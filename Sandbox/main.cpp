@@ -9,9 +9,14 @@
 #include <iostream>
 #include <thread>
 #include <mutex>
-#include <boost/thread.hpp>
+#include <vector>
+#include <array>
 
-#include "XRange.h"
+#include <boost/thread.hpp>
+#include <boost/iterator/counting_iterator.hpp>
+
+#include "MaskedVector.h"
+#include "OperationCounter.h"
 
 using std::cout;
 using std::cin;
@@ -20,37 +25,20 @@ using std::endl;
 using namespace bkp;
 using namespace std;
 
-std::mutex cout_mutex;
-
-boost::thread_specific_ptr<int> threadsum;
-
-void sum(int i) {
-    if (!threadsum.get()) {
-        threadsum.reset(new int);
-    }
-    *threadsum = 0;
-    int ctr = i;
-    while (ctr) {
-        *threadsum += ctr;
-        --ctr;
-    }
-    {
-        std::lock_guard<std::mutex> get_mutex(cout_mutex);
-        cout << "sum(" << i << ") = " << *threadsum << endl;
-    }
-}
+struct Foo {
+    OperationCounter o;
+    
+    Foo(int i) : o(i) { }
+};
 
 int main(int argc, const char * argv[]) {
     
-    const int NUM_THREADS = 10;
+    std::vector<OperationCounter> data(boost::counting_iterator<int>(0), boost::counting_iterator<int>(5));
+    std::vector<bool> filter({true, true, false, true, false});
     
-    std::vector<std::thread> threads;
-    threads.reserve(NUM_THREADS);
-    for (int i=0; i<NUM_THREADS; i++) {
-        threads[i] = std::thread(sum, i*10);
-    }
+    bkp::MaskedVector<OperationCounter> masked(std::shared_ptr<std::vector<OperationCounter>>(&data), filter);
     
-    for (int i=0; i<NUM_THREADS; i++) {
-        threads[i].join();
-    }
+    masked[2].data = 100;
+    
+    cout << data[3].data << endl;
 }
