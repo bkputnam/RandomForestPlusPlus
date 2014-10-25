@@ -35,7 +35,7 @@ namespace HRF {
     }
     
     template<class TRow>
-    bkp::MaskedVector<TRow> LoadRows(std::string filename) {
+    bkp::MaskedVector<const TRow> LoadRows(std::string filename) {
         
         AssertFileExists(filename);
         
@@ -53,17 +53,17 @@ namespace HRF {
             insert_deque.push_back(TRow(row));
         }
         
-        std::vector<TRow> allData(insert_deque.begin(), insert_deque.end());
-        return bkp::MaskedVector<TRow>(std::move(allData));
+        std::vector<const TRow> allData(insert_deque.begin(), insert_deque.end());
+        return bkp::MaskedVector<const TRow>(std::move(allData));
     }
     
     ////////// public stuff (from Parser.h) //////////
     
-    bkp::MaskedVector<HiggsTrainingCsvRow> LoadTrainingData() {
+    bkp::MaskedVector<const HiggsTrainingCsvRow> LoadTrainingData() {
         return LoadRows<HiggsTrainingCsvRow>("data/training.csv");
     }
     
-    bkp::MaskedVector<HiggsCsvRow> LoadTestData() {
+    bkp::MaskedVector<const HiggsCsvRow> LoadTestData() {
         return LoadRows<HiggsCsvRow>("data/test.csv");
     }
 }

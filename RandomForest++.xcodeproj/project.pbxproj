@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D0442A719F56454003FD1A2 /* Tree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D0442A519F56454003FD1A2 /* Tree.cpp */; };
+		3D0442AA19F56A2C003FD1A2 /* IScorer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D0442A819F56A2C003FD1A2 /* IScorer.cpp */; };
 		3D6DE68919F092F300B87BDF /* libboost_thread-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D6DE68519F078FD00B87BDF /* libboost_thread-mt.a */; };
 		3D6DE68A19F092F300B87BDF /* libboost_system-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D6DE68319F078AE00B87BDF /* libboost_system-mt.a */; };
 		3D6DE68D19F0A40800B87BDF /* RandUtilsTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D6DE68B19F0A40800B87BDF /* RandUtilsTests.cpp */; };
@@ -91,6 +93,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3D0442A519F56454003FD1A2 /* Tree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tree.cpp; sourceTree = "<group>"; };
+		3D0442A619F56454003FD1A2 /* Tree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tree.h; sourceTree = "<group>"; };
+		3D0442A819F56A2C003FD1A2 /* IScorer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IScorer.cpp; sourceTree = "<group>"; };
+		3D0442A919F56A2C003FD1A2 /* IScorer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IScorer.h; sourceTree = "<group>"; };
 		3D6DE68319F078AE00B87BDF /* libboost_system-mt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_system-mt.a"; path = "../../../../usr/local/lib/libboost_system-mt.a"; sourceTree = "<group>"; };
 		3D6DE68519F078FD00B87BDF /* libboost_thread-mt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_thread-mt.a"; path = "../../../../usr/local/lib/libboost_thread-mt.a"; sourceTree = "<group>"; };
 		3D6DE68B19F0A40800B87BDF /* RandUtilsTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RandUtilsTests.cpp; sourceTree = "<group>"; };
@@ -235,6 +241,10 @@
 				3DEF931519E3911B00E1110F /* RowSet.h */,
 				3D9BE34919EEE89D00536407 /* Timer.cpp */,
 				3D9BE34A19EEE89D00536407 /* Timer.h */,
+				3D0442A519F56454003FD1A2 /* Tree.cpp */,
+				3D0442A619F56454003FD1A2 /* Tree.h */,
+				3D0442A819F56A2C003FD1A2 /* IScorer.cpp */,
+				3D0442A919F56A2C003FD1A2 /* IScorer.h */,
 			);
 			path = "RandomForest++";
 			sourceTree = "<group>";
@@ -434,6 +444,8 @@
 				3DEF931319E2F69800E1110F /* Parser.cpp in Sources */,
 				3DEF92F519DF867D00E1110F /* main.cpp in Sources */,
 				3DEF92FF19DFBC1100E1110F /* libcsv_parser.cpp in Sources */,
+				3D0442AA19F56A2C003FD1A2 /* IScorer.cpp in Sources */,
+				3D0442A719F56454003FD1A2 /* Tree.cpp in Sources */,
 				3D9BE34B19EEE89D00536407 /* Timer.cpp in Sources */,
 				3DEF931619E3911B00E1110F /* RowSet.cpp in Sources */,
 				3DEF931019E0BC6C00E1110F /* HiggsCsvRow.cpp in Sources */,

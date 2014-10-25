@@ -15,8 +15,8 @@
 
 namespace HRF {
     
-    bkp::MaskedVector<HiggsTrainingCsvRow> LoadTrainingData();
-    bkp::MaskedVector<HiggsCsvRow> LoadTestData();
+    bkp::MaskedVector<const HiggsTrainingCsvRow> LoadTrainingData();
+    bkp::MaskedVector<const HiggsCsvRow> LoadTestData();
     
 }
 
