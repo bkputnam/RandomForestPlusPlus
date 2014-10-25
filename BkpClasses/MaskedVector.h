@@ -125,7 +125,9 @@ namespace bkp {
             return Slice(*this, 0, size());
         }
         
-        size_type size() const { return masked_data_.size(); }
+        size_type size() const {
+            return masked_data_.size();
+        }
         
         T& operator[](size_type i) {
             assert(i >= 0 && i < size());
@@ -202,7 +204,7 @@ namespace bkp {
                 return Slice(backing_data_, start + start_, size);
             }
             
-            std::pair<Slice, Slice> PredicateSort(std::function<bool(const T&)> pred) {
+            std::pair<Slice, Slice> PredicateSort(const std::function<bool(const T&)>& pred) {
                 
                 size_type this_size = size();
                 size_type start_index = 0;
