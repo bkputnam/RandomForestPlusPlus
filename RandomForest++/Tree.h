@@ -16,7 +16,7 @@
 #include "IScorer.h"
 #include "MaskedVector.h"
 
-namespace HRF {
+namespace hrf {
     class Tree : public IScorer {
     private:
         int ndim_;

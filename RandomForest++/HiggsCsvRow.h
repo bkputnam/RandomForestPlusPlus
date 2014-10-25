@@ -13,7 +13,7 @@
 
 #include "libs/libcsv_parser.h"
 
-namespace HRF {
+namespace hrf {
     
 class HiggsCsvRow {
 public:

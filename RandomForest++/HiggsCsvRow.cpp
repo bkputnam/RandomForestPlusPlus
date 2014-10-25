@@ -9,7 +9,7 @@
 #include "HiggsCsvRow.h"
 #include <string>
 
-namespace HRF {
+namespace hrf {
     
     // helper function - not in .h
     int parse_int(const std::string& str) {

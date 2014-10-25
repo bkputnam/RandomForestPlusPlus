@@ -13,7 +13,7 @@
 #include "MaskedVector.h"
 #include "HiggsCsvRow.h"
 
-namespace HRF {
+namespace hrf {
     
     class Score {
     private:

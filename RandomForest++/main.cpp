@@ -19,15 +19,15 @@
 #include "Tree.h"
 
 using bkp::MaskedVector;
-using HRF::HiggsTrainingCsvRow;
-using HRF::HiggsCsvRow;
+using hrf::HiggsTrainingCsvRow;
+using hrf::HiggsCsvRow;
 
 const double VALIDATION_PCT = 0.2; // 20%
 
 int main(int argc, const char * argv[]) {
     
     StartTimer("Loading training data");
-    MaskedVector<const HiggsTrainingCsvRow> alltraindata = HRF::LoadTrainingData();
+    MaskedVector<const HiggsTrainingCsvRow> alltraindata = hrf::LoadTrainingData();
     EndTimer();
     
     StartTimer("Splitting into validation and training sets");
@@ -55,14 +55,17 @@ int main(int argc, const char * argv[]) {
         }
     }
     
-    StartTimer("Training dummy tree");
-    HRF::Tree t(
-        train_set,
-        std::move(target_features),
-        std::move(min_corner),
-        std::move(max_corner)
-    );
-    t.Train();
+    const int N_TREES = 10;
+    StartTimer("Training dummy trees");
+    for (int i=0; i<N_TREES; ++i) {
+        hrf::Tree t(
+            train_set,
+            std::vector<int>(target_features),
+            std::vector<double>(min_corner),
+            std::vector<double>(max_corner)
+        );
+        t.Train();
+    }
     EndTimer();
     
     return 0;

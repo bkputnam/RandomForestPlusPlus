@@ -14,7 +14,7 @@
 
 #include "Parser.h"
 
-namespace HRF {
+namespace hrf {
     
     ////////// private stuff //////////
     

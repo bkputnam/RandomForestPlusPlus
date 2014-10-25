@@ -19,7 +19,7 @@
 
 #include "RandUtils.h"
 
-namespace HRF {
+namespace hrf {
     
     // private constructor - requires include_max and normalizing_constant, although they
     // can be calculated if defaults are detected
@@ -336,7 +336,7 @@ namespace HRF {
                     s_scores,
                     b_scores);
         
-        return HRF::Score(std::move(s_scores), std::move(b_scores));
+        return hrf::Score(std::move(s_scores), std::move(b_scores));
     }
     
     void Tree::ScoreHelper(

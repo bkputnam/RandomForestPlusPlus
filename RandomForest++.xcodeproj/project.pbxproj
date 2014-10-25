@@ -28,12 +28,12 @@
 		3D9BE35519EF077B00536407 /* test.csv in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3DEF930119DFBE1C00E1110F /* test.csv */; };
 		3D9BE35819EF0FCF00536407 /* RandUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9BE35619EF0FCF00536407 /* RandUtils.cpp */; };
 		3D9BE35919EF0FCF00536407 /* RandUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D9BE35719EF0FCF00536407 /* RandUtils.h */; };
+		3DB789E019FC3E4300669931 /* TreeCreator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DB789DE19FC3E4300669931 /* TreeCreator.cpp */; };
 		3DEF92F519DF867D00E1110F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DEF92F419DF867D00E1110F /* main.cpp */; };
 		3DEF92FF19DFBC1100E1110F /* libcsv_parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DEF92FD19DFBC1100E1110F /* libcsv_parser.cpp */; };
 		3DEF930D19E0BB8500E1110F /* training.csv in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3DEF930319DFBE1C00E1110F /* training.csv */; };
 		3DEF931019E0BC6C00E1110F /* HiggsCsvRow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DEF930E19E0BC6C00E1110F /* HiggsCsvRow.cpp */; };
 		3DEF931319E2F69800E1110F /* Parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DEF931119E2F69800E1110F /* Parser.cpp */; };
-		3DEF931619E3911B00E1110F /* RowSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DEF931419E3911B00E1110F /* RowSet.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,6 +115,8 @@
 		3D9BE35019EEFC1400536407 /* FmtDurationTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FmtDurationTests.cpp; sourceTree = "<group>"; };
 		3D9BE35619EF0FCF00536407 /* RandUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RandUtils.cpp; sourceTree = "<group>"; };
 		3D9BE35719EF0FCF00536407 /* RandUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RandUtils.h; sourceTree = "<group>"; };
+		3DB789DE19FC3E4300669931 /* TreeCreator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TreeCreator.cpp; sourceTree = "<group>"; };
+		3DB789DF19FC3E4300669931 /* TreeCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TreeCreator.h; sourceTree = "<group>"; };
 		3DEF92F119DF867D00E1110F /* RandomForest++ */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "RandomForest++"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DEF92F419DF867D00E1110F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		3DEF92FD19DFBC1100E1110F /* libcsv_parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = libcsv_parser.cpp; sourceTree = "<group>"; };
@@ -128,8 +130,6 @@
 		3DEF930F19E0BC6C00E1110F /* HiggsCsvRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HiggsCsvRow.h; sourceTree = "<group>"; };
 		3DEF931119E2F69800E1110F /* Parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Parser.cpp; sourceTree = "<group>"; };
 		3DEF931219E2F69800E1110F /* Parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Parser.h; sourceTree = "<group>"; };
-		3DEF931419E3911B00E1110F /* RowSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RowSet.cpp; sourceTree = "<group>"; };
-		3DEF931519E3911B00E1110F /* RowSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RowSet.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -237,14 +237,14 @@
 				3DEF930F19E0BC6C00E1110F /* HiggsCsvRow.h */,
 				3DEF931119E2F69800E1110F /* Parser.cpp */,
 				3DEF931219E2F69800E1110F /* Parser.h */,
-				3DEF931419E3911B00E1110F /* RowSet.cpp */,
-				3DEF931519E3911B00E1110F /* RowSet.h */,
 				3D9BE34919EEE89D00536407 /* Timer.cpp */,
 				3D9BE34A19EEE89D00536407 /* Timer.h */,
 				3D0442A519F56454003FD1A2 /* Tree.cpp */,
 				3D0442A619F56454003FD1A2 /* Tree.h */,
 				3D0442A819F56A2C003FD1A2 /* IScorer.cpp */,
 				3D0442A919F56A2C003FD1A2 /* IScorer.h */,
+				3DB789DE19FC3E4300669931 /* TreeCreator.cpp */,
+				3DB789DF19FC3E4300669931 /* TreeCreator.h */,
 			);
 			path = "RandomForest++";
 			sourceTree = "<group>";
@@ -447,7 +447,7 @@
 				3D0442AA19F56A2C003FD1A2 /* IScorer.cpp in Sources */,
 				3D0442A719F56454003FD1A2 /* Tree.cpp in Sources */,
 				3D9BE34B19EEE89D00536407 /* Timer.cpp in Sources */,
-				3DEF931619E3911B00E1110F /* RowSet.cpp in Sources */,
+				3DB789E019FC3E4300669931 /* TreeCreator.cpp in Sources */,
 				3DEF931019E0BC6C00E1110F /* HiggsCsvRow.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
