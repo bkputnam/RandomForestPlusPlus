@@ -56,16 +56,15 @@ namespace hrf {
     // public ctor - sets up a couple default values, but then mostly just passes off
     // all the work to the private ctor
     Tree::Tree(
-        std::shared_ptr<const bkp::MaskedVector<const HiggsTrainingCsvRow>> train_points,
+        const bkp::MaskedVector<const HiggsTrainingCsvRow>&& train_points,
         std::vector<int>&& target_features,
-        std::vector<double>&& min_corner,
-        std::vector<double>&& max_corner
+        std::shared_ptr<std::vector<double>> min_corner,
+        std::shared_ptr<std::vector<double>> max_corner
     ) :
-    Tree(
-         train_points,
+    Tree(std::make_shared<const bkp::MaskedVector<const HiggsTrainingCsvRow>>(std::move(train_points)),
          std::make_shared<std::vector<int>>(std::move(target_features)),
-         std::make_shared<std::vector<double>>(std::move(min_corner)),
-         std::make_shared<std::vector<double>>(std::move(max_corner)),
+         min_corner,
+         max_corner,
          std::numeric_limits<double>::quiet_NaN() // NaN should trigger default initializer
     )
     { }
@@ -190,11 +189,13 @@ namespace hrf {
         
         int global_dim_index = (*target_features_)[local_dim];
         
+        auto train_points_ptr = train_points_.get();
+        
+        auto size = train_points_->size();
         double dim_min = std::numeric_limits<double>::max();
         double dim_max = std::numeric_limits<double>::min();
-        auto end = train_points_->end();
-        for (auto iter=train_points_->begin(); iter!=end; ++iter) {
-            double val = iter->data_[global_dim_index];
+        for (auto i=decltype(size){0}; i<size; ++i) {
+            double val = (*train_points_ptr)[i].data_[global_dim_index];
             if (val < dim_min) {
                 dim_min = val;
             }
@@ -204,21 +205,22 @@ namespace hrf {
         }
         
         std::array<double, N_SPLITS> splits = bkp::random::RandDouble<N_SPLITS>(dim_min, dim_max);
+        auto splits_ptr = splits.data();
         
         double max_expected_info = 0.0;
         double best_split = std::numeric_limits<double>::quiet_NaN();
         
         for (int i=0; i<N_SPLITS; ++i) {
-            double split = splits[i];
+            double split = splits_ptr[i];
             
             int n_above, s_above, b_above;
             int n_below, s_below, b_below;
             n_above = s_above = b_above = n_below = s_below = b_below = 0;
             
-            auto end = train_points_->end();
-            for (auto iter=train_points_->begin(); iter!=end; ++iter) {
-                double val = iter->data_[global_dim_index];
-                bool is_signal = iter->Label_ == 's';
+            for (auto i = decltype(size){0}; i<size; ++i) {
+                const auto& row = (*train_points_ptr)[i];
+                double val = row.data_[global_dim_index];
+                bool is_signal = row.Label_ == 's';
                 
                 if (val >= split) {
                     if (is_signal) { ++s_above; } else { ++b_above; }
@@ -227,6 +229,7 @@ namespace hrf {
                     if (is_signal) { ++s_below; } else { ++b_below; }
                 }
             }
+            
             n_above = s_above + b_above;
             n_below = s_below + b_below;
             
@@ -296,25 +299,10 @@ namespace hrf {
             )
         );
         
-        // construct filter such that filter[i] is true iff data has a NaN value in that row
-        // for one or more of our target columns
-        std::vector<bool> filter;
-        filter.reserve(data_size);
-        auto end = data.end();
-        for (auto iter = data.begin(); iter!=end; ++iter) {
-            bool row_has_nan = false;
-            const auto& row = *iter;
-            
-            for (int i=0; i<this->ndim_; i++) {
-                int global_column_index = (*target_features_)[i];
-                if (std::isnan(row.data_[global_column_index])) {
-                    row_has_nan = true;
-                    break;
-                }
-            }
-            
-            filter.push_back(row_has_nan);
-        }
+        // construct filter such that filter[i] is true iff data has no NaN values in any of
+        // our target_feature columns (don't care about NaNs in other columns)
+        std::vector<bool> filter = HasNan(data, *target_features_);
+        std::transform(filter.begin(), filter.end(), filter.begin(), [](bool b) { return !b; });
         
         // use local std::vectors as backing stores for some MaskingVectors. ScoreHelper
         // will then populate our vectors by populating the MaskingVector and their

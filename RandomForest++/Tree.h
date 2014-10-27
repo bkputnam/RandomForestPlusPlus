@@ -56,8 +56,7 @@ namespace hrf {
         
         void TrainHelper(int max_depth, int min_pts);
         
-        Tree(
-             std::shared_ptr<const bkp::MaskedVector<const HiggsTrainingCsvRow>> train_points,
+        Tree(std::shared_ptr<const bkp::MaskedVector<const HiggsTrainingCsvRow>> train_points,
              std::shared_ptr<std::vector<int>> target_features,
              std::shared_ptr<std::vector<double>> min_corner,
              std::shared_ptr<std::vector<double>> max_corner,
@@ -65,11 +64,10 @@ namespace hrf {
              );
     
     public:
-        Tree(
-            std::shared_ptr<const bkp::MaskedVector<const HiggsTrainingCsvRow>> train_points,
-            std::vector<int>&& target_features,
-            std::vector<double>&& min_corner,
-            std::vector<double>&& max_corner
+        Tree(const bkp::MaskedVector<const HiggsTrainingCsvRow>&& train_points,
+             std::vector<int>&& target_features,
+             std::shared_ptr<std::vector<double>> min_corner,
+             std::shared_ptr<std::vector<double>> max_corner
         );
         
         void Train(int max_depth=-1, int min_pts=-1);
