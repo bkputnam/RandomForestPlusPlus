@@ -6,8 +6,10 @@
 //  Copyright (c) 2014 Brian Putnam. All rights reserved.
 //
 
-#include "HiggsCsvRow.h"
 #include <string>
+#include <cmath>
+
+#include "HiggsCsvRow.h"
 
 namespace hrf {
     
@@ -64,4 +66,41 @@ namespace hrf {
     Weight_(parse_double(row[31])),
     Label_(row[32][0])
     { }
+    
+    template<class TRow>
+    std::vector<bool>
+    HasNan(const bkp::MaskedVector<const TRow>& rows,
+           const std::vector<int>& cols)
+    {
+        auto nrows = rows.size();
+        auto ndims = cols.size();
+        
+        std::vector<bool> result;
+        result.reserve(nrows);
+        
+        for (auto row_index=decltype(nrows){0}; row_index<nrows; ++row_index) {
+            auto& row = rows[row_index];
+            bool row_has_nan = false;
+            for (auto dim_index=decltype(ndims){0}; dim_index<ndims; ++dim_index) {
+                row_has_nan &= std::isnan(row.data_[dim_index]);
+            }
+            result.push_back(row_has_nan);
+        }
+        
+        return result;
+    }
+    
+    std::vector<bool>
+    HasNan(const bkp::MaskedVector<const HiggsCsvRow>& rows,
+           const std::vector<int>& cols)
+    {
+        return HasNan<HiggsCsvRow>(rows, cols);
+    }
+    
+    std::vector<bool>
+    HasNan(const bkp::MaskedVector<const HiggsTrainingCsvRow>& rows,
+           const std::vector<int>& cols)
+    {
+        return HasNan<HiggsTrainingCsvRow>(rows, cols);
+    }
 }
