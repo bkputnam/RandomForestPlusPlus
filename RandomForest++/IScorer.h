@@ -15,17 +15,16 @@
 
 namespace hrf {
     
-    class Score {
-    private:
+    class ScoreResult {
+    public:
         std::vector<double> s_scores_;
         std::vector<double> b_scores_;
         
-    public:
-        Score(std::vector<double>&& s_scores, std::vector<double>&& b_scores);
+        ScoreResult(std::vector<double>&& s_scores, std::vector<double>&& b_scores);
     };
     
     class IScorer {
-        virtual Score Score(const bkp::MaskedVector<const HiggsCsvRow>& data, bool parallel=false) = 0;
+        virtual ScoreResult Score(const bkp::MaskedVector<const HiggsCsvRow>& data, bool parallel=false) = 0;
     };
 }
 

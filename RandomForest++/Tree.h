@@ -73,7 +73,7 @@ namespace hrf {
         void Train(int max_depth=-1, int min_pts=-1);
         
         // from IScorer:
-        class Score Score(
+        ScoreResult Score(
             const bkp::MaskedVector<const HiggsCsvRow>& data,
             bool parallel=false
         );

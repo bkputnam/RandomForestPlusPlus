@@ -286,7 +286,7 @@ namespace hrf {
     }
     
     // Note: ignore parallel paramter, only applies to other IScorers
-    Score Tree::Score(const bkp::MaskedVector<const HiggsCsvRow>& data, bool parallel) {
+    ScoreResult Tree::Score(const bkp::MaskedVector<const HiggsCsvRow>& data, bool parallel) {
         
         int data_size = static_cast<int>(data.size());
         std::vector<double> s_scores(data_size, std::numeric_limits<double>::quiet_NaN());
@@ -324,7 +324,7 @@ namespace hrf {
                     s_scores,
                     b_scores);
         
-        return hrf::Score(std::move(s_scores), std::move(b_scores));
+        return hrf::ScoreResult(std::move(s_scores), std::move(b_scores));
     }
     
     void Tree::ScoreHelper(
