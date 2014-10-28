@@ -206,9 +206,14 @@ namespace bkp {
             
             std::pair<Slice, Slice> PredicateSort(const std::function<bool(const T&)>& pred) {
                 
-                size_type this_size = size();
-                size_type start_index = 0;
-                size_type end_index = this_size - 1;
+                // probable loss of precision with int cast, but not too worried because
+                // I know my container sizes will be small. We need to allow signs in
+                // end_index at least, because it needs to be able to take the value -1
+                // so that the "end_index >= 0" check fails when end_index has gone
+                // all the way to the beginning.
+                int this_size = static_cast<int>(size());
+                int start_index = static_cast<int>(0);
+                int end_index = static_cast<int>(this_size - 1);
                 T* swap = nullptr;
                 
                 while(true) {
