@@ -61,6 +61,12 @@ namespace hrf {
         }
     }
     
+    // conversion constructor
+    HiggsCsvRow::HiggsCsvRow(const HiggsTrainingCsvRow& row):
+    EventId_(row.EventId_),
+    data_(row.data_)
+    { }
+    
     HiggsTrainingCsvRow::HiggsTrainingCsvRow(const csv_row& row) :
     HiggsCsvRow(row),
     Weight_(parse_double(row[31])),
@@ -102,5 +108,22 @@ namespace hrf {
            const std::vector<int>& cols)
     {
         return HasNan<HiggsTrainingCsvRow>(rows, cols);
+    }
+    
+    
+    bkp::MaskedVector<const HiggsCsvRow>
+    ConvertRows(const bkp::MaskedVector<const HiggsTrainingCsvRow>& rows) {
+        
+        std::vector<HiggsCsvRow> result_vector;
+        result_vector.reserve(rows.size());
+        
+        auto size = rows.size();
+        for (auto i = decltype(size){0}; i<size; ++i) {
+            result_vector.push_back(HiggsCsvRow(rows[i]));
+        }
+        
+        std::vector<const HiggsCsvRow> const_result_vector(result_vector.begin(), result_vector.end());
+        
+        return bkp::MaskedVector<const HiggsCsvRow>(std::move(const_result_vector));
     }
 }

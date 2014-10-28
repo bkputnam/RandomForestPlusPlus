@@ -14,6 +14,7 @@
 		3D6DE68D19F0A40800B87BDF /* RandUtilsTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D6DE68B19F0A40800B87BDF /* RandUtilsTests.cpp */; };
 		3D6DE69119F16BE500B87BDF /* MaskedVector.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D6DE68F19F16BE500B87BDF /* MaskedVector.h */; };
 		3D6DE69919F1BDA200B87BDF /* MaskedVectorTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D6DE69819F1BDA200B87BDF /* MaskedVectorTests.cpp */; };
+		3D94516819FEFAB500F73BCA /* ScoreAverager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D94516619FEFAB500F73BCA /* ScoreAverager.cpp */; };
 		3D9808E319E98C2B0016267F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9808DC19E98C2B0016267F /* main.cpp */; };
 		3D9808E619E98C500016267F /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9808A419E8B7070016267F /* gtest.framework */; };
 		3D9808EE19E98D080016267F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9808ED19E98D080016267F /* main.cpp */; };
@@ -102,6 +103,8 @@
 		3D6DE68B19F0A40800B87BDF /* RandUtilsTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RandUtilsTests.cpp; sourceTree = "<group>"; };
 		3D6DE68F19F16BE500B87BDF /* MaskedVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MaskedVector.h; sourceTree = "<group>"; };
 		3D6DE69819F1BDA200B87BDF /* MaskedVectorTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MaskedVectorTests.cpp; sourceTree = "<group>"; };
+		3D94516619FEFAB500F73BCA /* ScoreAverager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScoreAverager.cpp; sourceTree = "<group>"; };
+		3D94516719FEFAB500F73BCA /* ScoreAverager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreAverager.h; sourceTree = "<group>"; };
 		3D9808A419E8B7070016267F /* gtest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = gtest.framework; sourceTree = "<group>"; };
 		3D9808D119E98BE90016267F /* Tests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Tests; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D9808DC19E98C2B0016267F /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -245,6 +248,8 @@
 				3D0442A919F56A2C003FD1A2 /* IScorer.h */,
 				3DB789DE19FC3E4300669931 /* TreeCreator.cpp */,
 				3DB789DF19FC3E4300669931 /* TreeCreator.h */,
+				3D94516619FEFAB500F73BCA /* ScoreAverager.cpp */,
+				3D94516719FEFAB500F73BCA /* ScoreAverager.h */,
 			);
 			path = "RandomForest++";
 			sourceTree = "<group>";
@@ -442,6 +447,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3DEF931319E2F69800E1110F /* Parser.cpp in Sources */,
+				3D94516819FEFAB500F73BCA /* ScoreAverager.cpp in Sources */,
 				3DEF92F519DF867D00E1110F /* main.cpp in Sources */,
 				3DEF92FF19DFBC1100E1110F /* libcsv_parser.cpp in Sources */,
 				3D0442AA19F56A2C003FD1A2 /* IScorer.cpp in Sources */,
@@ -524,6 +530,7 @@
 		3D9808F019E98D080016267F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LIBRARY = "libc++";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -545,6 +552,7 @@
 		3D9808F119E98D080016267F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LIBRARY = "libc++";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,

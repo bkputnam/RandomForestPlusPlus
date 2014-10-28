@@ -19,11 +19,13 @@
 #include "RandUtils.h"
 #include "Tree.h"
 #include "TreeCreator.h"
+#include "ScoreAverager.h"
 
 using bkp::MaskedVector;
 using hrf::HiggsTrainingCsvRow;
 using hrf::HiggsCsvRow;
 
+const bool PARALLEL = false;
 const double VALIDATION_PCT = 0.2; // 20%
 const double COLS_PER_MODEL = 3;
 const int NUM_TREES = 100;
@@ -36,7 +38,8 @@ int main(int argc, const char * argv[]) {
     
     StartTimer("Splitting into validation and training sets");
     auto validation_filter = bkp::random::RandBools(static_cast<int>(alltraindata.size()), VALIDATION_PCT);
-    MaskedVector<const HiggsTrainingCsvRow> validation_set = alltraindata.Filter(validation_filter);
+    const bkp::MaskedVector<const hrf::HiggsTrainingCsvRow> validation_set = alltraindata.Filter(validation_filter);
+    const auto validation_set_downcasted = hrf::ConvertRows(validation_set);
     validation_filter.flip();
     auto train_set = std::make_shared<const MaskedVector<const HiggsTrainingCsvRow>>(alltraindata.Filter(validation_filter));
     EndTimer();
@@ -44,6 +47,11 @@ int main(int argc, const char * argv[]) {
     StartTimer("Training " + std::to_string(NUM_TREES) + " trees");
     hrf::TreeCreator tree_creator(*train_set, COLS_PER_MODEL);
     auto trees = tree_creator.MakeTrees(NUM_TREES);
+    hrf::ScoreAverager forest(std::move(trees));
+    EndTimer();
+    
+    StartTimer("Scoring validation data");
+    auto score = forest.Score(validation_set_downcasted, PARALLEL);
     EndTimer();
     
     return 0;

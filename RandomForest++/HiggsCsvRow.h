@@ -17,6 +17,8 @@
 
 namespace hrf {
     
+    class HiggsTrainingCsvRow;
+    
     class HiggsCsvRow {
     public:
         const int EventId_;
@@ -56,6 +58,7 @@ namespace hrf {
     //    const double PRI_jet_all_pt;
         
         HiggsCsvRow(const csv_row& row);
+        explicit HiggsCsvRow(const HiggsTrainingCsvRow& row);
     };
 
     class HiggsTrainingCsvRow : public HiggsCsvRow {
@@ -74,6 +77,9 @@ namespace hrf {
     std::vector<bool>
     HasNan(const bkp::MaskedVector<const HiggsTrainingCsvRow>& rows,
            const std::vector<int>& cols);
+    
+    bkp::MaskedVector<const HiggsCsvRow>
+    ConvertRows(const bkp::MaskedVector<const HiggsTrainingCsvRow>& rows);
 }
 
 #endif /* defined(__RandomForest____HiggsCsvRow__) */
