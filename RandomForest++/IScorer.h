@@ -24,6 +24,7 @@ namespace hrf {
     };
     
     class IScorer {
+    public:
         virtual ScoreResult Score(const bkp::MaskedVector<const HiggsCsvRow>& data, bool parallel=false) = 0;
     };
 }

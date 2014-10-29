@@ -15,6 +15,8 @@
 		3D6DE69119F16BE500B87BDF /* MaskedVector.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D6DE68F19F16BE500B87BDF /* MaskedVector.h */; };
 		3D6DE69919F1BDA200B87BDF /* MaskedVectorTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D6DE69819F1BDA200B87BDF /* MaskedVectorTests.cpp */; };
 		3D94516819FEFAB500F73BCA /* ScoreAverager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D94516619FEFAB500F73BCA /* ScoreAverager.cpp */; };
+		3D94516C1A0021EF00F73BCA /* Classifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D94516A1A0021EF00F73BCA /* Classifier.cpp */; };
+		3D9451721A002E7300F73BCA /* AmsCalculator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9451701A002E7300F73BCA /* AmsCalculator.cpp */; };
 		3D9808E319E98C2B0016267F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9808DC19E98C2B0016267F /* main.cpp */; };
 		3D9808E619E98C500016267F /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9808A419E8B7070016267F /* gtest.framework */; };
 		3D9808EE19E98D080016267F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9808ED19E98D080016267F /* main.cpp */; };
@@ -105,6 +107,10 @@
 		3D6DE69819F1BDA200B87BDF /* MaskedVectorTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MaskedVectorTests.cpp; sourceTree = "<group>"; };
 		3D94516619FEFAB500F73BCA /* ScoreAverager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScoreAverager.cpp; sourceTree = "<group>"; };
 		3D94516719FEFAB500F73BCA /* ScoreAverager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreAverager.h; sourceTree = "<group>"; };
+		3D94516A1A0021EF00F73BCA /* Classifier.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Classifier.cpp; sourceTree = "<group>"; };
+		3D94516B1A0021EF00F73BCA /* Classifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Classifier.h; sourceTree = "<group>"; };
+		3D9451701A002E7300F73BCA /* AmsCalculator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AmsCalculator.cpp; sourceTree = "<group>"; };
+		3D9451711A002E7300F73BCA /* AmsCalculator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmsCalculator.h; sourceTree = "<group>"; };
 		3D9808A419E8B7070016267F /* gtest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = gtest.framework; sourceTree = "<group>"; };
 		3D9808D119E98BE90016267F /* Tests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Tests; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D9808DC19E98C2B0016267F /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -250,6 +256,10 @@
 				3DB789DF19FC3E4300669931 /* TreeCreator.h */,
 				3D94516619FEFAB500F73BCA /* ScoreAverager.cpp */,
 				3D94516719FEFAB500F73BCA /* ScoreAverager.h */,
+				3D94516A1A0021EF00F73BCA /* Classifier.cpp */,
+				3D94516B1A0021EF00F73BCA /* Classifier.h */,
+				3D9451701A002E7300F73BCA /* AmsCalculator.cpp */,
+				3D9451711A002E7300F73BCA /* AmsCalculator.h */,
 			);
 			path = "RandomForest++";
 			sourceTree = "<group>";
@@ -452,6 +462,8 @@
 				3DEF92FF19DFBC1100E1110F /* libcsv_parser.cpp in Sources */,
 				3D0442AA19F56A2C003FD1A2 /* IScorer.cpp in Sources */,
 				3D0442A719F56454003FD1A2 /* Tree.cpp in Sources */,
+				3D9451721A002E7300F73BCA /* AmsCalculator.cpp in Sources */,
+				3D94516C1A0021EF00F73BCA /* Classifier.cpp in Sources */,
 				3D9BE34B19EEE89D00536407 /* Timer.cpp in Sources */,
 				3DB789E019FC3E4300669931 /* TreeCreator.cpp in Sources */,
 				3DEF931019E0BC6C00E1110F /* HiggsCsvRow.cpp in Sources */,

@@ -20,10 +20,12 @@
 #include "Tree.h"
 #include "TreeCreator.h"
 #include "ScoreAverager.h"
+#include "Classifier.h"
+#include "AmsCalculator.h"
 
 using bkp::MaskedVector;
-using hrf::HiggsTrainingCsvRow;
 using hrf::HiggsCsvRow;
+using hrf::HiggsTrainingCsvRow;
 
 const bool PARALLEL = false;
 const double VALIDATION_PCT = 0.2; // 20%
@@ -32,6 +34,8 @@ const int NUM_TREES = 100;
 
 int main(int argc, const char * argv[]) {
     
+    bkp::random::Seed(42);
+    
     StartTimer("Loading training data");
     MaskedVector<const HiggsTrainingCsvRow> alltraindata = hrf::LoadTrainingData();
     EndTimer();
@@ -39,20 +43,45 @@ int main(int argc, const char * argv[]) {
     StartTimer("Splitting into validation and training sets");
     auto validation_filter = bkp::random::RandBools(static_cast<int>(alltraindata.size()), VALIDATION_PCT);
     const bkp::MaskedVector<const hrf::HiggsTrainingCsvRow> validation_set = alltraindata.Filter(validation_filter);
-    const auto validation_set_downcasted = hrf::ConvertRows(validation_set);
     validation_filter.flip();
     auto train_set = std::make_shared<const MaskedVector<const HiggsTrainingCsvRow>>(alltraindata.Filter(validation_filter));
+    const auto validation_set_downcasted = hrf::ConvertRows(validation_set);
+    const auto train_set_downcasted = hrf::ConvertRows(*train_set);
     EndTimer();
     
     StartTimer("Training " + std::to_string(NUM_TREES) + " trees");
     hrf::TreeCreator tree_creator(*train_set, COLS_PER_MODEL);
     auto trees = tree_creator.MakeTrees(NUM_TREES);
-    hrf::ScoreAverager forest(std::move(trees));
+    std::unique_ptr<hrf::IScorer> forest(new hrf::ScoreAverager(std::move(trees)));
     EndTimer();
     
-    StartTimer("Scoring validation data");
-    auto score = forest.Score(validation_set_downcasted, PARALLEL);
+    StartTimer("Creating and tuning classifier");
+    const double NaN = std::numeric_limits<double>::quiet_NaN();
+    const double MIN_EXPONENT = -1.0;
+    const double MAX_EXPONENT = 1.0;
+    const double EXPONENT_STEP = 0.1;
+    double best_cutoff = NaN;
+    double best_exponent = NaN;
+    double best_score = std::numeric_limits<double>::min();
+    hrf::Classifier classifier(std::move(forest));
+    hrf::AmsCalculator ams_calculator(validation_set);
+    for (double exponent=MIN_EXPONENT; exponent<=MAX_EXPONENT; exponent+=EXPONENT_STEP) {
+        double cutoff = std::exp(exponent);
+        classifier.cutoff_ = cutoff;
+        double score = ams_calculator.CalcAms(classifier.Classify(validation_set_downcasted, PARALLEL));
+        
+        if (score > best_score) {
+            best_score = score;
+            best_exponent = exponent;
+            best_cutoff = cutoff;
+        }
+    }
+    classifier.cutoff_ = best_cutoff;
     EndTimer();
+    std::cout << "\tBest Cutoff: " << best_cutoff << " (e^" << best_exponent << ")" << std::endl;
+    std::cout << "\tBest Validation Score: " << best_score << std::endl;
+    double train_score = hrf::CalcAms(classifier.Classify(train_set_downcasted, PARALLEL), *train_set);
+    std::cout << "\tTraining Score: " << train_score << std::endl;
     
     return 0;
 }

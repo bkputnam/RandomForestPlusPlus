@@ -36,7 +36,7 @@ namespace hrf {
             for (auto row_index = decltype(n_rows){0}; row_index<n_rows; ++row_index) {
                 double s_score = score.s_scores_[row_index];
                 if (!std::isnan(s_score)) {
-                    s_sums[row_index] = std::log2(s_score);
+                    s_sums[row_index] += std::log(s_score);
                     ++(s_counts[row_index]);
                 }
             }
@@ -44,7 +44,7 @@ namespace hrf {
             for (auto row_index = decltype(n_rows){0}; row_index<n_rows; ++row_index) {
                 double b_score = score.b_scores_[row_index];
                 if (!std::isnan(b_score)) {
-                    b_sums[row_index] = std::log2(b_score);
+                    b_sums[row_index] += std::log(b_score);
                     ++(b_counts[row_index]);
                 }
             }
