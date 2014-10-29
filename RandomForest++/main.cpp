@@ -12,6 +12,9 @@
 #include <random>
 #include <limits>
 #include <string>
+#include <cstdlib>
+
+#include <boost/iterator/counting_iterator.hpp>
 
 #include "Timer.h"
 #include "HiggsCsvRow.h"
@@ -30,7 +33,12 @@ using hrf::HiggsTrainingCsvRow;
 const bool PARALLEL = false;
 const double VALIDATION_PCT = 0.2; // 20%
 const double COLS_PER_MODEL = 3;
-const int NUM_TREES = 100;
+const int NUM_TREES = 20;
+const std::string OUTFILE = "/Users/bkputnam/Desktop/hrf_output.csv";
+
+void PlayWinSound();
+void PlayFailSound();
+void PlayDingSound();
 
 int main(int argc, const char * argv[]) {
     
@@ -83,5 +91,30 @@ int main(int argc, const char * argv[]) {
     double train_score = hrf::CalcAms(classifier.Classify(train_set_downcasted, PARALLEL), *train_set);
     std::cout << "\tTraining Score: " << train_score << std::endl;
     
+    StartTimer("Loading Test Data");
+    auto test_data = hrf::LoadTestData();
+    EndTimer();
+    
+    StartTimer("Scoring Test Data");
+    auto predictions = classifier.Classify(test_data, PARALLEL);
+    EndTimer();
+    
+    StartTimer("Writing Output");
+    std::vector<int> confidences(boost::counting_iterator<int>(0),
+                                 boost::counting_iterator<int>(static_cast<int>(test_data.size())));
+    hrf::WritePredictions(OUTFILE, test_data, predictions, confidences);
+    EndTimer();
+    
+    PlayDingSound();
     return 0;
 }
+
+void PlaySound(std::string filename) {
+    if (system(nullptr)) {
+        system(("afplay data/" + filename).c_str());
+    }
+}
+void PlayWinSound() { PlaySound("ff7_win.mp3"); }
+void PlayFailSound() { PlaySound("sadTrombone.mp3"); }
+void PlayDingSound() { PlaySound("ding.mp3"); }
+

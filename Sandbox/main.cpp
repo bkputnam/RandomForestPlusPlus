@@ -11,6 +11,7 @@
 #include <mutex>
 #include <vector>
 #include <array>
+#include <cstdlib>
 
 #include <boost/thread.hpp>
 #include <boost/iterator/counting_iterator.hpp>
@@ -25,20 +26,12 @@ using std::endl;
 using namespace bkp;
 using namespace std;
 
-struct Foo {
-    OperationCounter o;
-    
-    Foo(int i) : o(i) { }
-};
-
 int main(int argc, const char * argv[]) {
     
-    std::vector<OperationCounter> data(boost::counting_iterator<int>(0), boost::counting_iterator<int>(5));
-    std::vector<bool> filter({true, true, false, true, false});
-    
-    bkp::MaskedVector<OperationCounter> masked(std::shared_ptr<std::vector<OperationCounter>>(&data), filter);
-    
-    masked[2].data = 100;
-    
-    cout << data[3].data << endl;
+    if (!system(nullptr)) {
+        cout << "system() not available" << endl;
+    }
+    else {
+        system("afplay data/ding.mp3");
+    }
 }

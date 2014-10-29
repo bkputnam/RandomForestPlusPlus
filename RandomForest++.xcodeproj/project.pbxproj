@@ -17,6 +17,12 @@
 		3D94516819FEFAB500F73BCA /* ScoreAverager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D94516619FEFAB500F73BCA /* ScoreAverager.cpp */; };
 		3D94516C1A0021EF00F73BCA /* Classifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D94516A1A0021EF00F73BCA /* Classifier.cpp */; };
 		3D9451721A002E7300F73BCA /* AmsCalculator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9451701A002E7300F73BCA /* AmsCalculator.cpp */; };
+		3D9451761A016CA000F73BCA /* ding.mp3 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D9451731A016C7A00F73BCA /* ding.mp3 */; };
+		3D9451771A016CA000F73BCA /* ff7_win.mp3 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D9451741A016C7A00F73BCA /* ff7_win.mp3 */; };
+		3D9451781A016CA000F73BCA /* sadTrombone.mp3 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D9451751A016C7A00F73BCA /* sadTrombone.mp3 */; };
+		3D9451791A016CAA00F73BCA /* ding.mp3 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D9451731A016C7A00F73BCA /* ding.mp3 */; };
+		3D94517A1A016CAA00F73BCA /* ff7_win.mp3 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D9451741A016C7A00F73BCA /* ff7_win.mp3 */; };
+		3D94517B1A016CAA00F73BCA /* sadTrombone.mp3 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D9451751A016C7A00F73BCA /* sadTrombone.mp3 */; };
 		3D9808E319E98C2B0016267F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9808DC19E98C2B0016267F /* main.cpp */; };
 		3D9808E619E98C500016267F /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9808A419E8B7070016267F /* gtest.framework */; };
 		3D9808EE19E98D080016267F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9808ED19E98D080016267F /* main.cpp */; };
@@ -75,12 +81,15 @@
 		};
 		3D9808E919E98D080016267F /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
+			buildActionMask = 12;
+			dstPath = data;
+			dstSubfolderSpec = 16;
 			files = (
+				3D9451791A016CAA00F73BCA /* ding.mp3 in CopyFiles */,
+				3D94517A1A016CAA00F73BCA /* ff7_win.mp3 in CopyFiles */,
+				3D94517B1A016CAA00F73BCA /* sadTrombone.mp3 in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		3DEF92EF19DF867D00E1110F /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -90,6 +99,9 @@
 			files = (
 				3DEF930D19E0BB8500E1110F /* training.csv in CopyFiles */,
 				3D9BE35519EF077B00536407 /* test.csv in CopyFiles */,
+				3D9451761A016CA000F73BCA /* ding.mp3 in CopyFiles */,
+				3D9451771A016CA000F73BCA /* ff7_win.mp3 in CopyFiles */,
+				3D9451781A016CA000F73BCA /* sadTrombone.mp3 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,6 +123,9 @@
 		3D94516B1A0021EF00F73BCA /* Classifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Classifier.h; sourceTree = "<group>"; };
 		3D9451701A002E7300F73BCA /* AmsCalculator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AmsCalculator.cpp; sourceTree = "<group>"; };
 		3D9451711A002E7300F73BCA /* AmsCalculator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmsCalculator.h; sourceTree = "<group>"; };
+		3D9451731A016C7A00F73BCA /* ding.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ding.mp3; sourceTree = "<group>"; };
+		3D9451741A016C7A00F73BCA /* ff7_win.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ff7_win.mp3; sourceTree = "<group>"; };
+		3D9451751A016C7A00F73BCA /* sadTrombone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sadTrombone.mp3; sourceTree = "<group>"; };
 		3D9808A419E8B7070016267F /* gtest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = gtest.framework; sourceTree = "<group>"; };
 		3D9808D119E98BE90016267F /* Tests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Tests; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D9808DC19E98C2B0016267F /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -276,6 +291,9 @@
 		3DEF930019DFBE1C00E1110F /* data */ = {
 			isa = PBXGroup;
 			children = (
+				3D9451731A016C7A00F73BCA /* ding.mp3 */,
+				3D9451741A016C7A00F73BCA /* ff7_win.mp3 */,
+				3D9451751A016C7A00F73BCA /* sadTrombone.mp3 */,
 				3DEF930119DFBE1C00E1110F /* test.csv */,
 				3DEF930219DFBE1C00E1110F /* test.csv.zip */,
 				3DEF930319DFBE1C00E1110F /* training.csv */,

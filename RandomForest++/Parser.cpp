@@ -11,6 +11,7 @@
 #include <memory>
 #include <cstdlib>
 #include <iostream>
+#include <fstream>
 
 #include "Parser.h"
 
@@ -65,5 +66,30 @@ namespace hrf {
     
     bkp::MaskedVector<const HiggsCsvRow> LoadTestData() {
         return LoadRows<HiggsCsvRow>("data/test.csv");
+    }
+    
+    void WritePredictions(std::string filename,
+                          const bkp::MaskedVector<const HiggsCsvRow>& rows,
+                          const std::vector<char>& predictions,
+                          const std::vector<int>& confidences)
+    {
+        std::ofstream outfile;
+        outfile.open(filename, std::fstream::out);
+        
+        if (!outfile.is_open()) {
+            std::cout << "Failed to open file" << std::endl;
+            return;
+        }
+        
+        outfile << "EventId,RankOrder,Class" << std::endl;
+        
+        const auto size = rows.size();
+        for (auto i = decltype(size){0}; i<size; ++i) {
+            outfile << rows[i].EventId_ << ',' << confidences[i] << ',' << predictions[i] << std::endl;
+        }
+        
+        // outfile will be closed automatically when variable exits scope,
+        // but good to remember this anyway.
+        outfile.close();
     }
 }

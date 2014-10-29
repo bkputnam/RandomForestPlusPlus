@@ -9,6 +9,8 @@
 #ifndef __RandomForest____Parser__
 #define __RandomForest____Parser__
 
+#include <string>
+
 #include "MaskedVector.h"
 #include "HiggsCsvRow.h"
 
@@ -16,6 +18,11 @@ namespace hrf {
     
     bkp::MaskedVector<const HiggsTrainingCsvRow> LoadTrainingData();
     bkp::MaskedVector<const HiggsCsvRow> LoadTestData();
+    
+    void WritePredictions(std::string filename,
+                          const bkp::MaskedVector<const HiggsCsvRow>& rows,
+                          const std::vector<char>& predictions,
+                          const std::vector<int>& confidences);
     
 }
 
