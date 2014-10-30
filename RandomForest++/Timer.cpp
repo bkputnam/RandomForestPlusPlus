@@ -40,17 +40,17 @@ std::string FmtDuration(chrono::duration<double> elapsed) {
     minutes = (tot_secs - (hours*SECS_PER_HOUR)) / SECS_PER_MIN;
     seconds = (tot_secs - (hours*SECS_PER_HOUR) - (minutes*SECS_PER_MIN));
     
-    std::ostringstream outstream;
-    outstream << std::setfill('0');
+    const int BUFFER_SIZE = 20; // longest expected string is "1234:56:12 hours" which is 16 chars
+    char buffer[BUFFER_SIZE];
     if (hours > 0) {
-        outstream << hours << ":" << std::setw(2) << minutes << ":" << std::setw(2) << seconds << " hours";
+        snprintf(buffer, BUFFER_SIZE, "%d:%02d:%02d hours", hours, minutes, seconds);
     }
     else if (minutes > 0) {
-        outstream << minutes << ":" << std::setw(2) << seconds << " minutes";
+        snprintf(buffer, BUFFER_SIZE, "%d:%02d minutes", minutes, seconds);
     }
     else {
-        outstream << seconds << " seconds";
+        snprintf(buffer, BUFFER_SIZE, "%d seconds", seconds);
     }
     
-    return outstream.str();
+    return std::string(buffer);
 }
