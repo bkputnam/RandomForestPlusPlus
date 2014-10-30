@@ -21,36 +21,30 @@
 
 namespace hrf {
     
-    // private constructor - requires include_max and normalizing_constant, although they
-    // can be calculated if defaults are detected
+    // private constructor - requires include_max, although it
+    // can be calculated if default is detected
     Tree::Tree(
         std::shared_ptr<const bkp::MaskedVector<const HiggsTrainingCsvRow>> train_points,
         std::shared_ptr<std::vector<int>> target_features,
         std::shared_ptr<std::vector<double>> min_corner,
-        std::shared_ptr<std::vector<double>> max_corner,
-        double normalizing_constant
+        std::shared_ptr<std::vector<double>> max_corner
     ) :
     ndim_(static_cast<int>(target_features->size())), // NOTE: ndim_ is initialized before target_features_, otherwise I would have to pull size() from the member not the parameter (parameter is invalid after std::move)
     npoints_(static_cast<int>(train_points->size())), // NOTE: ditto for npoints_, initialize from parameter over member due to initialization order and unique_ptr moves
     target_features_(target_features),
     min_corner_(min_corner),
     max_corner_(max_corner),
-    normalizing_constant_(normalizing_constant),
     train_points_(std::move(train_points))
     {
-        if (isnan(normalizing_constant_)) {
-            normalizing_constant_ = npoints_;
-        }
-        
-        double normalized_volume = CalcVolume() * normalizing_constant_;
+        double volume = CalcVolume();
         num_s_ = static_cast<int>(std::count_if(
             train_points_->begin(),
             train_points_->end(),
             [](const HiggsTrainingCsvRow& row) { return row.Label_ == 's'; }
         ));
         num_b_ = npoints_ - num_s_;
-        sdensity_ = num_s_ / normalized_volume;
-        bdensity_ = num_b_ / normalized_volume;
+        sdensity_ = num_s_ / volume;
+        bdensity_ = num_b_ / volume;
     }
     
     // public ctor - sets up a couple default values, but then mostly just passes off
@@ -64,8 +58,7 @@ namespace hrf {
     Tree(std::make_shared<const bkp::MaskedVector<const HiggsTrainingCsvRow>>(std::move(train_points)),
          std::make_shared<std::vector<int>>(std::move(target_features)),
          min_corner,
-         max_corner,
-         std::numeric_limits<double>::quiet_NaN() // NaN should trigger default initializer
+         max_corner
     )
     { }
     
@@ -139,8 +132,7 @@ namespace hrf {
             std::make_shared<const bkp::MaskedVector<const HiggsTrainingCsvRow>>(train_points_->Filter(filter)),
             target_features_,
             upper_min_corner,
-            max_corner_,
-            normalizing_constant_
+            max_corner_
         ));
         
         // filter = !filter
@@ -151,8 +143,7 @@ namespace hrf {
             std::make_shared<const bkp::MaskedVector<const HiggsTrainingCsvRow>>(train_points_->Filter(filter)),
             target_features_,
             min_corner_,
-            lower_max_corner,
-            normalizing_constant_
+            lower_max_corner
          ));
         
         split_dim_ = best_local_dim_index;

@@ -30,7 +30,6 @@ namespace hrf {
         int num_b_;
         double sdensity_;
         double bdensity_;
-        double normalizing_constant_;
         
         std::shared_ptr<const bkp::MaskedVector<const HiggsTrainingCsvRow>> train_points_;
         
@@ -59,8 +58,7 @@ namespace hrf {
         Tree(std::shared_ptr<const bkp::MaskedVector<const HiggsTrainingCsvRow>> train_points,
              std::shared_ptr<std::vector<int>> target_features,
              std::shared_ptr<std::vector<double>> min_corner,
-             std::shared_ptr<std::vector<double>> max_corner,
-             double normalizing_constant
+             std::shared_ptr<std::vector<double>> max_corner
              );
     
     public:
