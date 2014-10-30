@@ -73,23 +73,27 @@ namespace hrf {
                           const std::vector<char>& predictions,
                           const std::vector<int>& confidences)
     {
-        std::ofstream outfile;
-        outfile.open(filename, std::fstream::out);
-        
-        if (!outfile.is_open()) {
-            std::cout << "Failed to open file" << std::endl;
-            return;
+        bkp::FileWrapper f;
+        if (!f.Open(filename, "w")) {
+            return false;
         }
         
-        outfile << "EventId,RankOrder,Class" << std::endl;
+        if (f.Printf("EventId,RankOrder,Class\n") < 0) {
+            return false;
+        }
         
         const auto size = rows.size();
         for (auto i = decltype(size){0}; i<size; ++i) {
-            outfile << rows[i].EventId_ << ',' << confidences[i] << ',' << predictions[i] << std::endl;
+            int chars_printed = f.Printf("%d,%d,%c\n",
+                                         rows[i].EventId_,
+                                         confidences[i],
+                                         predictions[i]);
+            if (chars_printed < 0) {
+                return false;
+            }
         }
         
-        // outfile will be closed automatically when variable exits scope,
-        // but good to remember this anyway.
-        outfile.close();
+        // f will auto-close when it exits scope
+        return true;
     }
 }
