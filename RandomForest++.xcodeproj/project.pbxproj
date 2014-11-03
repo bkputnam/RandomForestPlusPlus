@@ -47,6 +47,7 @@
 		3D9251451A080AC2003255BF /* DummyScorer.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D9251431A080AC2003255BF /* DummyScorer.h */; };
 		3D9251471A080BE3003255BF /* DummyScorerTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9251461A080BE3003255BF /* DummyScorerTests.cpp */; };
 		3D92514A1A080F92003255BF /* MockRows.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9251481A080F92003255BF /* MockRows.cpp */; };
+		3D92514C1A0819DC003255BF /* AmsCalculatorTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D92514B1A0819DC003255BF /* AmsCalculatorTests.cpp */; };
 		3D9451761A016CA000F73BCA /* ding.mp3 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D9451731A016C7A00F73BCA /* ding.mp3 */; };
 		3D9451771A016CA000F73BCA /* ff7_win.mp3 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D9451741A016C7A00F73BCA /* ff7_win.mp3 */; };
 		3D9451781A016CA000F73BCA /* sadTrombone.mp3 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D9451751A016C7A00F73BCA /* sadTrombone.mp3 */; };
@@ -200,6 +201,7 @@
 		3D9251461A080BE3003255BF /* DummyScorerTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DummyScorerTests.cpp; sourceTree = "<group>"; };
 		3D9251481A080F92003255BF /* MockRows.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MockRows.cpp; sourceTree = "<group>"; };
 		3D9251491A080F92003255BF /* MockRows.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MockRows.h; sourceTree = "<group>"; };
+		3D92514B1A0819DC003255BF /* AmsCalculatorTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AmsCalculatorTests.cpp; sourceTree = "<group>"; };
 		3D9451731A016C7A00F73BCA /* ding.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ding.mp3; sourceTree = "<group>"; };
 		3D9451741A016C7A00F73BCA /* ff7_win.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ff7_win.mp3; sourceTree = "<group>"; };
 		3D9451751A016C7A00F73BCA /* sadTrombone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sadTrombone.mp3; sourceTree = "<group>"; };
@@ -326,6 +328,7 @@
 				3D9251461A080BE3003255BF /* DummyScorerTests.cpp */,
 				3D9251481A080F92003255BF /* MockRows.cpp */,
 				3D9251491A080F92003255BF /* MockRows.h */,
+				3D92514B1A0819DC003255BF /* AmsCalculatorTests.cpp */,
 			);
 			path = HrfClassesTests;
 			sourceTree = "<group>";
@@ -650,6 +653,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D9250FB1A07FE92003255BF /* main.cpp in Sources */,
+				3D92514C1A0819DC003255BF /* AmsCalculatorTests.cpp in Sources */,
 				3D9251471A080BE3003255BF /* DummyScorerTests.cpp in Sources */,
 				3D92514A1A080F92003255BF /* MockRows.cpp in Sources */,
 				3D9251411A080613003255BF /* FmtDurationTests.cpp in Sources */,
