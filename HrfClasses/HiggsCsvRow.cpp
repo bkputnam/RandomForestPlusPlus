@@ -22,6 +22,12 @@ namespace hrf {
         }
     }
     
+    // pass-anything constructor
+    HiggsCsvRow::HiggsCsvRow(int event_id, std::array<double, NUM_FEATURES>&& data) :
+    EventId_(event_id),
+    data_(std::move(data))
+    { }
+    
     // conversion constructor
     HiggsCsvRow::HiggsCsvRow(const HiggsTrainingCsvRow& row):
     EventId_(row.EventId_),
@@ -33,6 +39,16 @@ namespace hrf {
     HiggsCsvRow(row),
     Weight_(std::stod(row[31])),
     Label_(row[32][0])
+    { }
+    
+    // pass-anything constructor
+    HiggsTrainingCsvRow::HiggsTrainingCsvRow(int event_id,
+                                             std::array<double, HiggsCsvRow::NUM_FEATURES>&& data,
+                                             double weight,
+                                             char label) :
+    HiggsCsvRow(event_id, std::move(data)),
+    Weight_(weight),
+    Label_(label)
     { }
     
     // Internal template: the code for the two different

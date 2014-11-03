@@ -43,6 +43,10 @@
 		3D92513D1A08033D003255BF /* libcsv_parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9251391A08033D003255BF /* libcsv_parser.cpp */; };
 		3D92513E1A08033D003255BF /* libcsv_parser.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D92513A1A08033D003255BF /* libcsv_parser.h */; };
 		3D9251411A080613003255BF /* FmtDurationTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9251401A080613003255BF /* FmtDurationTests.cpp */; };
+		3D9251441A080AC2003255BF /* DummyScorer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9251421A080AC2003255BF /* DummyScorer.cpp */; };
+		3D9251451A080AC2003255BF /* DummyScorer.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D9251431A080AC2003255BF /* DummyScorer.h */; };
+		3D9251471A080BE3003255BF /* DummyScorerTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9251461A080BE3003255BF /* DummyScorerTests.cpp */; };
+		3D92514A1A080F92003255BF /* MockRows.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9251481A080F92003255BF /* MockRows.cpp */; };
 		3D9451761A016CA000F73BCA /* ding.mp3 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D9451731A016C7A00F73BCA /* ding.mp3 */; };
 		3D9451771A016CA000F73BCA /* ff7_win.mp3 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D9451741A016C7A00F73BCA /* ff7_win.mp3 */; };
 		3D9451781A016CA000F73BCA /* sadTrombone.mp3 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D9451751A016C7A00F73BCA /* sadTrombone.mp3 */; };
@@ -191,6 +195,11 @@
 		3D92513A1A08033D003255BF /* libcsv_parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libcsv_parser.h; sourceTree = "<group>"; };
 		3D92513C1A08033D003255BF /* csvreader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = csvreader.cpp; sourceTree = "<group>"; };
 		3D9251401A080613003255BF /* FmtDurationTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FmtDurationTests.cpp; sourceTree = "<group>"; };
+		3D9251421A080AC2003255BF /* DummyScorer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DummyScorer.cpp; sourceTree = "<group>"; };
+		3D9251431A080AC2003255BF /* DummyScorer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DummyScorer.h; sourceTree = "<group>"; };
+		3D9251461A080BE3003255BF /* DummyScorerTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DummyScorerTests.cpp; sourceTree = "<group>"; };
+		3D9251481A080F92003255BF /* MockRows.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MockRows.cpp; sourceTree = "<group>"; };
+		3D9251491A080F92003255BF /* MockRows.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MockRows.h; sourceTree = "<group>"; };
 		3D9451731A016C7A00F73BCA /* ding.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ding.mp3; sourceTree = "<group>"; };
 		3D9451741A016C7A00F73BCA /* ff7_win.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ff7_win.mp3; sourceTree = "<group>"; };
 		3D9451751A016C7A00F73BCA /* sadTrombone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sadTrombone.mp3; sourceTree = "<group>"; };
@@ -286,22 +295,24 @@
 				3D9251381A08033D003255BF /* libs */,
 				3D92513B1A08033D003255BF /* sample_code */,
 				3D9251141A0802E8003255BF /* AmsCalculator.cpp */,
-				3D9251161A0802E8003255BF /* Classifier.cpp */,
-				3D9251181A0802E8003255BF /* HiggsCsvRow.cpp */,
-				3D92511A1A0802E8003255BF /* IScorer.cpp */,
-				3D92511C1A0802E8003255BF /* Parser.cpp */,
-				3D92511E1A0802E8003255BF /* ScoreAverager.cpp */,
-				3D9251201A0802E8003255BF /* Timer.cpp */,
-				3D9251221A0802E8003255BF /* Tree.cpp */,
-				3D9251241A0802E8003255BF /* TreeCreator.cpp */,
 				3D9251151A0802E8003255BF /* AmsCalculator.h */,
+				3D9251161A0802E8003255BF /* Classifier.cpp */,
 				3D9251171A0802E8003255BF /* Classifier.h */,
+				3D9251421A080AC2003255BF /* DummyScorer.cpp */,
+				3D9251431A080AC2003255BF /* DummyScorer.h */,
+				3D9251181A0802E8003255BF /* HiggsCsvRow.cpp */,
 				3D9251191A0802E8003255BF /* HiggsCsvRow.h */,
+				3D92511A1A0802E8003255BF /* IScorer.cpp */,
 				3D92511B1A0802E8003255BF /* IScorer.h */,
+				3D92511C1A0802E8003255BF /* Parser.cpp */,
 				3D92511D1A0802E8003255BF /* Parser.h */,
+				3D92511E1A0802E8003255BF /* ScoreAverager.cpp */,
 				3D92511F1A0802E8003255BF /* ScoreAverager.h */,
+				3D9251201A0802E8003255BF /* Timer.cpp */,
 				3D9251211A0802E8003255BF /* Timer.h */,
+				3D9251221A0802E8003255BF /* Tree.cpp */,
 				3D9251231A0802E8003255BF /* Tree.h */,
+				3D9251241A0802E8003255BF /* TreeCreator.cpp */,
 				3D9251251A0802E8003255BF /* TreeCreator.h */,
 			);
 			path = HrfClasses;
@@ -312,6 +323,9 @@
 			children = (
 				3D9251401A080613003255BF /* FmtDurationTests.cpp */,
 				3D9250FA1A07FE92003255BF /* main.cpp */,
+				3D9251461A080BE3003255BF /* DummyScorerTests.cpp */,
+				3D9251481A080F92003255BF /* MockRows.cpp */,
+				3D9251491A080F92003255BF /* MockRows.h */,
 			);
 			path = HrfClassesTests;
 			sourceTree = "<group>";
@@ -418,6 +432,7 @@
 				3D9251311A0802E8003255BF /* ScoreAverager.h in Headers */,
 				3D9251271A0802E8003255BF /* AmsCalculator.h in Headers */,
 				3D92512B1A0802E8003255BF /* HiggsCsvRow.h in Headers */,
+				3D9251451A080AC2003255BF /* DummyScorer.h in Headers */,
 				3D92512D1A0802E8003255BF /* IScorer.h in Headers */,
 				3D9251371A0802E8003255BF /* TreeCreator.h in Headers */,
 				3D9251351A0802E8003255BF /* Tree.h in Headers */,
@@ -620,6 +635,7 @@
 				3D9251341A0802E8003255BF /* Tree.cpp in Sources */,
 				3D92512C1A0802E8003255BF /* IScorer.cpp in Sources */,
 				3D9251261A0802E8003255BF /* AmsCalculator.cpp in Sources */,
+				3D9251441A080AC2003255BF /* DummyScorer.cpp in Sources */,
 				3D9251321A0802E8003255BF /* Timer.cpp in Sources */,
 				3D92512A1A0802E8003255BF /* HiggsCsvRow.cpp in Sources */,
 				3D9251301A0802E8003255BF /* ScoreAverager.cpp in Sources */,
@@ -634,6 +650,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D9250FB1A07FE92003255BF /* main.cpp in Sources */,
+				3D9251471A080BE3003255BF /* DummyScorerTests.cpp in Sources */,
+				3D92514A1A080F92003255BF /* MockRows.cpp in Sources */,
 				3D9251411A080613003255BF /* FmtDurationTests.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -40,6 +40,9 @@ namespace hrf {
         // Construct a HiggsCsvRow from the output of our csv-parser library
         HiggsCsvRow(const csv_row& row);
         
+        // pass-anything constructor. Should probably only be used for mocking purposes
+        HiggsCsvRow(int event_id, std::array<double, NUM_FEATURES>&& data);
+        
         // Construct a HiggsCsvRow from a HiggsCsvTraining row, effectively stripping
         // off the extra features used for training. For those times where polymorphism
         // just won't cut it.
@@ -61,6 +64,12 @@ namespace hrf {
         
         // Construct from the output of our csv-parser library
         HiggsTrainingCsvRow(const csv_row& row);
+        
+        // pass-anything constructor. Should probably only be used for mocking purposes
+        HiggsTrainingCsvRow(int event_id,
+                            std::array<double, HiggsCsvRow::NUM_FEATURES>&& data,
+                            double weight,
+                            char label);
     };
     
     // Given a set of rows (HiggsCsvRow) and a set of columns (indexes to HiggsCsvRow.data_)

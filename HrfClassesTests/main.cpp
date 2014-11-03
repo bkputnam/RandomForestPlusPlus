@@ -9,7 +9,12 @@
 #include <iostream>
 #include <gtest/gtest.h>
 
+#include "RandUtils.h"
+
 int main(int argc, char * argv[]) {
+    
+    bkp::random::Seed(0); // fix seed for reproduceable results (used in MockRows)
+    
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
