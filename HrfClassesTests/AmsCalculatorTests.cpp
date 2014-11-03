@@ -28,8 +28,8 @@ TEST(AmsCalculatorTests, Basic) {
     
     std::vector<char> predicted_signal = {'s', 'b', 's'};
     
-    double s_sum = 1.0 + 3.0; // first and third elements are 's'
-    double b_sum = 3.0; // second element is 'b'
+    double s_sum = 1.0 + 2.0; // first and second elements are 's'
+    double b_sum = 3.0; // third element is 'b'
     
     std::array<double, N_ROWS> scaled_weights;
     for (int i=0; i<N_ROWS; ++i) {
@@ -63,6 +63,8 @@ TEST(AmsCalculatorTests, Basic) {
     double log = std::log(1.0 + (s/(b+B_R)));
     double radicand = 2.0 * (triple_sum * log - s);
     double ams = std::sqrt(radicand);
+    ASSERT_GT(ams, 0.0); // had a bug in MockRows that caused AMS to be equal to 0 all the time. This checks for that.
     
-    ASSERT_EQ(ams, hrf::CalcAms(predicted_signal, rows));
+    EXPECT_EQ(ams, hrf::CalcAms(predicted_signal, rows));
 }
+
