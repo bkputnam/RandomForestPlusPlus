@@ -13,51 +13,12 @@
 
 namespace hrf {
     
-    // helper function - not in .h
-    int parse_int(const std::string& str) {
-        return std::stoi(str);
-    }
-    
-    // helper function - not in .h
-    double parse_double(const std::string& str) {
-        return std::stod(str);
-    }
-    
+    // csv-row constructor
     HiggsCsvRow::HiggsCsvRow(const csv_row& row) :
-    EventId_(parse_int(row[0]))
-//    DER_mass_MMC(parse_double(row[1])),
-//    DER_mass_transverse_met_lep(parse_double(row[2])),
-//    DER_mass_vis(parse_double(row[3])),
-//    DER_pt_h(parse_double(row[4])),
-//    DER_deltaeta_jet_jet(parse_double(row[5])),
-//    DER_mass_jet_jet(parse_double(row[6])),
-//    DER_prodeta_jet_jet(parse_double(row[7])),
-//    DER_deltar_tau_lep(parse_double(row[8])),
-//    DER_pt_tot(parse_double(row[9])),
-//    DER_sum_pt(parse_double(row[10])),
-//    DER_pt_ratio_lep_tau(parse_double(row[11])),
-//    DER_met_phi_centrality(parse_double(row[12])),
-//    DER_lep_eta_centrality(parse_double(row[13])),
-//    PRI_tau_pt(parse_double(row[14])),
-//    PRI_tau_eta(parse_double(row[15])),
-//    PRI_tau_phi(parse_double(row[16])),
-//    PRI_lep_pt(parse_double(row[17])),
-//    PRI_lep_eta(parse_double(row[18])),
-//    PRI_lep_phi(parse_double(row[19])),
-//    PRI_met(parse_double(row[20])),
-//    PRI_met_phi(parse_double(row[21])),
-//    PRI_met_sumet(parse_double(row[22])),
-//    PRI_jet_num(parse_int(row[23])),
-//    PRI_jet_leading_pt(parse_double(row[24])),
-//    PRI_jet_leading_eta(parse_double(row[25])),
-//    PRI_jet_leading_phi(parse_double(row[26])),
-//    PRI_jet_subleading_pt(parse_double(row[27])),
-//    PRI_jet_subleading_eta(parse_double(row[28])),
-//    PRI_jet_subleading_phi(parse_double(row[29])),
-//    PRI_jet_all_pt(parse_double(row[30]))
+    EventId_(std::stoi(row[0]))
     {
         for (int i=0; i<data_.size(); i++) {
-            data_[i] = parse_double(row[i+1]); // +1 to shift past EventId
+            data_[i] = std::stod(row[i+1]); // +1 to shift past EventId
         }
     }
     
@@ -67,12 +28,16 @@ namespace hrf {
     data_(row.data_)
     { }
     
+    // csv-row constructor
     HiggsTrainingCsvRow::HiggsTrainingCsvRow(const csv_row& row) :
     HiggsCsvRow(row),
-    Weight_(parse_double(row[31])),
+    Weight_(std::stod(row[31])),
     Label_(row[32][0])
     { }
     
+    // Internal template: the code for the two different
+    // HasNan functions is exactly the same, so use a template
+    // to keep it DRY.
     template<class TRow>
     std::vector<bool>
     HasNan(const bkp::MaskedVector<const TRow>& rows,
@@ -84,18 +49,22 @@ namespace hrf {
         std::vector<bool> result;
         result.reserve(nrows);
         
-        for (auto row_index=decltype(nrows){0}; row_index<nrows; ++row_index) {
+        for (auto row_index = decltype(nrows){0}; row_index<nrows; ++row_index) {
+            
             auto& row = rows[row_index];
             bool row_has_nan = false;
-            for (auto dim_index=decltype(ndims){0}; dim_index<ndims; ++dim_index) {
+            
+            for (auto dim_index = decltype(ndims){0}; dim_index<ndims; ++dim_index) {
                 row_has_nan &= std::isnan(row.data_[dim_index]);
             }
+            
             result.push_back(row_has_nan);
         }
         
         return result;
     }
     
+    // HasNan implementation: delegate to instantiation of HasNan<T>
     std::vector<bool>
     HasNan(const bkp::MaskedVector<const HiggsCsvRow>& rows,
            const std::vector<int>& cols)
@@ -103,6 +72,7 @@ namespace hrf {
         return HasNan<HiggsCsvRow>(rows, cols);
     }
     
+    // HasNan implementation: delegate to instantiation of HasNan<T>
     std::vector<bool>
     HasNan(const bkp::MaskedVector<const HiggsTrainingCsvRow>& rows,
            const std::vector<int>& cols)
@@ -110,7 +80,12 @@ namespace hrf {
         return HasNan<HiggsTrainingCsvRow>(rows, cols);
     }
     
-    
+    // Convert Rows implementation
+    // Had some issues instantiating std::vector<const HiggsCsvRow>. Error
+    // occurred when calling reserve() and push_back(). Iterator constructor
+    // seems to work though, so created a vector of non-const rows and
+    // then copied to the vector of const. This does mean an extra copy is
+    // done, but this method isn't critical to our performance anyway.
     bkp::MaskedVector<const HiggsCsvRow>
     ConvertRows(const bkp::MaskedVector<const HiggsTrainingCsvRow>& rows) {
         

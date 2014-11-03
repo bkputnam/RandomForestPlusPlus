@@ -21,10 +21,14 @@
 
 namespace hrf {
     
-    // private constructor - requires include_max, although it
-    // can be calculated if default is detected
+    // private helper method
+    template<typename T, class = typename std::enable_if<std::is_rvalue_reference<T&&>::value>::type>
+    std::unique_ptr<T> copy_to_unique_ptr(T&& rval_ref) {
+        return std::unique_ptr<T>(new T(std::move(rval_ref)));
+    }
+    
     Tree::Tree(
-        std::shared_ptr<const bkp::MaskedVector<const HiggsTrainingCsvRow>> train_points,
+        std::unique_ptr<const bkp::MaskedVector<const HiggsTrainingCsvRow>> train_points,
         std::shared_ptr<std::vector<int>> target_features,
         std::shared_ptr<std::vector<double>> min_corner,
         std::shared_ptr<std::vector<double>> max_corner
@@ -55,7 +59,7 @@ namespace hrf {
         std::shared_ptr<std::vector<double>> min_corner,
         std::shared_ptr<std::vector<double>> max_corner
     ) :
-    Tree(std::make_shared<const bkp::MaskedVector<const HiggsTrainingCsvRow>>(std::move(train_points)),
+    Tree(copy_to_unique_ptr(std::move(train_points)),
          std::make_shared<std::vector<int>>(std::move(target_features)),
          min_corner,
          max_corner
@@ -129,7 +133,7 @@ namespace hrf {
         
         // upper tree
         result.push_back(Tree(
-            std::make_shared<const bkp::MaskedVector<const HiggsTrainingCsvRow>>(train_points_->Filter(filter)),
+            copy_to_unique_ptr(train_points_->Filter(filter)),
             target_features_,
             upper_min_corner,
             max_corner_
@@ -140,7 +144,7 @@ namespace hrf {
         
          // lower tree
         result.push_back(Tree(
-            std::make_shared<const bkp::MaskedVector<const HiggsTrainingCsvRow>>(train_points_->Filter(filter)),
+            copy_to_unique_ptr(train_points_->Filter(filter)),
             target_features_,
             min_corner_,
             lower_max_corner

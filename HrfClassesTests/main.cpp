@@ -1,8 +1,8 @@
 //
 //  main.cpp
-//  Tests
+//  HrfClassesTests
 //
-//  Created by Brian Putnam on 10/9/14.
+//  Created by Brian Putnam on 11/3/14.
 //  Copyright (c) 2014 Brian Putnam. All rights reserved.
 //
 
