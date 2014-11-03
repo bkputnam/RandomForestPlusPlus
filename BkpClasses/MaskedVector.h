@@ -78,6 +78,7 @@ namespace bkp {
         class Slice;
         
         MaskedVector() = default;
+        MaskedVector(const MaskedVector<T>& copyFrom) = default;
         
         // vector-move constructor: passed vector will be unusable after constructor has finished
         explicit MaskedVector(TVector&& data) :
