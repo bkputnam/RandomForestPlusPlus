@@ -27,8 +27,8 @@ std::vector<const hrf::HiggsTrainingCsvRow> MockRows_v(std::initializer_list<boo
     for (auto i = decltype(size){0}; i<size; ++i) {
         result.push_back(hrf::HiggsTrainingCsvRow(i,
                                                   RandData(),
-                                                  *signal_iter,
-                                                  *weight_iter
+                                                  *weight_iter,
+                                                  (*signal_iter) ? 's' : 'b'
                                                   )
                          );
         ++signal_iter;
