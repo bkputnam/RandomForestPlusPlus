@@ -69,6 +69,7 @@
 		3D9BE35519EF077B00536407 /* test.csv in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3DEF930119DFBE1C00E1110F /* test.csv */; };
 		3D9BE35819EF0FCF00536407 /* RandUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9BE35619EF0FCF00536407 /* RandUtils.cpp */; };
 		3D9BE35919EF0FCF00536407 /* RandUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D9BE35719EF0FCF00536407 /* RandUtils.h */; };
+		3DB6728C1A09393D00967801 /* TreeTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DB6728B1A09393D00967801 /* TreeTests.cpp */; };
 		3DEF92F519DF867D00E1110F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DEF92F419DF867D00E1110F /* main.cpp */; };
 		3DEF930D19E0BB8500E1110F /* training.csv in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3DEF930319DFBE1C00E1110F /* training.csv */; };
 /* End PBXBuildFile section */
@@ -225,6 +226,7 @@
 		3D98090F19E9A5F40016267F /* OperationCounter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationCounter.h; sourceTree = "<group>"; };
 		3D9BE35619EF0FCF00536407 /* RandUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RandUtils.cpp; sourceTree = "<group>"; };
 		3D9BE35719EF0FCF00536407 /* RandUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RandUtils.h; sourceTree = "<group>"; };
+		3DB6728B1A09393D00967801 /* TreeTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TreeTests.cpp; sourceTree = "<group>"; };
 		3DEF92F119DF867D00E1110F /* RandomForest++ */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "RandomForest++"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DEF92F419DF867D00E1110F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		3DEF930119DFBE1C00E1110F /* test.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test.csv; sourceTree = "<group>"; };
@@ -344,6 +346,7 @@
 				3D9251491A080F92003255BF /* MockRows.h */,
 				3D9251561A0880F9003255BF /* ScoreAveragerTests.cpp */,
 				3D9251531A086DB4003255BF /* ScoreCacherTests.cpp */,
+				3DB6728B1A09393D00967801 /* TreeTests.cpp */,
 			);
 			path = HrfClassesTests;
 			sourceTree = "<group>";
@@ -670,6 +673,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D9250FB1A07FE92003255BF /* main.cpp in Sources */,
+				3DB6728C1A09393D00967801 /* TreeTests.cpp in Sources */,
 				3D92514C1A0819DC003255BF /* AmsCalculatorTests.cpp in Sources */,
 				3D92514E1A08681F003255BF /* ClassifierTests.cpp in Sources */,
 				3D9251571A0880F9003255BF /* ScoreAveragerTests.cpp in Sources */,
@@ -1062,6 +1066,7 @@
 				3D9250B71A07FC09003255BF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3D9250F11A07FDE5003255BF /* Build configuration list for PBXNativeTarget "HrfClasses" */ = {
 			isa = XCConfigurationList;
@@ -1070,6 +1075,7 @@
 				3D9250F31A07FDE5003255BF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3D9250FC1A07FE92003255BF /* Build configuration list for PBXNativeTarget "HrfClassesTests" */ = {
 			isa = XCConfigurationList;
@@ -1078,6 +1084,7 @@
 				3D9250FE1A07FE92003255BF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3D9808EF19E98D080016267F /* Build configuration list for PBXNativeTarget "Sandbox" */ = {
 			isa = XCConfigurationList;

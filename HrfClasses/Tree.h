@@ -91,9 +91,14 @@ namespace hrf {
         // higher if num_s_ is close to num_b_, less if they are markedly different)
         double CalcTotalEntropy();
         
-        // Internal helper function that creates two children by splitting
-        // our box into two along some axis
-        std::vector<Tree> Split();
+        // Internal helper function, automates the process of finding a good dim/value
+        // to split on, and performing the split
+        void Split();
+        
+        // Internal helper function, performs split at specified location by creating
+        // two child Trees, splitting training data amongst the children, and recording
+        // the split dim/value.
+        void SplitHelper(int local_dim, int global_dim, double split_value);
         
         // FindBestSplitDim searches all of target_features_ for the best point on the
         // best dimension to split on (reduces entropy the most). FindBestRandomSplit
@@ -144,6 +149,13 @@ namespace hrf {
         // max_depth and min_pts are optional, and if left as -1 will be initialized
         // to some sensible default value (usually some function of npoints_).
         void Train(int max_depth=-1, int min_pts=-1);
+        
+        // Split the tree on the specified feature at the specified value. Will create
+        // two children. This function is mostly only useful for unit testing; you should
+        // really let the tree find its own splits in normal usage (use Train()).
+        //
+        // Note: feature_index is an index to HiggsCsvRow.data_
+        void Split(int feature_index, double split_value);
         
         // from IScorer:
         // For each point in data, find the leaf child that that point falls into.

@@ -93,7 +93,7 @@ namespace hrf {
         return Entropy(num_s_, num_b_);
     }
     
-    std::vector<Tree> Tree::Split() {
+    void Tree::Split() {
         
         int best_local_dim_index;
         double best_split, max_expected_info;
@@ -102,58 +102,72 @@ namespace hrf {
         auto split_info = FindBestRandomSplit();
         std::tie(best_local_dim_index, best_split, max_expected_info) = split_info;
         
-        if (best_local_dim_index == -1 || isnan(best_split) || max_expected_info <= 0.0) {
-            return std::vector<Tree>(); // empty list of children
-        }
+        assert(best_local_dim_index != -1);
+        assert(!isnan(best_split));
+        assert(max_expected_info > 0.0);
+        
         int best_global_dim_index = (*target_features_)[best_local_dim_index];
+        
+        SplitHelper(best_local_dim_index,
+                    best_global_dim_index,
+                    best_split);
+    }
+    
+    void Tree::Split(int feature_index, double split_value) {
+        
+        int local_index = -1;
+        for (int i=0; i<ndim_; ++i) {
+            if ((*target_features_)[i] == feature_index) {
+                local_index = i;
+            }
+        }
+        assert(local_index > -1);
+        
+        SplitHelper(local_index, feature_index, split_value);
+    }
+    
+    void Tree::SplitHelper(int local_dim, int global_dim, double split_value) {
+        
+        assert(local_dim >= 0);
+        assert(global_dim >= 0);
         
         std::vector<bool> filter;
         filter.reserve(npoints_);
-        std::transform(
-            train_points_->begin(),
-            train_points_->end(),
-            std::back_inserter(filter),
-            [best_global_dim_index, best_split](const HiggsTrainingCsvRow& row) { return row.data_[best_global_dim_index] >= best_split; }
+        std::transform(train_points_->begin(),
+                       train_points_->end(),
+                       std::back_inserter(filter),
+                       [global_dim, split_value](const HiggsTrainingCsvRow& row) { return row.data_[global_dim] >= split_value; }
         );
         
-        auto upper_min_corner = std::make_shared<std::vector<double>>(
-            min_corner_->begin(),
-            min_corner_->end()
-        );
-        (*upper_min_corner)[best_local_dim_index] = best_split;
+        auto upper_min_corner = std::make_shared<std::vector<double>>(min_corner_->begin(),
+                                                                      min_corner_->end());
+        (*upper_min_corner)[local_dim] = split_value;
         
-        auto lower_max_corner = std::make_shared<std::vector<double>>(
-            max_corner_->begin(),
-            max_corner_->end()
-        );
-        (*lower_max_corner)[best_local_dim_index] = best_split;
+        auto lower_max_corner = std::make_shared<std::vector<double>>(max_corner_->begin(),
+                                                                      max_corner_->end());
+        (*lower_max_corner)[local_dim] = split_value;
         
-        std::vector<Tree> result;
-        result.reserve(2);
+        assert(children_.size() == 0);
+        children_.reserve(2); // single-dim, single-value splits always produce 2 children
         
-        // upper tree
-        result.push_back(Tree(
-            copy_to_unique_ptr(train_points_->Filter(filter)),
-            target_features_,
-            upper_min_corner,
-            max_corner_
-        ));
+        // upper tree (child 0)
+        children_.push_back(Tree(copy_to_unique_ptr(train_points_->Filter(filter)),
+                              target_features_,
+                              upper_min_corner,
+                              max_corner_));
         
         // filter = !filter
         std::transform(filter.begin(), filter.end(), filter.begin(), [](bool b) { return !b; });
         
-         // lower tree
-        result.push_back(Tree(
-            copy_to_unique_ptr(train_points_->Filter(filter)),
-            target_features_,
-            min_corner_,
-            lower_max_corner
-         ));
+        // lower tree (child 1)
+        children_.push_back(Tree(copy_to_unique_ptr(train_points_->Filter(filter)),
+                              target_features_,
+                              min_corner_,
+                              lower_max_corner));
         
-        split_dim_ = best_local_dim_index;
-        split_val_ = best_split;
-        
-        return result;
+        // copy to member variables for future use
+        split_dim_ = local_dim;
+        split_val_ = split_value;
     }
     
     std::tuple<int, double, double> Tree::FindBestSplitDim() {
@@ -273,7 +287,7 @@ namespace hrf {
     void Tree::TrainHelper(int max_depth, int min_pts) {
         bool too_small = (max_depth <= 0 || npoints_ <= min_pts);
         if (!too_small) {
-            children_ = Split();
+            Split();
             for (auto& child : children_) {
                 child.TrainHelper(max_depth-1, min_pts);
             }
