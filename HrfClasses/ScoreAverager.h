@@ -10,6 +10,7 @@
 #define __RandomForest____ScoreAverager__
 
 #include <vector>
+#include <memory>
 
 #include "IScorer.h"
 #include "Tree.h"
@@ -17,14 +18,16 @@
 namespace hrf {
     
     class ScoreAverager : public IScorer {
+    public:
+        typedef std::vector<std::unique_ptr<hrf::IScorer>> IScorerVector;
     private:
-        std::vector<Tree> sub_models_;
+        IScorerVector sub_models_;
         
         ScoreResult GMeanSerial(const bkp::MaskedVector<const HiggsCsvRow>& data);
         
     public:
         
-        ScoreAverager(std::vector<Tree>&& sub_models);
+        ScoreAverager(IScorerVector&& sub_models);
         
         virtual ScoreResult Score(const bkp::MaskedVector<const HiggsCsvRow>& data, bool parallel=false);
         
