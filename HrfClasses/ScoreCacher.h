@@ -13,10 +13,9 @@
 
 #include "IScorer.h"
 
-
 namespace hrf {
     
-    class ScoreCacher {
+    class ScoreCacher : public IScorer {
     private:
         std::unique_ptr<ScoreResult> cache_;
         std::unique_ptr<IScorer> scorer_;

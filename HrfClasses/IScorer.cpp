@@ -13,6 +13,11 @@ namespace hrf {
     ScoreResult::ScoreResult(std::vector<double>&& s_scores, std::vector<double>&& b_scores) :
     s_scores_(std::move(s_scores)),
     b_scores_(std::move(b_scores))
-    { }
+    {
+        assert(s_scores_.size() == b_scores_.size());
+    }
     
+    std::vector<double>::size_type ScoreResult::size() {
+        return s_scores_.size();
+    }
 }

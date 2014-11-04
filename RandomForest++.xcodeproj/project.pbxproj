@@ -48,6 +48,7 @@
 		3D9251471A080BE3003255BF /* DummyScorerTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9251461A080BE3003255BF /* DummyScorerTests.cpp */; };
 		3D92514A1A080F92003255BF /* MockRows.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9251481A080F92003255BF /* MockRows.cpp */; };
 		3D92514C1A0819DC003255BF /* AmsCalculatorTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D92514B1A0819DC003255BF /* AmsCalculatorTests.cpp */; };
+		3D92514E1A08681F003255BF /* ClassifierTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D92514D1A08681F003255BF /* ClassifierTests.cpp */; };
 		3D9251511A0869E8003255BF /* ScoreCacher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D92514F1A0869E8003255BF /* ScoreCacher.cpp */; };
 		3D9251521A0869E8003255BF /* ScoreCacher.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D9251501A0869E8003255BF /* ScoreCacher.h */; };
 		3D9251551A086DB4003255BF /* ScoreCacherTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9251531A086DB4003255BF /* ScoreCacherTests.cpp */; };
@@ -205,6 +206,7 @@
 		3D9251481A080F92003255BF /* MockRows.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MockRows.cpp; sourceTree = "<group>"; };
 		3D9251491A080F92003255BF /* MockRows.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MockRows.h; sourceTree = "<group>"; };
 		3D92514B1A0819DC003255BF /* AmsCalculatorTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AmsCalculatorTests.cpp; sourceTree = "<group>"; };
+		3D92514D1A08681F003255BF /* ClassifierTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ClassifierTests.cpp; sourceTree = "<group>"; };
 		3D92514F1A0869E8003255BF /* ScoreCacher.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScoreCacher.cpp; sourceTree = "<group>"; };
 		3D9251501A0869E8003255BF /* ScoreCacher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreCacher.h; sourceTree = "<group>"; };
 		3D9251531A086DB4003255BF /* ScoreCacherTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScoreCacherTests.cpp; sourceTree = "<group>"; };
@@ -332,6 +334,7 @@
 			isa = PBXGroup;
 			children = (
 				3D92514B1A0819DC003255BF /* AmsCalculatorTests.cpp */,
+				3D92514D1A08681F003255BF /* ClassifierTests.cpp */,
 				3D9251461A080BE3003255BF /* DummyScorerTests.cpp */,
 				3D9251401A080613003255BF /* FmtDurationTests.cpp */,
 				3D9250FA1A07FE92003255BF /* main.cpp */,
@@ -665,6 +668,7 @@
 			files = (
 				3D9250FB1A07FE92003255BF /* main.cpp in Sources */,
 				3D92514C1A0819DC003255BF /* AmsCalculatorTests.cpp in Sources */,
+				3D92514E1A08681F003255BF /* ClassifierTests.cpp in Sources */,
 				3D9251471A080BE3003255BF /* DummyScorerTests.cpp in Sources */,
 				3D9251551A086DB4003255BF /* ScoreCacherTests.cpp in Sources */,
 				3D92514A1A080F92003255BF /* MockRows.cpp in Sources */,

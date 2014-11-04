@@ -20,6 +20,8 @@ namespace hrf {
         std::vector<double> s_scores_;
         std::vector<double> b_scores_;
         
+        std::vector<double>::size_type size();
+        
         ScoreResult(std::vector<double>&& s_scores, std::vector<double>&& b_scores);
     };
     
