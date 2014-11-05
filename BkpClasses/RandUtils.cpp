@@ -37,6 +37,21 @@ namespace bkp {
             return std::uniform_real_distribution<double>(low, high)(Generator());
         }
         
+        std::vector<double> RandDoubles(int how_many, double low, double high) {
+            std::uniform_real_distribution<double> dist(low, high);
+            auto gen = Generator();
+            
+            std::vector<double> result(how_many);
+            auto iter = result.begin();
+            auto end = result.end();
+            while (iter != end) {
+                *iter = dist(gen);
+                ++iter;
+            }
+            
+            return result;
+        }
+        
         std::vector<int> Choice(int n, int k) {
             std::vector<int> indices(boost::counting_iterator<int>(0), boost::counting_iterator<int>(n));
             

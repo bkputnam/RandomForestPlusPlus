@@ -39,6 +39,7 @@ namespace bkp {
         }
         
         double RandDouble(double low, double high);
+        std::vector<double> RandDoubles(int how_many, double low, double high);
         
         template<unsigned int Size>
         std::array<double, Size> RandDouble(double low, double high) {

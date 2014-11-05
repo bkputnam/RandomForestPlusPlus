@@ -61,3 +61,45 @@ TEST(RandUtilsTests, RandBools) {
         EXPECT_EQ(num_true, CountTrues(bools));
     }
 }
+
+TEST(RandUtilsTests, RandDouble) {
+    
+    const double LOW = 10.0;
+    const double HIGH = 20.0;
+    
+    for (int i=0; i<100; ++i) {
+        double val = bkp::random::RandDouble(LOW, HIGH);
+        EXPECT_GE(val, LOW);
+        EXPECT_LE(val, HIGH);
+    }
+}
+
+TEST(RandUtilsTests, RandDoubleArray) {
+    
+    const double LOW = 10.0;
+    const double HIGH = 20.0;
+    
+    for (int i=0; i<100; ++i) {
+        std::array<double, 5> arr = bkp::random::RandDouble<5>(LOW, HIGH);
+        for (int j=0; j<5; ++j) {
+            double val = arr[j];
+            EXPECT_GE(val, LOW);
+            EXPECT_LE(val, HIGH);
+        }
+    }
+}
+
+TEST(RandUtilsTests, RandDoublesVector) {
+    
+    const double LOW = 10.0;
+    const double HIGH = 20.0;
+    
+    for (int i=0; i<100; ++i) {
+        std::vector<double> vec = bkp::random::RandDoubles(5, LOW, HIGH);
+        for (int j=0; j<5; ++j) {
+            double val = vec[j];
+            EXPECT_GE(val, LOW);
+            EXPECT_LE(val, HIGH);
+        }
+    }
+}
