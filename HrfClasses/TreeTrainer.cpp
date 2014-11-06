@@ -169,8 +169,22 @@ namespace trainer {
                      int max_depth,
                      int min_pts)
     {
-        if (max_depth <= 0 || training_rows.size() <= min_pts) {
-            return; // do nothing, end recursion
+        int s_count = CountLabel(training_rows, 's');
+        int b_count = CountLabel(training_rows, 'b'); // == training_rows.size() - s_count
+        
+        if (max_depth <= 0 ||
+            training_rows.size() <= min_pts ||
+            s_count == 0 ||
+            b_count == 0)
+        {
+            // set score and stop recursion (return)
+            
+            double volume = static_cast<double>(tree.volume_);
+            double s_density = s_count / volume;
+            double b_density = b_count / volume;
+            
+            tree.SetScore(s_density, b_density);
+            return;
         }
         
         double split, expected_info;
