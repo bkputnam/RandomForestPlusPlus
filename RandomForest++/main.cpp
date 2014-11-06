@@ -58,7 +58,9 @@ int main(int argc, const char * argv[]) {
     EndTimer();
     
     StartTimer("Training " + std::to_string(NUM_TREES) + " trees");
-    hrf::TreeCreator tree_creator(*train_set, COLS_PER_MODEL);
+    hrf::TreeCreator tree_creator(*train_set,
+                                  hrf::trainer::TrainRandDim,
+                                  COLS_PER_MODEL);
     auto trees = tree_creator.MakeTrees(NUM_TREES);
     std::unique_ptr<hrf::IScorer> forest(new hrf::ScoreAverager(std::move(trees)));
     EndTimer();
@@ -90,6 +92,10 @@ int main(int argc, const char * argv[]) {
     std::cout << "\tBest Validation Score: " << best_score << std::endl;
     double train_score = hrf::CalcAms(classifier.Classify(train_set_downcasted, PARALLEL), *train_set);
     std::cout << "\tTraining Score: " << train_score << std::endl;
+    
+    if (best_score < 3.4) {
+        return 0;
+    }
     
     StartTimer("Loading Test Data");
     auto test_data = hrf::LoadTestData();

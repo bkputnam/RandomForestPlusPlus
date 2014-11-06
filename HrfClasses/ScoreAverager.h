@@ -19,7 +19,13 @@ namespace hrf {
     
     class ScoreAverager : public IScorer {
     public:
-        typedef std::vector<std::unique_ptr<hrf::IScorer>> IScorerVector;
+        
+        // Note: using a vector of pointers to allow polymorphism. Although
+        // in the real program this will only ever be full of hrf::Tree
+        // instances, in the unit tests it made more sense to fill it with
+        // other types of IScorer (e.g. DummyScorer)
+        typedef std::unique_ptr<const std::vector<std::unique_ptr<hrf::IScorer>>> IScorerVector;
+        
     private:
         IScorerVector sub_models_;
         

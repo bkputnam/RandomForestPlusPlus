@@ -59,8 +59,9 @@ TEST(ScoreAveragerTests, Basic) {
     models.push_back(std::move(score_1));
     models.push_back(std::move(score_2));
     models.push_back(std::move(score_3));
+    std::unique_ptr<const std::vector<std::unique_ptr<hrf::IScorer>>> models_ptr(new std::vector<std::unique_ptr<hrf::IScorer>>(std::move(models)));
     
-    hrf::ScoreAverager averager(std::move(models));
+    hrf::ScoreAverager averager(std::move(models_ptr));
     
     auto result = averager.Score(mock::MockRows(N_ROWS));
     

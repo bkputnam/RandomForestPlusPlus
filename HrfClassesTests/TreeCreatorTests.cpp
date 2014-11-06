@@ -34,10 +34,11 @@ TEST(TreeCreatorTests, Basic) {
                                   hrf::trainer::TrainBestDim,
                                   3);
     
-    const std::vector<hrf::Tree> forest = tree_factory.MakeTrees(5);
+    std::unique_ptr<const std::vector<std::unique_ptr<hrf::IScorer>>> forest = tree_factory.MakeTrees(5);
     
-    ASSERT_EQ(5, forest.size());
+    ASSERT_EQ(5, forest->size());
     for (int i=0; i<5; ++i) {
-        EXPECT_GT(forest[i].children_.size(), 0);
+        hrf::Tree& t = static_cast<hrf::Tree&>(*(*forest)[i]);
+        EXPECT_GT(t.children_.size(), 0);
     }
 }

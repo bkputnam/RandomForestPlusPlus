@@ -50,30 +50,29 @@ namespace hrf {
         GetGlobalExtrema(data, *global_min_corner_, *global_max_corner_);
     }
     
-    Tree TreeCreator::MakeTree() {
+    std::unique_ptr<Tree> TreeCreator::MakeTree() {
         auto cols = bkp::random::Choice(hrf::HiggsCsvRow::NUM_FEATURES, cols_per_tree_);
         
         auto filter = HasNan(data_, cols);
         std::transform(filter.begin(), filter.end(), filter.begin(), [](bool b){return !b;});
         
-        Tree result(std::move(cols),
-                    global_min_corner_,
-                    global_max_corner_
-        );
-        trainer_(result, data_);
+        std::unique_ptr<Tree> result(new Tree(std::move(cols),
+                                              global_min_corner_,
+                                              global_max_corner_));
         
+        trainer_(*result, data_);
         return result;
     }
     
-    const std::vector<Tree> TreeCreator::MakeTrees(int n) {
+    hrf::ScoreAverager::IScorerVector TreeCreator::MakeTrees(int n) {
         
-        std::vector<Tree> result;
-        result.reserve(n);
+        std::vector<std::unique_ptr<hrf::IScorer>>* raw_result = new std::vector<std::unique_ptr<hrf::IScorer>>;
+        raw_result->reserve(n);
         
         for (int i=0; i<n; ++i) {
-            result.push_back(MakeTree());
+            raw_result->push_back(MakeTree());
         }
         
-        return result;
+        return std::unique_ptr<const std::vector<std::unique_ptr<hrf::IScorer>>>(raw_result);
     }
 }

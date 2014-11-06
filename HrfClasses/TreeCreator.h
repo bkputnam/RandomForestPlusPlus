@@ -17,6 +17,7 @@
 #include "HiggsCsvRow.h"
 #include "Tree.h"
 #include "TreeTrainer.h"
+#include "ScoreAverager.h"
 
 namespace hrf {
     
@@ -30,15 +31,14 @@ namespace hrf {
         std::shared_ptr<std::vector<double>> global_min_corner_;
         std::shared_ptr<std::vector<double>> global_max_corner_;
         
-        Tree MakeTree();
+        std::unique_ptr<Tree> MakeTree();
     
     public:
         TreeCreator(const bkp::MaskedVector<const hrf::HiggsTrainingCsvRow>& data,
                     const hrf::trainer::TrainerFn& trainer,
                     int cols_per_tree);
         
-        const std::vector<Tree> MakeTrees(int n);
-        
+        hrf::ScoreAverager::IScorerVector MakeTrees(int n);
     };
     
 }
