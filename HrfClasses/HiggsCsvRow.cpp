@@ -8,6 +8,7 @@
 
 #include <string>
 #include <cmath>
+#include <limits>
 
 #include "HiggsCsvRow.h"
 
@@ -17,8 +18,13 @@ namespace hrf {
     HiggsCsvRow::HiggsCsvRow(const csv_row& row) :
     EventId_(std::stoi(row[0]))
     {
+        const double NaN = std::numeric_limits<double>::quiet_NaN();
         for (int i=0; i<data_.size(); i++) {
-            data_[i] = std::stod(row[i+1]); // +1 to shift past EventId
+            double val = std::stod(row[i+1]); // +1 to shift past EventId
+            if (val == -999.0) {
+                val = NaN;
+            }
+            data_[i] = val;
         }
     }
     
