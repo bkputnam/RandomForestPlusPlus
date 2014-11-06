@@ -77,6 +77,7 @@
 		3DB672961A09C5E900967801 /* TreeCreatorTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DB672951A09C5E900967801 /* TreeCreatorTests.cpp */; };
 		3DB6729A1A0AD25600967801 /* ExclusiveWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DB672981A0AD25600967801 /* ExclusiveWriter.h */; };
 		3DB6729C1A0AE8A500967801 /* ExclusiveWriterTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DB6729B1A0AE8A500967801 /* ExclusiveWriterTests.cpp */; };
+		3DC1D00C1A0C22C700FB6DCB /* libHrfClasses.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9250E91A07FDE5003255BF /* libHrfClasses.a */; };
 		3DEF92F519DF867D00E1110F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DEF92F419DF867D00E1110F /* main.cpp */; };
 		3DEF930D19E0BB8500E1110F /* training.csv in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3DEF930319DFBE1C00E1110F /* training.csv */; };
 /* End PBXBuildFile section */
@@ -123,6 +124,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 3D9808F719E9A0120016267F;
 			remoteInfo = BkpClasses;
+		};
+		3DC1D00A1A0C22C100FB6DCB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3DEF92E919DF867D00E1110F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3D9250E81A07FDE5003255BF;
+			remoteInfo = HrfClasses;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -281,6 +289,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D98091619E9A71B0016267F /* libBkpClasses.a in Frameworks */,
+				3DC1D00C1A0C22C700FB6DCB /* libHrfClasses.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -567,6 +576,7 @@
 			);
 			dependencies = (
 				3D98091819E9A7220016267F /* PBXTargetDependency */,
+				3DC1D00B1A0C22C100FB6DCB /* PBXTargetDependency */,
 			);
 			name = Sandbox;
 			productName = Sandbox;
@@ -770,6 +780,11 @@
 			isa = PBXTargetDependency;
 			target = 3D9808F719E9A0120016267F /* BkpClasses */;
 			targetProxy = 3D98091D19E9A7400016267F /* PBXContainerItemProxy */;
+		};
+		3DC1D00B1A0C22C100FB6DCB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3D9250E81A07FDE5003255BF /* HrfClasses */;
+			targetProxy = 3DC1D00A1A0C22C100FB6DCB /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
