@@ -39,7 +39,7 @@ namespace bkp {
         
         std::vector<double> RandDoubles(int how_many, double low, double high) {
             std::uniform_real_distribution<double> dist(low, high);
-            auto gen = Generator();
+            auto& gen = Generator();
             
             std::vector<double> result(how_many);
             auto iter = result.begin();

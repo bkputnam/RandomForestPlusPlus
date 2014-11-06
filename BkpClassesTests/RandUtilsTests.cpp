@@ -10,6 +10,7 @@
 
 #include <vector>
 #include "RandUtils.h"
+#include <limits.h>
 
 TEST(RandUtilsTests, RandInt) {
     int randint;
@@ -101,5 +102,47 @@ TEST(RandUtilsTests, RandDoublesVector) {
             EXPECT_GE(val, LOW);
             EXPECT_LE(val, HIGH);
         }
+    }
+}
+
+// Test bug where repeated calls to RandDouble gave same values
+TEST(RandUtilsTests, RandDoubleDifference) {
+    
+    const int ARR_SIZE = 20;
+    
+    auto a1 = bkp::random::RandDouble<ARR_SIZE>(0.0, 20.0);
+    auto a2 = bkp::random::RandDouble<ARR_SIZE>(0.0, 20.0);
+    
+    for (int i=0; i<ARR_SIZE; ++i) {
+        EXPECT_NE(a1[i], a2[i]);
+    }
+}
+
+// Test bug where repeated calls to RandDoubles gave same values
+TEST(RandUtilsTests, RandDoublesDifference) {
+    
+    const int ARR_SIZE = 20;
+    
+    auto a1 = bkp::random::RandDoubles(ARR_SIZE, 0.0, 20.0);
+    auto a2 = bkp::random::RandDoubles(ARR_SIZE, 0.0, 20.0);
+    
+    for (int i=0; i<ARR_SIZE; ++i) {
+        EXPECT_NE(a1[i], a2[i]);
+    }
+}
+
+
+// Test bug where repeated calls to RandInt gave same values
+TEST(RandUtilsTests, RandIntDifference) {
+    
+    const int ARR_SIZE = 20;
+    const int MIN = std::numeric_limits<int>::min();
+    const int MAX = std::numeric_limits<int>::max();
+    
+    auto a1 = bkp::random::RandInt<ARR_SIZE>(MIN, MAX);
+    auto a2 = bkp::random::RandInt<ARR_SIZE>(MIN, MAX);
+    
+    for (int i=0; i<ARR_SIZE; ++i) {
+        EXPECT_NE(a1[i], a2[i]);
     }
 }

@@ -28,8 +28,8 @@ namespace bkp {
         
         template<unsigned int Size>
         std::array<int, Size> RandInt(int low, int high) {
-            auto dist = std::uniform_int_distribution<int>(low, high);
-            auto gen = Generator();
+            std::uniform_int_distribution<int> dist(low, high);
+            auto& gen = Generator();
             
             std::array<int, Size> result;
             for (int i=0; i<Size; ++i) {
@@ -43,8 +43,8 @@ namespace bkp {
         
         template<unsigned int Size>
         std::array<double, Size> RandDouble(double low, double high) {
-            auto dist = std::uniform_real_distribution<double>(low, high);
-            auto gen = Generator();
+            std::uniform_real_distribution<double> dist(low, high);
+            auto& gen = Generator();
             
             std::array<double, Size> result;
             for (int i=0; i<Size; ++i) {

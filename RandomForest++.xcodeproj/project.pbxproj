@@ -46,7 +46,7 @@
 		3D9251441A080AC2003255BF /* DummyScorer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9251421A080AC2003255BF /* DummyScorer.cpp */; };
 		3D9251451A080AC2003255BF /* DummyScorer.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D9251431A080AC2003255BF /* DummyScorer.h */; };
 		3D9251471A080BE3003255BF /* DummyScorerTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9251461A080BE3003255BF /* DummyScorerTests.cpp */; };
-		3D92514A1A080F92003255BF /* MockRows.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9251481A080F92003255BF /* MockRows.cpp */; };
+		3D92514A1A080F92003255BF /* Mock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9251481A080F92003255BF /* Mock.cpp */; };
 		3D92514C1A0819DC003255BF /* AmsCalculatorTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D92514B1A0819DC003255BF /* AmsCalculatorTests.cpp */; };
 		3D92514E1A08681F003255BF /* ClassifierTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D92514D1A08681F003255BF /* ClassifierTests.cpp */; };
 		3D9251511A0869E8003255BF /* ScoreCacher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D92514F1A0869E8003255BF /* ScoreCacher.cpp */; };
@@ -70,6 +70,11 @@
 		3D9BE35819EF0FCF00536407 /* RandUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9BE35619EF0FCF00536407 /* RandUtils.cpp */; };
 		3D9BE35919EF0FCF00536407 /* RandUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D9BE35719EF0FCF00536407 /* RandUtils.h */; };
 		3DB6728C1A09393D00967801 /* TreeTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DB6728B1A09393D00967801 /* TreeTests.cpp */; };
+		3DB6728F1A098B7F00967801 /* TreeTrainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DB6728D1A098B7F00967801 /* TreeTrainer.cpp */; };
+		3DB672901A098B7F00967801 /* TreeTrainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DB6728E1A098B7F00967801 /* TreeTrainer.h */; };
+		3DB672921A09BD4800967801 /* TreeTrainerTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DB672911A09BD4800967801 /* TreeTrainerTests.cpp */; };
+		3DB672941A09C2E000967801 /* MockTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DB672931A09C2E000967801 /* MockTests.cpp */; };
+		3DB672961A09C5E900967801 /* TreeCreatorTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DB672951A09C5E900967801 /* TreeCreatorTests.cpp */; };
 		3DB6729A1A0AD25600967801 /* ExclusiveWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DB672981A0AD25600967801 /* ExclusiveWriter.h */; };
 		3DB6729C1A0AE8A500967801 /* ExclusiveWriterTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DB6729B1A0AE8A500967801 /* ExclusiveWriterTests.cpp */; };
 		3DEF92F519DF867D00E1110F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DEF92F419DF867D00E1110F /* main.cpp */; };
@@ -207,8 +212,8 @@
 		3D9251421A080AC2003255BF /* DummyScorer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DummyScorer.cpp; sourceTree = "<group>"; };
 		3D9251431A080AC2003255BF /* DummyScorer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DummyScorer.h; sourceTree = "<group>"; };
 		3D9251461A080BE3003255BF /* DummyScorerTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DummyScorerTests.cpp; sourceTree = "<group>"; };
-		3D9251481A080F92003255BF /* MockRows.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MockRows.cpp; sourceTree = "<group>"; };
-		3D9251491A080F92003255BF /* MockRows.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MockRows.h; sourceTree = "<group>"; };
+		3D9251481A080F92003255BF /* Mock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mock.cpp; sourceTree = "<group>"; };
+		3D9251491A080F92003255BF /* Mock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mock.h; sourceTree = "<group>"; };
 		3D92514B1A0819DC003255BF /* AmsCalculatorTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AmsCalculatorTests.cpp; sourceTree = "<group>"; };
 		3D92514D1A08681F003255BF /* ClassifierTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ClassifierTests.cpp; sourceTree = "<group>"; };
 		3D92514F1A0869E8003255BF /* ScoreCacher.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScoreCacher.cpp; sourceTree = "<group>"; };
@@ -229,6 +234,11 @@
 		3D9BE35619EF0FCF00536407 /* RandUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RandUtils.cpp; sourceTree = "<group>"; };
 		3D9BE35719EF0FCF00536407 /* RandUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RandUtils.h; sourceTree = "<group>"; };
 		3DB6728B1A09393D00967801 /* TreeTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TreeTests.cpp; sourceTree = "<group>"; };
+		3DB6728D1A098B7F00967801 /* TreeTrainer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TreeTrainer.cpp; sourceTree = "<group>"; };
+		3DB6728E1A098B7F00967801 /* TreeTrainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TreeTrainer.h; sourceTree = "<group>"; };
+		3DB672911A09BD4800967801 /* TreeTrainerTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TreeTrainerTests.cpp; sourceTree = "<group>"; };
+		3DB672931A09C2E000967801 /* MockTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MockTests.cpp; sourceTree = "<group>"; };
+		3DB672951A09C5E900967801 /* TreeCreatorTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TreeCreatorTests.cpp; sourceTree = "<group>"; };
 		3DB672981A0AD25600967801 /* ExclusiveWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExclusiveWriter.h; sourceTree = "<group>"; };
 		3DB6729B1A0AE8A500967801 /* ExclusiveWriterTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExclusiveWriterTests.cpp; sourceTree = "<group>"; };
 		3DEF92F119DF867D00E1110F /* RandomForest++ */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "RandomForest++"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -335,6 +345,8 @@
 				3D9251231A0802E8003255BF /* Tree.h */,
 				3D9251241A0802E8003255BF /* TreeCreator.cpp */,
 				3D9251251A0802E8003255BF /* TreeCreator.h */,
+				3DB6728D1A098B7F00967801 /* TreeTrainer.cpp */,
+				3DB6728E1A098B7F00967801 /* TreeTrainer.h */,
 			);
 			path = HrfClasses;
 			sourceTree = "<group>";
@@ -347,11 +359,14 @@
 				3D9251461A080BE3003255BF /* DummyScorerTests.cpp */,
 				3D9251401A080613003255BF /* FmtDurationTests.cpp */,
 				3D9250FA1A07FE92003255BF /* main.cpp */,
-				3D9251481A080F92003255BF /* MockRows.cpp */,
-				3D9251491A080F92003255BF /* MockRows.h */,
+				3D9251481A080F92003255BF /* Mock.cpp */,
+				3D9251491A080F92003255BF /* Mock.h */,
+				3DB672931A09C2E000967801 /* MockTests.cpp */,
 				3D9251561A0880F9003255BF /* ScoreAveragerTests.cpp */,
 				3D9251531A086DB4003255BF /* ScoreCacherTests.cpp */,
+				3DB672951A09C5E900967801 /* TreeCreatorTests.cpp */,
 				3DB6728B1A09393D00967801 /* TreeTests.cpp */,
+				3DB672911A09BD4800967801 /* TreeTrainerTests.cpp */,
 			);
 			path = HrfClassesTests;
 			sourceTree = "<group>";
@@ -459,6 +474,7 @@
 				3D9251521A0869E8003255BF /* ScoreCacher.h in Headers */,
 				3D9251311A0802E8003255BF /* ScoreAverager.h in Headers */,
 				3D9251271A0802E8003255BF /* AmsCalculator.h in Headers */,
+				3DB672901A098B7F00967801 /* TreeTrainer.h in Headers */,
 				3D92512B1A0802E8003255BF /* HiggsCsvRow.h in Headers */,
 				3D9251451A080AC2003255BF /* DummyScorer.h in Headers */,
 				3D92512D1A0802E8003255BF /* IScorer.h in Headers */,
@@ -599,7 +615,7 @@
 		3DEF92E919DF867D00E1110F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = "Brian Putnam";
 				TargetAttributes = {
 					3D9250B01A07FC09003255BF = {
@@ -671,6 +687,7 @@
 				3D9251301A0802E8003255BF /* ScoreAverager.cpp in Sources */,
 				3D92512E1A0802E8003255BF /* Parser.cpp in Sources */,
 				3D9251281A0802E8003255BF /* Classifier.cpp in Sources */,
+				3DB6728F1A098B7F00967801 /* TreeTrainer.cpp in Sources */,
 				3D9251511A0869E8003255BF /* ScoreCacher.cpp in Sources */,
 				3D92513D1A08033D003255BF /* libcsv_parser.cpp in Sources */,
 			);
@@ -683,11 +700,14 @@
 				3D9250FB1A07FE92003255BF /* main.cpp in Sources */,
 				3DB6728C1A09393D00967801 /* TreeTests.cpp in Sources */,
 				3D92514C1A0819DC003255BF /* AmsCalculatorTests.cpp in Sources */,
+				3DB672921A09BD4800967801 /* TreeTrainerTests.cpp in Sources */,
+				3DB672961A09C5E900967801 /* TreeCreatorTests.cpp in Sources */,
 				3D92514E1A08681F003255BF /* ClassifierTests.cpp in Sources */,
 				3D9251571A0880F9003255BF /* ScoreAveragerTests.cpp in Sources */,
 				3D9251471A080BE3003255BF /* DummyScorerTests.cpp in Sources */,
 				3D9251551A086DB4003255BF /* ScoreCacherTests.cpp in Sources */,
-				3D92514A1A080F92003255BF /* MockRows.cpp in Sources */,
+				3D92514A1A080F92003255BF /* Mock.cpp in Sources */,
+				3DB672941A09C2E000967801 /* MockTests.cpp in Sources */,
 				3D9251411A080613003255BF /* FmtDurationTests.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -797,6 +817,7 @@
 		3D9250F21A07FDE5003255BF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				EXECUTABLE_PREFIX = lib;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
@@ -818,6 +839,7 @@
 		3D9250F31A07FDE5003255BF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				EXECUTABLE_PREFIX = lib;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
@@ -913,6 +935,7 @@
 		3D98090119E9A0130016267F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				EXECUTABLE_PREFIX = lib;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
@@ -938,6 +961,7 @@
 		3D98090219E9A0130016267F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				EXECUTABLE_PREFIX = lib;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
