@@ -22,7 +22,7 @@ namespace hrf {
         const auto ndims = hrf::HiggsTrainingCsvRow::NUM_FEATURES;
         
         out_mins = std::vector<double>(ndims, std::numeric_limits<double>::max());
-        out_maxs = std::vector<double>(ndims, std::numeric_limits<double>::min());
+        out_maxs = std::vector<double>(ndims, std::numeric_limits<double>::lowest());
         
         for (decltype(nrows) row_index=0; row_index<nrows; ++row_index) {
             auto& row = data[row_index];
@@ -39,7 +39,9 @@ namespace hrf {
     }
     
     TreeCreator::TreeCreator(const bkp::MaskedVector<const hrf::HiggsTrainingCsvRow>& data,
+                             const hrf::trainer::TrainerFn& trainer,
                              int cols_per_tree):
+    trainer_(trainer),
     data_(data),
     cols_per_tree_(cols_per_tree)
     {
@@ -54,12 +56,11 @@ namespace hrf {
         auto filter = HasNan(data_, cols);
         std::transform(filter.begin(), filter.end(), filter.begin(), [](bool b){return !b;});
         
-        Tree result(data_.Filter(filter),
-                    std::move(cols),
+        Tree result(std::move(cols),
                     global_min_corner_,
                     global_max_corner_
         );
-        result.Train();
+        trainer_(result, data_);
         
         return result;
     }

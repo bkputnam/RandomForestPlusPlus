@@ -23,100 +23,45 @@ namespace hrf {
     
     // private helper method
     template<typename T, class = typename std::enable_if<std::is_rvalue_reference<T&&>::value>::type>
-    std::unique_ptr<T> copy_to_unique_ptr(T&& rval_ref) {
+    std::unique_ptr<T> CopyToUniquePtr(T&& rval_ref) {
         return std::unique_ptr<T>(new T(std::move(rval_ref)));
     }
-    
-    Tree::Tree(
-        std::unique_ptr<const bkp::MaskedVector<const HiggsTrainingCsvRow>> train_points,
-        std::shared_ptr<std::vector<int>> target_features,
-        std::shared_ptr<std::vector<double>> min_corner,
-        std::shared_ptr<std::vector<double>> max_corner
-    ) :
-    ndim_(static_cast<int>(target_features->size())), // NOTE: ndim_ is initialized before target_features_, otherwise I would have to pull size() from the member not the parameter (parameter is invalid after std::move)
-    npoints_(static_cast<int>(train_points->size())), // NOTE: ditto for npoints_, initialize from parameter over member due to initialization order and unique_ptr moves
-    target_features_(target_features),
-    min_corner_(min_corner),
-    max_corner_(max_corner),
-    train_points_(std::move(train_points))
-    {
-        double volume = CalcVolume();
-        num_s_ = static_cast<int>(std::count_if(
-            train_points_->begin(),
-            train_points_->end(),
-            [](const HiggsTrainingCsvRow& row) { return row.Label_ == 's'; }
-        ));
-        num_b_ = npoints_ - num_s_;
-        sdensity_ = num_s_ / volume;
-        bdensity_ = num_b_ / volume;
-    }
-    
-    // public ctor - sets up a couple default values, but then mostly just passes off
-    // all the work to the private ctor
-    Tree::Tree(
-        const bkp::MaskedVector<const HiggsTrainingCsvRow>&& train_points,
-        std::vector<int>&& target_features,
-        std::shared_ptr<std::vector<double>> min_corner,
-        std::shared_ptr<std::vector<double>> max_corner
-    ) :
-    Tree(copy_to_unique_ptr(std::move(train_points)),
-         std::make_shared<std::vector<int>>(std::move(target_features)),
-         min_corner,
-         max_corner
-    )
-    { }
-    
-    double Tree::CalcVolume() {
+
+    // helper method - calculate volume of a Tree's box (min_corner_ to max_corner_)
+    double CalcVolume(const Tree& t) {
         double volume(1.0);
-        for (int i=0; i<ndim_; ++i) {
-            volume *= std::abs((*max_corner_)[i] - (*min_corner_)[i]);
+        for (int i=0; i<t.ndim_; ++i) {
+            volume *= std::abs((*t.max_corner_)[i] - (*t.min_corner_)[i]);
         }
         return volume;
     }
     
-    double Entropy(int count_a, int count_b) {
-        int isum = count_a + count_b;
-        if (isum == 0) { return 0.0; }
-        
-        double sum = static_cast<double>(isum);
-        
-        double prob_a = count_a / sum;
-        double prob_b = count_b / sum;
-        
-        double logprob_a = std::log2(prob_a);
-        double logprob_b = std::log2(prob_b);
-        
-        return -((prob_a * logprob_a) + (prob_b * logprob_b));
-    }
+    Tree::Tree(
+        std::shared_ptr<const std::vector<int>> target_features,
+        std::shared_ptr<const std::vector<double>> min_corner,
+        std::shared_ptr<const std::vector<double>> max_corner
+    ) :
+    ndim_(static_cast<int>(target_features->size())), // NOTE: ndim_ is initialized before target_features_, otherwise I would have to pull size() from the member not the parameter (parameter is invalid after std::move)
+    target_features_(target_features),
+    min_corner_(min_corner),
+    max_corner_(max_corner),
+    volume_(CalcVolume(*this))
+    { }
     
-    double Tree::CalcTotalEntropy() {
-        return Entropy(num_s_, num_b_);
-    }
-    
-    void Tree::Split() {
-        
-        int best_local_dim_index;
-        double best_split, max_expected_info;
-        
-        // auto split_info = FindBestSplitDim();
-        auto split_info = FindBestRandomSplit();
-        std::tie(best_local_dim_index, best_split, max_expected_info) = split_info;
-        
-        assert(best_local_dim_index != -1);
-        assert(!isnan(best_split));
-        assert(max_expected_info > 0.0);
-        
-        int best_global_dim_index = (*target_features_)[best_local_dim_index];
-        
-        SplitHelper(best_local_dim_index,
-                    best_global_dim_index,
-                    best_split);
-    }
+    // public ctor - sets up a couple default values, but then mostly just passes off
+    // all the work to the private ctor
+    Tree::Tree(std::vector<int>&& target_features,
+               std::shared_ptr<const std::vector<double>> min_corner,
+               std::shared_ptr<const std::vector<double>> max_corner) :
+    Tree(std::make_shared<std::vector<int>>(std::move(target_features)),
+         min_corner,
+         max_corner)
+    { }
     
     void Tree::Split(int feature_index, double split_value) {
         
         int local_index = -1;
-        for (int i=0; i<ndim_; ++i) {
+        for (int i=0; i<ndim_ && local_index==-1; ++i) {
             if ((*target_features_)[i] == feature_index) {
                 local_index = i;
             }
@@ -131,14 +76,6 @@ namespace hrf {
         assert(local_dim >= 0);
         assert(global_dim >= 0);
         
-        std::vector<bool> filter;
-        filter.reserve(npoints_);
-        std::transform(train_points_->begin(),
-                       train_points_->end(),
-                       std::back_inserter(filter),
-                       [global_dim, split_value](const HiggsTrainingCsvRow& row) { return row.data_[global_dim] >= split_value; }
-        );
-        
         auto upper_min_corner = std::make_shared<std::vector<double>>(min_corner_->begin(),
                                                                       min_corner_->end());
         (*upper_min_corner)[local_dim] = split_value;
@@ -151,147 +88,23 @@ namespace hrf {
         children_.reserve(2); // single-dim, single-value splits always produce 2 children
         
         // upper tree (child 0)
-        children_.push_back(Tree(copy_to_unique_ptr(train_points_->Filter(filter)),
-                              target_features_,
-                              upper_min_corner,
-                              max_corner_));
-        
-        // filter = !filter
-        std::transform(filter.begin(), filter.end(), filter.begin(), [](bool b) { return !b; });
+        children_.push_back(Tree(target_features_,
+                                 upper_min_corner,
+                                 max_corner_));
         
         // lower tree (child 1)
-        children_.push_back(Tree(copy_to_unique_ptr(train_points_->Filter(filter)),
-                              target_features_,
-                              min_corner_,
-                              lower_max_corner));
+        children_.push_back(Tree(target_features_,
+                                 min_corner_,
+                                 lower_max_corner));
         
         // copy to member variables for future use
         split_dim_ = local_dim;
         split_val_ = split_value;
     }
     
-    std::tuple<int, double, double> Tree::FindBestSplitDim() {
-        
-        int best_local_dim_index = -1;
-        double max_expected_info = 0.0;
-        double best_split = std::numeric_limits<double>::quiet_NaN();
-        
-        for (int dim=0; dim<ndim_; ++dim) {
-            
-            double dim_expected_info, dim_best_split;
-            std::tie(dim_expected_info, dim_best_split) = FindBestSplit(dim);
-            
-            if (dim_expected_info > max_expected_info) {
-                best_local_dim_index = dim;
-                max_expected_info = dim_expected_info;
-                best_split = dim_best_split;
-            }
-        }
-        
-        return std::make_tuple(best_local_dim_index, best_split, max_expected_info);
-    }
-    
-    std::tuple<double, double> Tree::FindBestSplit(int local_dim) {
-        
-        const int N_SPLITS = 5;
-        double total_entropy = CalcTotalEntropy();
-        
-        int global_dim_index = (*target_features_)[local_dim];
-        
-        auto train_points_ptr = train_points_.get();
-        
-        auto size = train_points_->size();
-        double dim_min = std::numeric_limits<double>::max();
-        double dim_max = std::numeric_limits<double>::min();
-        for (auto i=decltype(size){0}; i<size; ++i) {
-            double val = (*train_points_ptr)[i].data_[global_dim_index];
-            if (val < dim_min) {
-                dim_min = val;
-            }
-            if (val > dim_max) {
-                dim_max = val;
-            }
-        }
-        
-        std::array<double, N_SPLITS> splits = bkp::random::RandDouble<N_SPLITS>(dim_min, dim_max);
-        auto splits_ptr = splits.data();
-        
-        double max_expected_info = 0.0;
-        double best_split = std::numeric_limits<double>::quiet_NaN();
-        
-        for (int i=0; i<N_SPLITS; ++i) {
-            double split = splits_ptr[i];
-            
-            int n_above, s_above, b_above;
-            int n_below, s_below, b_below;
-            n_above = s_above = b_above = n_below = s_below = b_below = 0;
-            
-            for (auto i = decltype(size){0}; i<size; ++i) {
-                const auto& row = (*train_points_ptr)[i];
-                double val = row.data_[global_dim_index];
-                bool is_signal = row.Label_ == 's';
-                
-                if (val >= split) {
-                    if (is_signal) { ++s_above; } else { ++b_above; }
-                }
-                else {
-                    if (is_signal) { ++s_below; } else { ++b_below; }
-                }
-            }
-            
-            n_above = s_above + b_above;
-            n_below = s_below + b_below;
-            
-            double prob_above = static_cast<double>(n_above) / this->npoints_;
-            double prob_below = 1.0 - prob_above;
-            
-            double entropy_above = Entropy(s_above, b_above);
-            double entropy_below = Entropy(s_below, b_below);
-            
-            double expected_info = total_entropy - ((prob_above * entropy_above) + (prob_below * entropy_below));
-            
-            if (expected_info > max_expected_info) {
-                max_expected_info = expected_info;
-                best_split = split;
-            }
-        }
-        
-        return std::make_tuple(max_expected_info, best_split);
-    }
-    
-    std::tuple<int, double, double> Tree::FindBestRandomSplit() {
-        int local_dim_index = bkp::random::RandInt(ndim_ - 1);
-        
-        double expected_info, split;
-        std::tie(expected_info, split) = FindBestSplit(local_dim_index);
-        
-        return std::make_tuple(local_dim_index, split, expected_info);
-    }
-    
-    void Tree::Train(int max_depth, int min_pts) {
-        int sqrt_ish = static_cast<int>(floor(sqrt(npoints_)));
-        
-        if (max_depth == -1) {
-            max_depth = sqrt_ish;
-        }
-        if (min_pts == -1) {
-            min_pts = sqrt_ish;
-        }
-        
-        TrainHelper(max_depth, min_pts);
-        
-        // release our training data to allow it to be freed, evenutally
-        train_points_ = nullptr;
-    }
-    
-    void Tree::TrainHelper(int max_depth, int min_pts) {
-        bool too_small = (max_depth <= 0 || npoints_ <= min_pts);
-        if (!too_small) {
-            Split();
-            for (auto& child : children_) {
-                child.TrainHelper(max_depth-1, min_pts);
-            }
-        }
+    void Tree::SetScore(double s_density, double b_density) {
+        sdensity_ = s_density;
+        bdensity_ = b_density;
     }
     
     // Note: ignore parallel paramter, only applies to other IScorers

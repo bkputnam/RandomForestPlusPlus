@@ -16,11 +16,14 @@
 #include "MaskedVector.h"
 #include "HiggsCsvRow.h"
 #include "Tree.h"
+#include "TreeTrainer.h"
 
 namespace hrf {
     
     class TreeCreator {
     private:
+        const hrf::trainer::TrainerFn& trainer_;
+        
         const bkp::MaskedVector<const hrf::HiggsTrainingCsvRow>& data_;
         const int cols_per_tree_;
         
@@ -31,6 +34,7 @@ namespace hrf {
     
     public:
         TreeCreator(const bkp::MaskedVector<const hrf::HiggsTrainingCsvRow>& data,
+                    const hrf::trainer::TrainerFn& trainer,
                     int cols_per_tree);
         
         const std::vector<Tree> MakeTrees(int n);

@@ -10,14 +10,14 @@
 
 #include "DummyScorer.h"
 #include "ScoreCacher.h"
-#include "MockRows.h"
+#include "Mock.h"
 
 TEST(ScoreCacherTests, IScorerTest) {
     
     std::unique_ptr<hrf::IScorer> scorer(new hrf::DummyScorer(10.0, 20.0));
     hrf::ScoreCacher cacher(std::move(scorer));
     
-    auto three_rows = MockRows(3);
+    auto three_rows = mock::MockRows(3);
     auto result_1 = cacher.Score(three_rows);
     
     ASSERT_EQ(3, result_1.s_scores_.size());
@@ -30,7 +30,7 @@ TEST(ScoreCacherTests, IScorerTest) {
     // a "real" scorer would output 4 scores when given 4 rows,
     // but since we expect our cacher to return the same score
     // every time, we expect it to be of length 3 again
-    auto four_rows = MockRows(4);
+    auto four_rows = mock::MockRows(4);
     auto result_2 = cacher.Score(four_rows);
     EXPECT_EQ(3, result_2.s_scores_.size());
     EXPECT_EQ(3, result_2.b_scores_.size());
@@ -53,7 +53,7 @@ TEST(ScoreCacherTests, ScoreResultTest) {
     std::unique_ptr<hrf::ScoreResult> result_to_cache(new hrf::ScoreResult(std::move(s_scores), std::move(b_scores)));
     hrf::ScoreCacher cacher(std::move(result_to_cache));
     
-    auto result = cacher.Score(MockRows(N_ROWS));
+    auto result = cacher.Score(mock::MockRows(N_ROWS));
     ASSERT_EQ(N_ROWS, result.s_scores_.size());
     ASSERT_EQ(N_ROWS, result.b_scores_.size());
     for (int i=0; i<N_ROWS; ++i) {
@@ -62,7 +62,7 @@ TEST(ScoreCacherTests, ScoreResultTest) {
     }
     
     // againt checking for bogus sizes to ensure caching
-    auto result_2 = cacher.Score(MockRows(N_ROWS * 2));
+    auto result_2 = cacher.Score(mock::MockRows(N_ROWS * 2));
     EXPECT_EQ(N_ROWS, result.s_scores_.size());
     EXPECT_EQ(N_ROWS, result.b_scores_.size());
 }

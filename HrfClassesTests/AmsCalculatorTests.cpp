@@ -9,7 +9,7 @@
 #include <gtest/gtest.h>
 #include <cmath>
 
-#include "MockRows.h"
+#include "Mock.h"
 #include "AmsCalculator.h"
 
 // fixed constant from the AMS formula
@@ -22,7 +22,7 @@ const double TOTAL_B = 410000.0;
 
 TEST(AmsCalculatorTests, Basic) {
     
-    auto rows = MockRows({true, true, false},
+    auto rows = mock::MockRows({true, true, false},
                          {1.0, 2.0, 3.0});
     const int N_ROWS = 3;
     

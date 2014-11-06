@@ -10,7 +10,7 @@
 
 #include "DummyScorer.h"
 #include "HiggsCsvRow.h"
-#include "MockRows.h"
+#include "Mock.h"
 
 using hrf::HiggsCsvRow;
 
@@ -19,7 +19,7 @@ TEST(DummyScorerTests, Basic) {
     const int N_ROWS = 3;
     hrf::DummyScorer scorer(10.0, 20.0);
     
-    auto rows = MockRows(N_ROWS);
+    auto rows = mock::MockRows(N_ROWS);
     
     auto result = scorer.Score(rows);
     

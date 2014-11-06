@@ -32,47 +32,39 @@ namespace hrf {
     // children they will divide this Tree's box into 2 not-necessarily-equal sub boxes that
     // cover the entire space).
     class Tree : public IScorer {
-    private:
+    public:
         
         // number of dimensions (size of target_features_)
         const int ndim_;
         
-        // number of rows we're dealing with (size of train_points_)
-        const int npoints_;
-        
         // our local subset of all available features. Values represent indices
         // into HiggsCsvRow.data_. Children will always share target_features_
         // with parent
-        std::shared_ptr<std::vector<int>> target_features_;
+        std::shared_ptr<const std::vector<int>> target_features_;
         
         // values representing the min edge in each dimension of this Tree's box
         // These values are synchronized with target_features_
         // Children will typically share either min_corner_ or max_corner_ with
         // their parent.
-        std::shared_ptr<std::vector<double>> min_corner_;
+        std::shared_ptr<const std::vector<double>> min_corner_;
         
         // values representing the max edge in each dimension of this Tree's box
         // These values are synchronized with target_features_
         // Children will typically share either min_corner_ or max_corner_ with
         // their parent.
-        std::shared_ptr<std::vector<double>> max_corner_;
+        std::shared_ptr<const std::vector<double>> max_corner_;
         
-        // the number of 's' points in our box
-        int num_s_;
+        // the volume defined by the axis-aligned box from min_corner_ to max_corner_
+        const double volume_;
         
-        // the number of 'b' points in our box
-        int num_b_;
-        
+    private:
         // s-density of our box
         double sdensity_;
         
         // b-density of our box
         double bdensity_;
         
-        // training data. Set in constructor, used in Train(). Will be released (set to
-        // nullptr) at the end of Train().
-        std::unique_ptr<const bkp::MaskedVector<const HiggsTrainingCsvRow>> train_points_;
-        
+    public:
         // vector of child Trees. May either be empty or have size=2
         std::vector<Tree> children_;
         
@@ -84,31 +76,11 @@ namespace hrf {
         // split_dim_ was split to form the children
         double split_val_;
         
-        // Internal helper function to calculate the volume between min_corner_ and max_corner_
-        double CalcVolume();
-        
-        // Internal helper function to calculate the entropy of this Tree (will be
-        // higher if num_s_ is close to num_b_, less if they are markedly different)
-        double CalcTotalEntropy();
-        
-        // Internal helper function, automates the process of finding a good dim/value
-        // to split on, and performing the split
-        void Split();
-        
+    private:
         // Internal helper function, performs split at specified location by creating
         // two child Trees, splitting training data amongst the children, and recording
         // the split dim/value.
         void SplitHelper(int local_dim, int global_dim, double split_value);
-        
-        // FindBestSplitDim searches all of target_features_ for the best point on the
-        // best dimension to split on (reduces entropy the most). FindBestRandomSplit
-        // returns a similar result (drop-in replacement) but simply chooses a dimension
-        // randomly and finds the best point to split on that dimension (faster, possibly
-        // better regularizer). Both methods use FindBestSplit(int) to search a single
-        // dimension
-        std::tuple<int, double, double> FindBestSplitDim();
-        std::tuple<int, double, double> FindBestRandomSplit();
-        std::tuple<double, double> FindBestSplit(int dim);
         
         // Recursive helper method for Score function
         void ScoreHelper(
@@ -118,14 +90,14 @@ namespace hrf {
             std::vector<double>& b_scores
         );
         
+    public:
         // Recursive helper method for Train function
         void TrainHelper(int max_depth, int min_pts);
         
         // Private constructor. Only difference from public is that train_points
-        Tree(std::unique_ptr<const bkp::MaskedVector<const HiggsTrainingCsvRow>> train_points,
-             std::shared_ptr<std::vector<int>> target_features,
-             std::shared_ptr<std::vector<double>> min_corner,
-             std::shared_ptr<std::vector<double>> max_corner
+        Tree(std::shared_ptr<const std::vector<int>> target_features,
+             std::shared_ptr<const std::vector<double>> min_corner,
+             std::shared_ptr<const std::vector<double>> max_corner
              );
     
     public:
@@ -136,19 +108,10 @@ namespace hrf {
         //      Values represent indices to HiggsCsvRow.data_
         // min_corner: the n-dimensional point representing the min_corner of this Tree's box
         // max_corner: the n-dimensional point representing the max_corner of this Tree's box
-        Tree(const bkp::MaskedVector<const HiggsTrainingCsvRow>&& train_points,
-             std::vector<int>&& target_features,
-             std::shared_ptr<std::vector<double>> min_corner,
-             std::shared_ptr<std::vector<double>> max_corner
+        Tree(std::vector<int>&& target_features,
+             std::shared_ptr<const std::vector<double>> min_corner,
+             std::shared_ptr<const std::vector<double>> max_corner
         );
-        
-        // Train this Tree by finding a good (low entropy) split point on
-        // one of the target_dimensions, and creating 2 children to represent the
-        // split. This will also call Train on the created children, recursively,
-        // until max_depth is reached or num_s_+num_b_<min_ptrs. The parameters
-        // max_depth and min_pts are optional, and if left as -1 will be initialized
-        // to some sensible default value (usually some function of npoints_).
-        void Train(int max_depth=-1, int min_pts=-1);
         
         // Split the tree on the specified feature at the specified value. Will create
         // two children. This function is mostly only useful for unit testing; you should
@@ -156,6 +119,8 @@ namespace hrf {
         //
         // Note: feature_index is an index to HiggsCsvRow.data_
         void Split(int feature_index, double split_value);
+        
+        void SetScore(double s_density, double b_density);
         
         // from IScorer:
         // For each point in data, find the leaf child that that point falls into.

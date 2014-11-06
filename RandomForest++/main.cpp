@@ -70,7 +70,7 @@ int main(int argc, const char * argv[]) {
     const double EXPONENT_STEP = 0.1;
     double best_cutoff = NaN;
     double best_exponent = NaN;
-    double best_score = std::numeric_limits<double>::min();
+    double best_score = std::numeric_limits<double>::lowest();
     hrf::Classifier classifier(std::move(forest));
     hrf::AmsCalculator ams_calculator(validation_set);
     for (double exponent=MIN_EXPONENT; exponent<=MAX_EXPONENT; exponent+=EXPONENT_STEP) {

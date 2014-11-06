@@ -10,7 +10,7 @@
 
 #include "ScoreCacher.h"
 #include "Classifier.h"
-#include "MockRows.h"
+#include "Mock.h"
 
 TEST(ClassifierTests, Basic) {
     
@@ -24,7 +24,7 @@ TEST(ClassifierTests, Basic) {
     hrf::Classifier classifier(std::move(scorer), 2.0);
     
     auto predictions = classifier.Classify(
-                                      MockRows(0), // may as well have 0 mock rows - the result is pre-set anyway
+                                      mock::MockRows(0), // may as well have 0 mock rows - the result is pre-set anyway
                                       false);
     std::array<char, N_ROWS> expected = {'b', 's', 's'};
     for (int i=0; i<N_ROWS; ++i) {

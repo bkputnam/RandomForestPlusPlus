@@ -1,0 +1,237 @@
+//
+//  TreeTrainer.cpp
+//  RandomForest++
+//
+//  Created by Brian Putnam on 11/4/14.
+//  Copyright (c) 2014 Brian Putnam. All rights reserved.
+//
+
+#include <cmath>
+#include <limits>
+
+#include "TreeTrainer.h"
+#include "RandUtils.h"
+
+namespace hrf {
+namespace trainer {
+
+    const double NaN = std::numeric_limits<double>::quiet_NaN();
+    
+    double CalcEntropy(int count_a, int count_b) {
+        if (count_a == 0 || count_b == 0) {
+            return 0.0;
+        }
+
+        double sum = count_a + count_b;
+
+        double prob_a = count_a / sum;
+        double prob_b = count_b / sum;
+
+        // be sure to account for the fact that log(0.0) == -Infinity
+        // which will mess up all of our calculations. In that case,
+        // we will have prob*logprob == 0.0 * -Inf, and we want that
+        // to be equal to 0.0 (not NaN or something else).
+        double logprob_a = count_a > 0 ? std::log2(prob_a) : 0.0;
+        double logprob_b = count_b > 0 ? std::log2(prob_b) : 0.0;
+
+        return -((prob_a * logprob_a) + (prob_b * logprob_b));
+    }
+    
+    std::tuple<int, double, double> FindBestSplitDim(const hrf::Tree& tree,
+                                                     const TrainingRows& training_rows)
+    {
+        int best_local_dim_index = -1;
+        double max_expected_info = 0.0;
+        double best_split = NaN;
+        
+        for (int dim=0; dim<tree.ndim_; ++dim) {
+            int global_dim = (*tree.target_features_)[dim];
+            
+            double dim_expected_info, dim_best_split;
+            std::tie(dim_best_split, dim_expected_info) = FindBestSplit(training_rows, global_dim);
+            
+            if (dim_expected_info > max_expected_info) {
+                best_local_dim_index = dim;
+                max_expected_info = dim_expected_info;
+                best_split = dim_best_split;
+            }
+        }
+        
+        return std::make_tuple(best_local_dim_index, best_split, max_expected_info);
+    }
+    
+    std::tuple<int, double, double> FindBestRandomSplit(const hrf::Tree& tree,
+                                                        const TrainingRows& training_rows)
+    {
+        int local_dim_index = bkp::random::RandInt(tree.ndim_ - 1);
+        int global_dim_index = (*tree.target_features_)[local_dim_index];
+        
+        double expected_info, split;
+        std::tie(split, expected_info) = FindBestSplit(training_rows, global_dim_index);
+        
+        return std::make_tuple(local_dim_index, split, expected_info);
+    }
+    
+    // helper function: count how many times a label appears in the given rows
+    int CountLabel(const TrainingRows& rows, char label) {
+        auto size = rows.size();
+        int count = 0;
+        for (auto i = decltype(size){0}; i<size; ++i) {
+            if (rows[i].Label_ == label) {
+                ++count;
+            }
+        }
+        return count;
+    }
+    
+    std::tuple<double, double> FindBestSplit(const TrainingRows& training_rows,
+                                             int global_dim_index,
+                                             const int n_splits)
+    {
+        int s_count = CountLabel(training_rows, 's');
+        int b_count = CountLabel(training_rows, 'b'); // == training_rows.size() - s_count
+        double total_entropy = CalcEntropy(s_count, b_count);
+        
+        const auto size = training_rows.size();
+        double dim_min = std::numeric_limits<double>::max();
+        double dim_max = std::numeric_limits<double>::lowest();
+        for (auto i = decltype(size){0}; i<size; ++i) {
+            double val = training_rows[i].data_[global_dim_index];
+            if (val < dim_min) {
+                dim_min = val;
+            }
+            if (val > dim_max) {
+                dim_max = val;
+            }
+        }
+        
+        if (dim_max - dim_min == 0.0) {
+            return std::make_tuple(NaN, 0.0);
+        }
+        
+        auto splits = bkp::random::RandDoubles(n_splits, dim_min, dim_max);
+        auto splits_ptr = splits.data(); // because speed?
+        
+        double max_expected_info = 0.0;
+        double best_split = NaN;
+        
+        for (int split_index=0; split_index<n_splits; ++split_index) {
+            double split = splits_ptr[split_index];
+            
+            int n_above, s_above, b_above;
+            int n_below, s_below, b_below;
+            n_above = s_above = b_above = n_below = s_below = b_below = 0;
+            
+            for (auto row_index = decltype(size){0}; row_index<size; ++row_index) {
+                const auto& row = training_rows[row_index];
+                double val = row.data_[global_dim_index];
+                bool is_signal = row.Label_ == 's';
+                
+                if (val >= split) {
+                    if (is_signal) { ++s_above; } else { ++b_above; }
+                }
+                else {
+                    if (is_signal) { ++s_below; } else { ++b_below; }
+                }
+            }
+            
+            n_above = s_above + b_above;
+            n_below = s_below + b_below;
+            
+            double prob_above = static_cast<double>(n_above) / size;
+            double prob_below = static_cast<double>(n_below) / size; // == 1.0 - prob_above
+            
+            double entropy_above = CalcEntropy(s_above, b_above);
+            double entropy_below = CalcEntropy(s_below, b_below);
+            
+            double expected_info = total_entropy - ((prob_above*entropy_above) + (prob_below*entropy_below));
+            
+            if (expected_info > max_expected_info) {
+                max_expected_info = expected_info;
+                best_split = split;
+            }
+        }
+        
+        return std::make_tuple(best_split, max_expected_info);
+    }
+    
+    int DefaultMaxDepth(const TrainingRows& rows) {
+        return static_cast<int>(floor(sqrt(rows.size())));
+    }
+    
+    int DefaultMinPts(const TrainingRows& rows) {
+        return static_cast<int>(floor(sqrt(rows.size())));
+    }
+    
+    void TrainHelper(hrf::Tree& tree,
+                     const TrainingRows& training_rows,
+                     const std::function<std::tuple<int, double, double>(const hrf::Tree&, const TrainingRows&)>& split_finder,
+                     int max_depth,
+                     int min_pts)
+    {
+        if (max_depth <= 0 || training_rows.size() <= min_pts) {
+            return; // do nothing, end recursion
+        }
+        
+        double split, expected_info;
+        int local_dim_index;
+        std::tie(local_dim_index, split, expected_info) = split_finder(tree, training_rows);
+        int global_index = (*tree.target_features_)[local_dim_index];
+        
+        tree.Split(global_index, split);
+        
+        // We may have either 0 or 2 children at this point (Split() has, at times,
+        // been coded to refuse to create children under certain circumstances. Whether
+        // or not it is now, we should still check for that case). If there are no
+        // children just stop - there's nothing else to do. If there are children,
+        // recurse to them.
+        if (tree.children_.size() == 0) { return; }
+        assert(tree.children_.size() == 2);
+        
+        std::vector<bool> filter(training_rows.size());
+        std::transform(training_rows.begin(),
+                       training_rows.end(),
+                       filter.begin(),
+                       [global_index, split](const HiggsTrainingCsvRow& row) {
+                           return row.data_[global_index] >= split;
+                       });
+        
+        TrainHelper(tree.children_[0],
+                    training_rows.Filter(filter),
+                    split_finder,
+                    max_depth-1,
+                    min_pts);
+        
+        // filter = !filter
+        std::transform(filter.begin(), filter.end(), filter.begin(),
+                       [](bool b) { return !b; });
+        
+        TrainHelper(tree.children_[1],
+                    training_rows.Filter(filter),
+                    split_finder,
+                    max_depth-1,
+                    min_pts);
+        
+    }
+    
+    void TrainBestDim(hrf::Tree& tree,
+                      const TrainingRows& training_rows)
+    {
+        TrainHelper(tree,
+                    training_rows,
+                    FindBestSplitDim,
+                    DefaultMaxDepth(training_rows),
+                    DefaultMinPts(training_rows));
+    }
+    
+    void TrainRandDim(hrf::Tree& tree,
+                      const TrainingRows& training_rows)
+    {
+        TrainHelper(tree,
+                    training_rows,
+                    FindBestRandomSplit,
+                    DefaultMaxDepth(training_rows),
+                    DefaultMinPts(training_rows));
+    }
+}
+}

@@ -11,7 +11,7 @@
 
 #include "ScoreCacher.h"
 #include "ScoreAverager.h"
-#include "MockRows.h"
+#include "Mock.h"
 
 std::unique_ptr<hrf::ScoreCacher> make_scorer(std::initializer_list<double> s_scores,
                                               std::initializer_list<double> b_scores)
@@ -53,7 +53,7 @@ TEST(ScoreAveragerTests, Basic) {
             gmean(15.0, 3.0, 9.79),
             gmean(20.0, 5.0, 1.23)
         }
-    )->Score(MockRows(N_ROWS));
+    )->Score(mock::MockRows(N_ROWS));
     
     std::vector<std::unique_ptr<hrf::IScorer>> models;
     models.push_back(std::move(score_1));
@@ -62,7 +62,7 @@ TEST(ScoreAveragerTests, Basic) {
     
     hrf::ScoreAverager averager(std::move(models));
     
-    auto result = averager.Score(MockRows(N_ROWS));
+    auto result = averager.Score(mock::MockRows(N_ROWS));
     
     for (int i=0; i<N_ROWS; ++i) {
         EXPECT_DOUBLE_EQ(gmeans.s_scores_[i], result.s_scores_[i]);
