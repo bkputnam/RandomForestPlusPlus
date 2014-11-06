@@ -124,7 +124,7 @@ namespace hrf {
         // construct filter such that filter[i] is true iff data has no NaN values in any of
         // our target_feature columns (don't care about NaNs in other columns)
         std::vector<bool> filter = HasNan(data, *target_features_);
-        std::transform(filter.begin(), filter.end(), filter.begin(), [](bool b) { return !b; });
+        filter.flip();
         
         // use local std::vectors as backing stores for some MaskingVectors. ScoreHelper
         // will then populate our vectors by populating the MaskingVector and their
