@@ -70,6 +70,8 @@
 		3D9BE35819EF0FCF00536407 /* RandUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9BE35619EF0FCF00536407 /* RandUtils.cpp */; };
 		3D9BE35919EF0FCF00536407 /* RandUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D9BE35719EF0FCF00536407 /* RandUtils.h */; };
 		3DB6728C1A09393D00967801 /* TreeTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DB6728B1A09393D00967801 /* TreeTests.cpp */; };
+		3DB6729A1A0AD25600967801 /* ExclusiveWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DB672981A0AD25600967801 /* ExclusiveWriter.h */; };
+		3DB6729C1A0AE8A500967801 /* ExclusiveWriterTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DB6729B1A0AE8A500967801 /* ExclusiveWriterTests.cpp */; };
 		3DEF92F519DF867D00E1110F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DEF92F419DF867D00E1110F /* main.cpp */; };
 		3DEF930D19E0BB8500E1110F /* training.csv in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3DEF930319DFBE1C00E1110F /* training.csv */; };
 /* End PBXBuildFile section */
@@ -227,6 +229,8 @@
 		3D9BE35619EF0FCF00536407 /* RandUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RandUtils.cpp; sourceTree = "<group>"; };
 		3D9BE35719EF0FCF00536407 /* RandUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RandUtils.h; sourceTree = "<group>"; };
 		3DB6728B1A09393D00967801 /* TreeTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TreeTests.cpp; sourceTree = "<group>"; };
+		3DB672981A0AD25600967801 /* ExclusiveWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExclusiveWriter.h; sourceTree = "<group>"; };
+		3DB6729B1A0AE8A500967801 /* ExclusiveWriterTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExclusiveWriterTests.cpp; sourceTree = "<group>"; };
 		3DEF92F119DF867D00E1110F /* RandomForest++ */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "RandomForest++"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DEF92F419DF867D00E1110F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		3DEF930119DFBE1C00E1110F /* test.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test.csv; sourceTree = "<group>"; };
@@ -294,6 +298,7 @@
 		3D9250B21A07FC09003255BF /* BkpClassesTests */ = {
 			isa = PBXGroup;
 			children = (
+				3DB6729B1A0AE8A500967801 /* ExclusiveWriterTests.cpp */,
 				3D9250B81A07FC3A003255BF /* FileWrapperTests.cpp */,
 				3D9250C31A07FC8B003255BF /* main.cpp */,
 				3D9250BA1A07FC3A003255BF /* MaskedVectorTests.cpp */,
@@ -379,6 +384,7 @@
 		3D9808F919E9A0130016267F /* BkpClasses */ = {
 			isa = PBXGroup;
 			children = (
+				3DB672981A0AD25600967801 /* ExclusiveWriter.h */,
 				3D94517D1A01A23E00F73BCA /* FileWrapper.cpp */,
 				3D94517E1A01A23E00F73BCA /* FileWrapper.h */,
 				3D6DE68F19F16BE500B87BDF /* MaskedVector.h */,
@@ -469,6 +475,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D9451801A01A23E00F73BCA /* FileWrapper.h in Headers */,
+				3DB6729A1A0AD25600967801 /* ExclusiveWriter.h in Headers */,
 				3D9BE35919EF0FCF00536407 /* RandUtils.h in Headers */,
 				3D98091319E9A5F40016267F /* OperationCounter.h in Headers */,
 				3D6DE69119F16BE500B87BDF /* MaskedVector.h in Headers */,
@@ -643,6 +650,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D9250C01A07FC3A003255BF /* RandUtilsTests.cpp in Sources */,
+				3DB6729C1A0AE8A500967801 /* ExclusiveWriterTests.cpp in Sources */,
 				3D9250BF1A07FC3A003255BF /* MaskedVectorTests.cpp in Sources */,
 				3D9250BD1A07FC3A003255BF /* FileWrapperTests.cpp in Sources */,
 				3D9250C41A07FC8B003255BF /* main.cpp in Sources */,
