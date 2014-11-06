@@ -36,6 +36,8 @@ namespace hrf {
         return volume;
     }
     
+    static const double NaN = std::numeric_limits<double>::quiet_NaN();
+    
     Tree::Tree(
         std::shared_ptr<const std::vector<int>> target_features,
         std::shared_ptr<const std::vector<double>> min_corner,
@@ -45,7 +47,9 @@ namespace hrf {
     target_features_(target_features),
     min_corner_(min_corner),
     max_corner_(max_corner),
-    volume_(CalcVolume(*this))
+    volume_(CalcVolume(*this)),
+    sdensity_(NaN), // set to NaN so that we can test that this has been unset later
+    bdensity_(NaN) // set to NaN so that we can test that this has been unset later
     { }
     
     // public ctor - sets up a couple default values, but then mostly just passes off
