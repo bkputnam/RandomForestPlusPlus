@@ -168,10 +168,11 @@ namespace hrf {
             }
         }
         else {
-            int split_dim = this->split_dim_;
+            int local_split_dim = this->split_dim_;
+            int global_split_dim = (*this->target_features_)[local_split_dim];
             double split_val = this->split_val_;
-            auto predicate = [&data, split_dim, split_val](const int& index) {
-                return data[index].data_[split_dim] >= split_val;
+            auto predicate = [&data, global_split_dim, split_val](const int& index) {
+                return data[index].data_[global_split_dim] >= split_val;
             };
             
             auto slices = return_indices.PredicateSort(predicate);
