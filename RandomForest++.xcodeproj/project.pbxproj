@@ -78,6 +78,8 @@
 		3DB6729A1A0AD25600967801 /* ExclusiveWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DB672981A0AD25600967801 /* ExclusiveWriter.h */; };
 		3DB6729C1A0AE8A500967801 /* ExclusiveWriterTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DB6729B1A0AE8A500967801 /* ExclusiveWriterTests.cpp */; };
 		3DC1D00C1A0C22C700FB6DCB /* libHrfClasses.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9250E91A07FDE5003255BF /* libHrfClasses.a */; };
+		3DC1D0101A0D5F0800FB6DCB /* JobQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DC1D00E1A0D5F0800FB6DCB /* JobQueue.h */; };
+		3DC1D0121A0D862D00FB6DCB /* JobQueueTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DC1D0111A0D862D00FB6DCB /* JobQueueTests.cpp */; };
 		3DEF92F519DF867D00E1110F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DEF92F419DF867D00E1110F /* main.cpp */; };
 		3DEF930D19E0BB8500E1110F /* training.csv in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3DEF930319DFBE1C00E1110F /* training.csv */; };
 /* End PBXBuildFile section */
@@ -249,6 +251,8 @@
 		3DB672951A09C5E900967801 /* TreeCreatorTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TreeCreatorTests.cpp; sourceTree = "<group>"; };
 		3DB672981A0AD25600967801 /* ExclusiveWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExclusiveWriter.h; sourceTree = "<group>"; };
 		3DB6729B1A0AE8A500967801 /* ExclusiveWriterTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExclusiveWriterTests.cpp; sourceTree = "<group>"; };
+		3DC1D00E1A0D5F0800FB6DCB /* JobQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JobQueue.h; sourceTree = "<group>"; };
+		3DC1D0111A0D862D00FB6DCB /* JobQueueTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JobQueueTests.cpp; sourceTree = "<group>"; };
 		3DEF92F119DF867D00E1110F /* RandomForest++ */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "RandomForest++"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DEF92F419DF867D00E1110F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		3DEF930119DFBE1C00E1110F /* test.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test.csv; sourceTree = "<group>"; };
@@ -323,6 +327,7 @@
 				3D9250BA1A07FC3A003255BF /* MaskedVectorTests.cpp */,
 				3D9250BB1A07FC3A003255BF /* RandUtilsTests.cpp */,
 				3D9250BC1A07FC3A003255BF /* testfile.txt */,
+				3DC1D0111A0D862D00FB6DCB /* JobQueueTests.cpp */,
 			);
 			path = BkpClassesTests;
 			sourceTree = "<group>";
@@ -416,6 +421,7 @@
 				3D98090F19E9A5F40016267F /* OperationCounter.h */,
 				3D9BE35619EF0FCF00536407 /* RandUtils.cpp */,
 				3D9BE35719EF0FCF00536407 /* RandUtils.h */,
+				3DC1D00E1A0D5F0800FB6DCB /* JobQueue.h */,
 			);
 			path = BkpClasses;
 			sourceTree = "<group>";
@@ -503,6 +509,7 @@
 				3DB6729A1A0AD25600967801 /* ExclusiveWriter.h in Headers */,
 				3D9BE35919EF0FCF00536407 /* RandUtils.h in Headers */,
 				3D98091319E9A5F40016267F /* OperationCounter.h in Headers */,
+				3DC1D0101A0D5F0800FB6DCB /* JobQueue.h in Headers */,
 				3D6DE69119F16BE500B87BDF /* MaskedVector.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -680,6 +687,7 @@
 				3D9250BF1A07FC3A003255BF /* MaskedVectorTests.cpp in Sources */,
 				3D9250BD1A07FC3A003255BF /* FileWrapperTests.cpp in Sources */,
 				3D9250C41A07FC8B003255BF /* main.cpp in Sources */,
+				3DC1D0121A0D862D00FB6DCB /* JobQueueTests.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
