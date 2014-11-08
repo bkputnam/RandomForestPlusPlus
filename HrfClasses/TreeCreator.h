@@ -18,11 +18,14 @@
 #include "Tree.h"
 #include "TreeTrainer.h"
 #include "ScoreAverager.h"
+#include "JobQueue.h"
 
 namespace hrf {
     
     class TreeCreator {
     private:
+        class MakeTreesJob;
+        
         const hrf::trainer::TrainerFn& trainer_;
         
         const bkp::MaskedVector<const hrf::HiggsTrainingCsvRow>& data_;
@@ -32,6 +35,8 @@ namespace hrf {
         std::shared_ptr<std::vector<double>> global_max_corner_;
         
         std::unique_ptr<Tree> MakeTree();
+        
+        void MakeTreesParallelHelper(bkp::JobQueue<MakeTreesJob>& job_queue);
     
     public:
         TreeCreator(const bkp::MaskedVector<const hrf::HiggsTrainingCsvRow>& data,
@@ -39,6 +44,8 @@ namespace hrf {
                     int cols_per_tree);
         
         hrf::ScoreAverager::IScorerVector MakeTrees(int n);
+        
+        hrf::ScoreAverager::IScorerVector MakeTreesParallel(int n);
     };
     
 }
