@@ -50,4 +50,8 @@ namespace hrf {
         return std::move(scorer_);
     }
     
+    void Classifier::ResetScorer(std::unique_ptr<IScorer> new_scorer) {
+        scorer_ = std::move(new_scorer);
+    }
+    
 }

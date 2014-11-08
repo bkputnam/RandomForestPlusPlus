@@ -27,6 +27,25 @@ namespace hrf {
         ScoreResult Score(const bkp::MaskedVector<const HiggsCsvRow>& data, bool parallel=false);
         
         std::unique_ptr<IScorer> ReleaseScorer();
+        
+        template<typename TScorer>
+        std::unique_ptr<typename std::enable_if<std::is_base_of<IScorer, TScorer>::value, TScorer>::type>
+        ReleaseScorer()
+        {
+            // optimism: remove raw_ptr from scorer_ on the assumption that
+            // the cast will succeed. If it fails we'll have to put it back
+            IScorer* raw_ptr = scorer_.release();
+            TScorer* casted_ptr = dynamic_cast<TScorer*>(raw_ptr);
+            
+            if (casted_ptr != nullptr) {
+                return std::unique_ptr<TScorer>(casted_ptr);
+            }
+            else {
+                // casting fail - put the original pointer back and return an empty unique_ptr
+                scorer_.reset(raw_ptr);
+                return std::unique_ptr<TScorer>(nullptr);
+            }
+        }
     };
 }
 
