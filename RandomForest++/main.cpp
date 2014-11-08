@@ -23,6 +23,7 @@
 #include "Tree.h"
 #include "TreeCreator.h"
 #include "ScoreAverager.h"
+#include "ScoreCacher.h"
 #include "Classifier.h"
 #include "AmsCalculator.h"
 
@@ -34,6 +35,7 @@ const bool PARALLEL = false;
 const double VALIDATION_PCT = 0.2; // 20%
 const double COLS_PER_MODEL = 3;
 const int NUM_TREES = 100;
+const bool USE_SCORE_CACHER = true;
 const std::string OUTFILE = "/Users/bkputnam/Desktop/hrf_output.csv";
 
 void PlayWinSound();
@@ -61,7 +63,13 @@ int main(int argc, const char * argv[]) {
     hrf::TreeCreator tree_creator(*train_set,
                                   hrf::trainer::TrainRandDim,
                                   COLS_PER_MODEL);
-    auto trees = tree_creator.MakeTrees(NUM_TREES);
+    hrf::ScoreAverager::IScorerVector trees;
+    if (PARALLEL) {
+        trees = tree_creator.MakeTreesParallel(NUM_TREES);
+    }
+    else {
+        trees = tree_creator.MakeTrees(NUM_TREES);
+    }
     std::unique_ptr<hrf::IScorer> forest(new hrf::ScoreAverager(std::move(trees)));
     EndTimer();
     
@@ -73,6 +81,9 @@ int main(int argc, const char * argv[]) {
     double best_cutoff = NaN;
     double best_exponent = NaN;
     double best_score = std::numeric_limits<double>::lowest();
+    if (USE_SCORE_CACHER) {
+        forest = std::unique_ptr<hrf::ScoreCacher>(new hrf::ScoreCacher(std::move(forest)));
+    }
     hrf::Classifier classifier(std::move(forest));
     hrf::AmsCalculator ams_calculator(validation_set);
     for (double exponent=MIN_EXPONENT; exponent<=MAX_EXPONENT; exponent+=EXPONENT_STEP) {
@@ -86,12 +97,20 @@ int main(int argc, const char * argv[]) {
             best_cutoff = cutoff;
         }
     }
-    classifier.cutoff_ = best_cutoff;
     EndTimer();
+    if (USE_SCORE_CACHER) {
+        // reset classifier to use forest directly, instead of wrapping it in a ScoreCacher
+        classifier.ResetScorer(
+            classifier.ReleaseScorer<hrf::ScoreCacher>()->ReleaseScorer()
+        );
+    }
+    classifier.cutoff_ = best_cutoff;
     std::cout << "\tBest Cutoff: " << best_cutoff << " (e^" << best_exponent << ")" << std::endl;
     std::cout << "\tBest Validation Score: " << best_score << std::endl;
     double train_score = hrf::CalcAms(classifier.Classify(train_set_downcasted, PARALLEL), *train_set);
     std::cout << "\tTraining Score: " << train_score << std::endl;
+    
+    PlayDingSound();
     
     if (best_score < 3.4) {
         return 0;
