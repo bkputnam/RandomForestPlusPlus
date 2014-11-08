@@ -20,6 +20,11 @@ namespace trainer {
     typedef bkp::MaskedVector<const hrf::HiggsTrainingCsvRow> TrainingRows;
     typedef std::function<void(hrf::Tree&, const TrainingRows&)> TrainerFn;
     
+    enum SplitErrorCode {
+        NO_ERROR,
+        ZERO_WIDTH_DIM // signifies that dim_max-dim_min==0.0
+    };
+    
     // FindBestSplitDim searches all of target_features_ for the best point on the
     // best dimension to split on (reduces entropy the most). FindBestRandomSplit
     // returns a similar result (drop-in replacement) but simply chooses a dimension
@@ -28,7 +33,7 @@ namespace trainer {
     // dimension for a good split point.
     std::tuple<int, double, double> FindBestSplitDim(const hrf::Tree& tree, const TrainingRows& training_rows);
     std::tuple<int, double, double> FindBestRandomSplit(const hrf::Tree& tree, const TrainingRows& training_rows);
-    std::tuple<double, double> FindBestSplit(const TrainingRows& training_rows, int global_dim_index, int n_splits=5);
+    std::tuple<SplitErrorCode, double, double> FindBestSplit(const TrainingRows& training_rows, int global_dim_index, int n_splits=5);
     
     void TrainBestDim(hrf::Tree& tree, const TrainingRows& training_rows);
     void TrainRandDim(hrf::Tree& tree, const TrainingRows& training_rows);

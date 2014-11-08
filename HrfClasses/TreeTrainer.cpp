@@ -47,9 +47,12 @@ namespace trainer {
         for (int dim=0; dim<tree.ndim_; ++dim) {
             int global_dim = (*tree.target_features_)[dim];
             
+            SplitErrorCode error;
             double dim_expected_info, dim_best_split;
-            std::tie(dim_best_split, dim_expected_info) = FindBestSplit(training_rows, global_dim);
+            std::tie(error, dim_best_split, dim_expected_info) = FindBestSplit(training_rows, global_dim);
             
+            // Note: ignore error; if it fails it will return dim_expected_info==0.0 which will
+            // never be > max_expected_info
             if (dim_expected_info > max_expected_info) {
                 best_local_dim_index = dim;
                 max_expected_info = dim_expected_info;
@@ -63,11 +66,31 @@ namespace trainer {
     std::tuple<int, double, double> FindBestRandomSplit(const hrf::Tree& tree,
                                                         const TrainingRows& training_rows)
     {
-        int local_dim_index = bkp::random::RandInt(tree.ndim_ - 1);
-        int global_dim_index = (*tree.target_features_)[local_dim_index];
-        
+        int local_dim_index;
+        SplitErrorCode error;
         double expected_info, split;
-        std::tie(split, expected_info) = FindBestSplit(training_rows, global_dim_index);
+        const int MAX_TRIES = tree.ndim_ * 2;
+        int tries = 0;
+        
+        // try a bunch of randomly picked dimensions to split on. Sometimes,
+        // FindBestSplit will return ZERO_WIDTH_DIM error if dim_max - dim_min
+        // is 0.0. In that case, try a different dim. In very rare cases,
+        // all available dims will return ZERO_WIDTH_DIM, so we need to stop
+        // after a certain number of tries.
+        //
+        // Note: the assumption here is that most of the time, most dimensions
+        // will produce a successful split. There
+        // is no logic to ensure that all dimensions are tried in the event
+        // of repeated failures, since that is assumed to be a rare circumstance.
+        // The logic in place is intended to be fast while also preventing
+        // infinite loops. Since we have so many trees, it isn't a huge deal
+        // if we stop splitting one a bit early (i.e. if we miss a dimension that
+        // we could have split on, because RandInt just never picked it)
+        do {
+            local_dim_index = bkp::random::RandInt(tree.ndim_ - 1);
+            int global_dim_index = (*tree.target_features_)[local_dim_index];
+            std::tie(error, split, expected_info) = FindBestSplit(training_rows, global_dim_index);
+        } while (error == SplitErrorCode::ZERO_WIDTH_DIM && (++tries) < MAX_TRIES);
         
         return std::make_tuple(local_dim_index, split, expected_info);
     }
@@ -84,7 +107,7 @@ namespace trainer {
         return count;
     }
     
-    std::tuple<double, double> FindBestSplit(const TrainingRows& training_rows,
+    std::tuple<SplitErrorCode, double, double> FindBestSplit(const TrainingRows& training_rows,
                                              int global_dim_index,
                                              const int n_splits)
     {
@@ -106,7 +129,7 @@ namespace trainer {
         }
         
         if (dim_max - dim_min == 0.0) {
-            return std::make_tuple(NaN, 0.0);
+            return std::make_tuple(SplitErrorCode::ZERO_WIDTH_DIM, NaN, 0.0);
         }
         
         auto splits = bkp::random::RandDoubles(n_splits, dim_min, dim_max);
@@ -152,7 +175,7 @@ namespace trainer {
             }
         }
         
-        return std::make_tuple(best_split, max_expected_info);
+        return std::make_tuple(SplitErrorCode::NO_ERROR, best_split, max_expected_info);
     }
     
     int DefaultMaxDepth(const TrainingRows& rows) {
@@ -161,6 +184,17 @@ namespace trainer {
     
     int DefaultMinPts(const TrainingRows& rows) {
         return static_cast<int>(floor(sqrt(rows.size())));
+    }
+    
+    void TrainHelperLeaf(hrf::Tree& tree,
+                         int s_count,
+                         int b_count)
+    {
+        double volume = static_cast<double>(tree.volume_);
+        double s_density = s_count / volume;
+        double b_density = b_count / volume;
+        
+        tree.SetScore(s_density, b_density);
     }
     
     void TrainHelper(hrf::Tree& tree,
@@ -177,19 +211,17 @@ namespace trainer {
             s_count == 0 ||
             b_count == 0)
         {
-            // set score and stop recursion (return)
-            
-            double volume = static_cast<double>(tree.volume_);
-            double s_density = s_count / volume;
-            double b_density = b_count / volume;
-            
-            tree.SetScore(s_density, b_density);
+            TrainHelperLeaf(tree, s_count, b_count);
             return;
         }
         
         double split, expected_info;
         int local_dim_index;
         std::tie(local_dim_index, split, expected_info) = split_finder(tree, training_rows);
+        if (local_dim_index == -1 || std::isnan(split) || expected_info <= 0.0) {
+            TrainHelperLeaf(tree, s_count, b_count);
+            return;
+        }
         int global_index = (*tree.target_features_)[local_dim_index];
         
         tree.Split(global_index, split);
