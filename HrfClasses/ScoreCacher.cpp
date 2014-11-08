@@ -26,4 +26,8 @@ namespace hrf {
         }
         return *cache_; // yeah, it's a copy, but c'est la vie. Should still be faster than calculating.
     }
+    
+    std::unique_ptr<IScorer> ScoreCacher::ReleaseScorer() {
+        return std::move(scorer_);
+    }
 }

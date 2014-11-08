@@ -30,6 +30,8 @@ namespace hrf {
         std::vector<char>
         Classify(const bkp::MaskedVector<const HiggsCsvRow>& rows,
                  bool parallel);
+        
+        std::unique_ptr<IScorer> ReleaseScorer();
     };
 }
 

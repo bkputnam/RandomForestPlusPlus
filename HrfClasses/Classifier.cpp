@@ -46,4 +46,8 @@ namespace hrf {
         return result;
     }
     
+    std::unique_ptr<IScorer> Classifier::ReleaseScorer() {
+        return std::move(scorer_);
+    }
+    
 }

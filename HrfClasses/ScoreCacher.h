@@ -25,6 +25,8 @@ namespace hrf {
         ScoreCacher(std::unique_ptr<ScoreResult> result_to_cache);
         
         ScoreResult Score(const bkp::MaskedVector<const HiggsCsvRow>& data, bool parallel=false);
+        
+        std::unique_ptr<IScorer> ReleaseScorer();
     };
 }
 
