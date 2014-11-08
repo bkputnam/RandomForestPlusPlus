@@ -80,6 +80,8 @@ TEST(JobQueueTests, Basic2) {
     std::atomic<int> consumed_count(0);
     std::vector<bool> consumer_thread_exited(N_CONSUMERS, false);
     
+    // This is the main difference between this test and 'Basic' - make sure the job
+    // queue is filled prior to starting.
     for (int i=0; i<N_JOBS; ++i) {
         job_queue.PushBack(std::unique_ptr<bkp::OperationCounter>(new bkp::OperationCounter(i)));
     }
