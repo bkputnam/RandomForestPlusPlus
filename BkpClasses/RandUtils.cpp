@@ -15,15 +15,19 @@ namespace bkp {
     
     namespace random {
         
+        static std::default_random_engine main_generator;
+        
         std::default_random_engine& Generator() {
-            static boost::thread_specific_ptr<std::default_random_engine> _generator;
-            if (!_generator.get()) {
-                _generator.reset(new std::default_random_engine);
+            static boost::thread_specific_ptr<std::default_random_engine> thread_generator;
+            
+            if (!thread_generator.get()) {
+                thread_generator.reset(new std::default_random_engine);
+                thread_generator->seed(main_generator());
             }
-            return *_generator;
+            return *thread_generator;
         }
         
-        void Seed(int seed) { Generator().seed(seed); }
+        void Seed(int seed) { main_generator.seed(seed); }
         
         int RandInt(int low, int high) {
             return std::uniform_int_distribution<int>(low, high)(Generator());
