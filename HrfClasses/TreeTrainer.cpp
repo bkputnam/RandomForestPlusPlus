@@ -139,11 +139,15 @@ namespace trainer {
         double max_expected_info = 0.0;
         double best_split = NaN;
         
+        // We'll be accessing the signal flag and a single column from
+        // the row repeatedly (n_splits times). It turns out that it's
+        // significantly faster to copy all the values we'll need to
+        // a contiguous array first, to improve our chances of cache
+        // hits later.
         std::unique_ptr<bool[]> is_signal_owner(new bool[size]);
         std::unique_ptr<double[]> vals_owner(new double[size]);
         bool* is_signal_raw = is_signal_owner.get();
         double* vals_raw = vals_owner.get();
-        
         auto row_index = size;
         while (row_index--) {
             auto& row = training_rows[row_index];
