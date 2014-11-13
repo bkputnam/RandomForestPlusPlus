@@ -139,6 +139,18 @@ namespace trainer {
         double max_expected_info = 0.0;
         double best_split = NaN;
         
+        std::unique_ptr<bool[]> is_signal_owner(new bool[size]);
+        std::unique_ptr<double[]> vals_owner(new double[size]);
+        bool* is_signal_raw = is_signal_owner.get();
+        double* vals_raw = vals_owner.get();
+        
+        auto row_index = size;
+        while (row_index--) {
+            auto& row = training_rows[row_index];
+            is_signal_raw[row_index] = row.Label_ == 's';
+            vals_raw[row_index] = row.data_[global_dim_index];
+        }
+        
         for (int split_index=0; split_index<n_splits; ++split_index) {
             double split = splits_ptr[split_index];
             
@@ -146,16 +158,14 @@ namespace trainer {
             int n_below, s_below, b_below;
             n_above = s_above = b_above = n_below = s_below = b_below = 0;
             
-            for (auto row_index = decltype(size){0}; row_index<size; ++row_index) {
-                const auto& row = training_rows[row_index];
-                double val = row.data_[global_dim_index];
-                bool is_signal = row.Label_ == 's';
+            auto row_index = size;
+            while (row_index--) {
                 
-                if (val >= split) {
-                    if (is_signal) { ++s_above; } else { ++b_above; }
+                if (vals_raw[row_index] >= split) {
+                    if (is_signal_raw[row_index]) { ++s_above; } else { ++b_above; }
                 }
                 else {
-                    if (is_signal) { ++s_below; } else { ++b_below; }
+                    if (is_signal_raw[row_index]) { ++s_below; } else { ++b_below; }
                 }
             }
             
