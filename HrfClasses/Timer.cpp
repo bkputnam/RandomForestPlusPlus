@@ -70,7 +70,7 @@ void EndTimer() {
         std::printf(" (Done %s)\n", FmtDuration(elapsed).c_str());
     }
     else {
-        std::printf("%s Done - %s\n",
+        std::printf("%sDone - %s\n",
                     std::string(start_stack.size(), '\t').c_str(),
                     FmtDuration(elapsed).c_str());
     }
