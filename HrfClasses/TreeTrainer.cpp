@@ -97,9 +97,9 @@ namespace trainer {
     
     // helper function: count how many times a label appears in the given rows
     int CountLabel(const TrainingRows& rows, char label) {
-        auto size = rows.size();
+        auto i = rows.size();
         int count = 0;
-        for (auto i = decltype(size){0}; i<size; ++i) {
+        while (i--) {
             if (rows[i].Label_ == label) {
                 ++count;
             }
@@ -112,13 +112,14 @@ namespace trainer {
                                              const int n_splits)
     {
         int s_count = CountLabel(training_rows, 's');
-        int b_count = CountLabel(training_rows, 'b'); // == training_rows.size() - s_count
+        int b_count = static_cast<int>(training_rows.size()) - s_count;
         double total_entropy = CalcEntropy(s_count, b_count);
         
         const auto size = training_rows.size();
         double dim_min = std::numeric_limits<double>::max();
         double dim_max = std::numeric_limits<double>::lowest();
-        for (auto i = decltype(size){0}; i<size; ++i) {
+        auto i = size;
+        while (i--) {
             double val = training_rows[i].data_[global_dim_index];
             if (val < dim_min) {
                 dim_min = val;
@@ -199,12 +200,12 @@ namespace trainer {
     
     void TrainHelper(hrf::Tree& tree,
                      const TrainingRows& training_rows,
-                     const std::function<std::tuple<int, double, double>(const hrf::Tree&, const TrainingRows&)>& split_finder,
+                     std::tuple<int, double, double> (*split_finder)(const hrf::Tree&, const TrainingRows&),
                      int max_depth,
                      int min_pts)
     {
         int s_count = CountLabel(training_rows, 's');
-        int b_count = CountLabel(training_rows, 'b'); // == training_rows.size() - s_count
+        int b_count = static_cast<int>(training_rows.size()) - s_count;
         
         if (max_depth <= 0 ||
             training_rows.size() <= min_pts ||
@@ -249,8 +250,7 @@ namespace trainer {
                     min_pts);
         
         // filter = !filter
-        std::transform(filter.begin(), filter.end(), filter.begin(),
-                       [](bool b) { return !b; });
+        filter.flip();
         
         TrainHelper(tree.children_[1],
                     training_rows.Filter(filter),

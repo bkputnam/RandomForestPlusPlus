@@ -192,7 +192,7 @@ namespace bkp {
             size_type start_;
             size_type size_;
             
-            T*& backing_ptr(size_type i) {
+            inline T*& backing_ptr(size_type i) {
                 assert(i >=0 && i < size_);
                 return backing_data_.masked_data_[i + start_];
             }
@@ -228,7 +228,7 @@ namespace bkp {
                 // so that the "end_index >= 0" check fails when end_index has gone
                 // all the way to the beginning.
                 int this_size = static_cast<int>(size());
-                int start_index = static_cast<int>(0);
+                int start_index = 0;
                 int end_index = static_cast<int>(this_size - 1);
                 T* swap = nullptr;
                 
@@ -246,6 +246,8 @@ namespace bkp {
                         swap = backing_ptr(start_index);
                         backing_ptr(start_index) = backing_ptr(end_index);
                         backing_ptr(end_index) = swap;
+                        ++start_index;
+                        --end_index;
                     }
                     else {
                         return std::make_pair(

@@ -68,19 +68,19 @@ namespace hrf {
         auto nrows = rows.size();
         auto ndims = cols.size();
         
-        std::vector<bool> result;
-        result.reserve(nrows);
+        std::vector<bool> result(nrows);
         
-        for (auto row_index = decltype(nrows){0}; row_index<nrows; ++row_index) {
-            
+        auto row_index = nrows;
+        while (row_index--) {
             auto& row = rows[row_index];
             bool row_has_nan = false;
             
-            for (auto dim_index = decltype(ndims){0}; dim_index<ndims; ++dim_index) {
+            auto dim_index = ndims;
+            while (dim_index--) {
                 row_has_nan &= std::isnan(row.data_[dim_index]);
             }
             
-            result.push_back(row_has_nan);
+            result[row_index] = row_has_nan;
         }
         
         return result;
