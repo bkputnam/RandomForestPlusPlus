@@ -10,6 +10,7 @@
 
 namespace bkp {
     
+    // initialize all counts to 0
     int OperationCounter::default_constructors = 0;
     int OperationCounter::int_constructors = 0;
     int OperationCounter::instance_count = 0;
