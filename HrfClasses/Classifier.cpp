@@ -23,7 +23,7 @@ namespace hrf {
     Classifier::Classify(const bkp::MaskedVector<const HiggsCsvRow>& rows,
                          bool parallel)
     {
-        auto score = scorer_->Score(rows);
+        auto score = scorer_->Score(rows, parallel);
         
         // Note: in theory rows.size()==score.size() always.
         // In practice, it's better to use the size of the thing we're

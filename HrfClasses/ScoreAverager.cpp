@@ -32,7 +32,7 @@ namespace hrf {
         int* b_counts = b_counts_v.data();
         
         for (auto model_index = decltype(n_models){0}; model_index<n_models; ++model_index) {
-            auto score = (*sub_models_)[model_index]->Score(data);
+            auto score = (*sub_models_)[model_index]->Score(data, false);
             assert(score.size() == n_rows);
             
             for (auto row_index = decltype(n_rows){0}; row_index<n_rows; ++row_index) {
