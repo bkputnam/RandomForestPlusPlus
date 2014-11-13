@@ -13,6 +13,17 @@
 #include <vector>
 #include <thread>
 
+// Simple test to prove basic functionality. Fire up several
+// threads that will attempt to read/write from/to the
+// ExclusiveWriter. Keep atomic counts of how many readers
+// and writers are executing at any given time, and check
+// that they are reasonable (e.g. writer_count should always
+// be 0 when the reader is executing). Writer functions
+// will incrememnt the int held by the ExclusiveWriter, so
+// at the end of the test that int should be equal to the
+// number of writer threads there were (if the writes weren't
+// exclusive/atomic like ExclusiveWriter is supposed to
+// guarantee, that count will be < the number of writer threads).
 TEST(ExclusiveWriterTests, Basic) {
     
     std::atomic<int> reader_count(0);

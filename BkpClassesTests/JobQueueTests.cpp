@@ -13,6 +13,10 @@
 #include "JobQueue.h"
 #include "OperationCounter.h"
 
+// Basic functionality. Push all jobs to JobQueue in single producer thread.
+// Multiple consumer threads will process jobs, and update various flags
+// and counts to ensure that all jobs are processed, and that consumer
+// threads exit sucessfully.
 TEST(JobQueueTests, Basic) {
     
     const int N_JOBS = 10000;
@@ -72,6 +76,8 @@ TEST(JobQueueTests, Basic) {
     }
 }
 
+// Basic functionality 2: essentially the same as Basic test, but add
+// jobs to Queue in main thread before starting consumer threads.
 TEST(JobQueueTests, Basic2) {
     const int N_JOBS = 10000;
     const int N_CONSUMERS = 10;
@@ -126,6 +132,8 @@ TEST(JobQueueTests, Basic2) {
     }
 }
 
+// Use sleep() calls to ensure that TryPopFront() will wait
+// for a job like it should
 TEST(JobQueueTests, TryPopFrontWaitsCorrectly) {
     
     std::atomic<bool> got_value(false);
@@ -150,6 +158,8 @@ TEST(JobQueueTests, TryPopFrontWaitsCorrectly) {
     EXPECT_EQ(true, got_value);
 }
 
+// Copy of Basic2 that uses raw pointers instead of unique_ptr. This test was
+// added after we removed the requirement to use unique_ptr for everything.
 TEST(JobQueueTests, RawPointers2) {
     
     const int N_JOBS = 10000;
@@ -197,6 +207,8 @@ TEST(JobQueueTests, RawPointers2) {
     EXPECT_EQ(N_JOBS, ops.size());
 }
 
+// Copy of Basic that uses raw pointers instead of unique_ptr. This test was
+// added after we removed the requirement to use unique_ptr for everything.
 TEST(JobQueueTests, RawPointers) {
     
     const int N_JOBS = 10000;

@@ -21,6 +21,7 @@ TEST(RandUtilsTests, RandInt) {
     }
 }
 
+// helper function: return true if v contains the same int more than once
 bool HasDuplicates(std::vector<int>& v) {
     std::vector<int>::size_type size = v.size();
     if (size == 0) { return false; }

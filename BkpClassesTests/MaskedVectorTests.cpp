@@ -18,8 +18,10 @@
 
 using namespace bkp;
 
+// Helper function to create a range of OperationCounter instances.
 std::vector<OperationCounter> MakeVector(int how_many) {
-    return std::vector<OperationCounter>(boost::counting_iterator<int>(0), boost::counting_iterator<int>(how_many));
+    return std::vector<OperationCounter>(boost::counting_iterator<int>(0),
+                                         boost::counting_iterator<int>(how_many));
 }
 
 TEST(MaskedVectorTests, DefaultConstructor) {
@@ -28,6 +30,8 @@ TEST(MaskedVectorTests, DefaultConstructor) {
     EXPECT_DEATH(v[0], ".*");
 }
 
+// ensure that vector-move constructor properly takes and empties
+// passed vector
 TEST(MaskedVectorTests, VectorMoveConstructor) {
     OperationCounter::ResetCounts();
     {
@@ -167,6 +171,8 @@ TEST(MaskedVectorTests, Iterators) {
     EXPECT_EQ(5, OperationCounter::destructors);
 }
 
+// Test that our iterators work with STL iterator functions like
+// the std::vector iterator-constructor and std::count_if
 TEST(MaskedVectorTests, StlIteratorIntegration) {
     OperationCounter::ResetCounts();
     {
