@@ -54,9 +54,6 @@ namespace hrf {
     std::unique_ptr<Tree> TreeCreator::MakeTree() {
         auto cols = bkp::random::Choice(hrf::HiggsCsvRow::NUM_FEATURES, cols_per_tree_);
         
-        auto filter = HasNan(data_, cols);
-        std::transform(filter.begin(), filter.end(), filter.begin(), [](bool b){return !b;});
-        
         std::unique_ptr<Tree> result(new Tree(std::move(cols),
                                               global_min_corner_,
                                               global_max_corner_));

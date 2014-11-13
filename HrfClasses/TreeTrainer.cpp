@@ -158,9 +158,9 @@ namespace trainer {
         for (int split_index=0; split_index<n_splits; ++split_index) {
             double split = splits_ptr[split_index];
             
-            int n_above, s_above, b_above;
-            int n_below, s_below, b_below;
-            n_above = s_above = b_above = n_below = s_below = b_below = 0;
+            int s_above, b_above;
+            int s_below, b_below;
+            s_above = b_above = s_below = b_below = 0;
             
             auto row_index = size;
             while (row_index--) {
@@ -173,8 +173,8 @@ namespace trainer {
                 }
             }
             
-            n_above = s_above + b_above;
-            n_below = s_below + b_below;
+            int n_above = s_above + b_above;
+            int n_below = s_below + b_below;
             
             double prob_above = static_cast<double>(n_above) / size;
             double prob_below = static_cast<double>(n_below) / size; // == 1.0 - prob_above
