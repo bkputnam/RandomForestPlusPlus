@@ -88,7 +88,7 @@ namespace hrf {
         MakeTreesJob(iterator begin, iterator end) : begin_(begin), end_(end) { }
     };
     
-    void TreeCreator::MakeTreesParallelHelper(bkp::JobQueue<MakeTreesJob>& job_queue)
+    void TreeCreator::MakeTreesParallelHelper(bkp::JobQueue<std::unique_ptr<MakeTreesJob>>& job_queue)
     {
         bool got_job;
         std::unique_ptr<MakeTreesJob> job;
@@ -118,7 +118,7 @@ namespace hrf {
         const int TREES_PER_JOB = n / (N_CORES * 10); // integer division intentional
         
         std::vector<std::unique_ptr<hrf::IScorer>>* raw_result = new std::vector<std::unique_ptr<hrf::IScorer>>(n);
-        bkp::JobQueue<TreeCreator::MakeTreesJob> job_queue;
+        bkp::JobQueue<std::unique_ptr<MakeTreesJob>> job_queue;
         
         std::vector<std::thread> consumer_threads;
         const int N_CONSUMER_THREADS = N_CORES;
@@ -136,10 +136,10 @@ namespace hrf {
             iter += TREES_PER_JOB;
             auto end = iter;
             
-            job_queue.PushBack(std::unique_ptr<MakeTreesJob>(new MakeTreesJob(begin, end)));
+            job_queue.MoveBack(std::unique_ptr<MakeTreesJob>(new MakeTreesJob(begin, end)));
         }
         if (full_batches * TREES_PER_JOB < n) {
-            job_queue.PushBack(std::unique_ptr<MakeTreesJob>(new MakeTreesJob(iter, raw_result->end())));
+            job_queue.MoveBack(std::unique_ptr<MakeTreesJob>(new MakeTreesJob(iter, raw_result->end())));
         }
         job_queue.CompleteAdding();
         

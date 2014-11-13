@@ -36,7 +36,7 @@ namespace hrf {
         
         std::unique_ptr<Tree> MakeTree();
         
-        void MakeTreesParallelHelper(bkp::JobQueue<MakeTreesJob>& job_queue);
+        void MakeTreesParallelHelper(bkp::JobQueue<std::unique_ptr<MakeTreesJob>>& job_queue);
     
     public:
         TreeCreator(const bkp::MaskedVector<const hrf::HiggsTrainingCsvRow>& data,
