@@ -14,6 +14,7 @@
 
 #include "IScorer.h"
 #include "Tree.h"
+#include "MaskedVector.h"
 
 namespace hrf {
     
@@ -30,6 +31,7 @@ namespace hrf {
         IScorerVector sub_models_;
         
         ScoreResult GMeanSerial(const bkp::MaskedVector<const HiggsCsvRow>& data);
+        ScoreResult GMeanParallel(const bkp::MaskedVector<const HiggsCsvRow>& data);
         
     public:
         
