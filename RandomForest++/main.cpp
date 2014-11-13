@@ -46,6 +46,8 @@ int main(int argc, const char * argv[]) {
     
     bkp::random::Seed(42);
     
+    StartTimer("Running RandomForest++"); // global timer
+    
     StartTimer("Loading training data");
     MaskedVector<const HiggsTrainingCsvRow> alltraindata = hrf::LoadTrainingData();
     EndTimer();
@@ -105,14 +107,15 @@ int main(int argc, const char * argv[]) {
         );
     }
     classifier.cutoff_ = best_cutoff;
-    std::cout << "\tBest Cutoff: " << best_cutoff << " (e^" << best_exponent << ")" << std::endl;
-    std::cout << "\tBest Validation Score: " << best_score << std::endl;
+    std::cout << "\t\tBest Cutoff: " << best_cutoff << " (e^" << best_exponent << ")" << std::endl;
+    std::cout << "\t\tBest Validation Score: " << best_score << std::endl;
     double train_score = hrf::CalcAms(classifier.Classify(train_set_downcasted, PARALLEL), *train_set);
-    std::cout << "\tTraining Score: " << train_score << std::endl;
+    std::cout << "\t\tTraining Score: " << train_score << std::endl;
     
     PlayDingSound();
     
     if (best_score < 3.4) {
+        EndTimer(); // end global timer
         return 0;
     }
     
@@ -129,6 +132,8 @@ int main(int argc, const char * argv[]) {
                                  boost::counting_iterator<int>(static_cast<int>(test_data.size())));
     hrf::WritePredictions(OUTFILE, test_data, predictions, confidences);
     EndTimer();
+    
+    EndTimer(); // end global timer
     
     PlayDingSound();
     return 0;
