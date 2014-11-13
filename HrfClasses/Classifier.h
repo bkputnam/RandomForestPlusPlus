@@ -17,6 +17,11 @@
 
 namespace hrf {
     
+    // A Classifier wraps an IScorer and turns its scores into an absolute 's' or 'b'
+    // classification prediction. Internally it compares the ratio of s_score to b_score,
+    // and if the s_score is above cutoff_ it produces a prediction of 's', otherwise 'b'.
+    // The cutoff can be set externally, and is expected to be tuned by an external
+    // caller.
     class Classifier {
     private:
         std::unique_ptr<IScorer> scorer_;
@@ -32,11 +37,17 @@ namespace hrf {
         Classify(const bkp::MaskedVector<const HiggsCsvRow>& rows,
                  bool parallel);
         
+        // Return ownership of the internal IScorer to the caller. Classifier will
+        // be unusable until internal IScorer is reset (see ResetScorer). The
+        // template version of ReleaseScorer may be more useful, since it casts
+        // the returned unique_ptr for you, which can be tedious.
         std::unique_ptr<IScorer> ReleaseScorer();
+        
+        // Reset the internal IScorer to the passed IScorer
         void ResetScorer(std::unique_ptr<IScorer> new_scorer);
         
-        // Template function that will cast the unique_ptr for you. Internal scorer_ is stored
-        // as an IScorer, but typically callers will remember the type of the thing they passed in.
+        // Template version of ReleaseScorer that will cast the unique_ptr for you. The scorer_ member is
+        // stored as an IScorer, but typically callers will remember the exact type of the thing they passed in.
         // If casting fails, a null unique_ptr will be returned and the internal scorer will remain
         // unchanged (that is not expected to be common).
         template<typename TScorer>

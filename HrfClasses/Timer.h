@@ -12,12 +12,14 @@
 #include <string>
 #include <chrono>
 
+// ----------------------------
 // Implements a timer that prints to stdout in a nicely formatted way.
 // Format generally looks like this:
 // "Loading training data.. Done. (3 seconds)"
 // Timers may be nested by calling StartTimer multiple times before calling
 // EndTimer (they are started and stopped in FIFO order using a stack).
 // No namespace was used for convenience.
+// ----------------------------
 
 // Print the passed message to stdout with added ellipsis and no newline,
 // then start the timer.

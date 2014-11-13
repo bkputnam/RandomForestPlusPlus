@@ -13,6 +13,8 @@
 
 namespace hrf {
     
+    // A simple implementation of IScorer that returns predictable
+    // results. Useful for unit-testing things that contain IScorers
     class DummyScorer : public IScorer {
     private:
         

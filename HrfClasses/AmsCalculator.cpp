@@ -15,8 +15,8 @@ namespace hrf {
     AmsCalculator::AmsCalculator(const bkp::MaskedVector<const HiggsTrainingCsvRow>& actual) :
     nrows_(actual.size())
     {
-        actual_signal_ = new bool[nrows_];
-        actual_background_ = new bool[nrows_];
+        actual_signal_ = std::unique_ptr<bool[]>(new bool[nrows_]);
+        // actual_background_ = std::unique_ptr<bool[]>(new bool[nrows_]);
         
         double total_s = 0.0;
         double total_b = 0.0;
@@ -26,7 +26,7 @@ namespace hrf {
             bool is_signal = row.Label_ == 's';
             
             actual_signal_[row_index] = is_signal;
-            actual_background_[row_index] = !is_signal;
+            // actual_background_[row_index] = !is_signal;
             
             if (is_signal) {
                 total_s += row.Weight_;
@@ -44,11 +44,6 @@ namespace hrf {
             auto& row = actual[row_index];
             scaled_weights_.push_back(row.Weight_ * scale_factor);
         }
-    }
-    
-    AmsCalculator::~AmsCalculator() {
-        delete actual_signal_;
-        delete actual_background_;
     }
     
     // formula from: https://www.kaggle.com/c/higgs-boson/details/evaluation

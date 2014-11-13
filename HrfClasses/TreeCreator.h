@@ -22,6 +22,12 @@
 
 namespace hrf {
     
+    // Simple utility class for making Trees.
+    //
+    // TreeCreator instances store an hrf::trainer::TrainerFn& that they
+    // use in most/all tree-creation methods. Returned trees
+    // have been 'trained' (passed to that method) unless
+    // otherwise specified.
     class TreeCreator {
     private:
         class MakeTreesJob;

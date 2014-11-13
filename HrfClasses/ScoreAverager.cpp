@@ -23,6 +23,10 @@ namespace hrf {
     
     ScoreResult ScoreAverager::GMeanSerial(const bkp::MaskedVector<const HiggsCsvRow>& data) {
         
+        // NOTE: calculate gmean using equivalent sum of logarithms, for numeric
+        // stability (avoids over/underflows). Formula here:
+        // http://en.wikipedia.org/wiki/Geometric_mean#Relationship_with_arithmetic_mean_of_logarithms
+        
         const auto n_rows = data.size();
         const auto n_models = sub_models_->size();
         
@@ -37,7 +41,7 @@ namespace hrf {
         int* b_counts = b_counts_v.data();
         
         for (auto model_index = decltype(n_models){0}; model_index<n_models; ++model_index) {
-            auto score = (*sub_models_)[model_index]->Score(data, false);
+            auto score = (*sub_models_)[model_index]->Score(data, false); // note: if we're here, parallel=false was passed to our Score method
             assert(score.size() == n_rows);
             
             for (auto row_index = decltype(n_rows){0}; row_index<n_rows; ++row_index) {
@@ -95,6 +99,10 @@ namespace hrf {
     
     ScoreResult ScoreAverager::GMeanParallel(const bkp::MaskedVector<const HiggsCsvRow>& data) {
         
+        // NOTE: calculate gmean using equivalent sum of logarithms, for numeric
+        // stability (avoids over/underflows). Formula here:
+        // http://en.wikipedia.org/wiki/Geometric_mean#Relationship_with_arithmetic_mean_of_logarithms
+        
         const auto N_ROWS = data.size();
         
         // Put all sub_models in a JobQueue
@@ -117,7 +125,7 @@ namespace hrf {
             while (!scorer_queue.IsComplete()) {
                 tied_result = scorer_queue.TryPopFront();
                 if (success) {
-                    auto score_result = scorer->Score(data, true);
+                    auto score_result = scorer->Score(data, true); // note: if we're in this method, parallel=true was passed to our Score method
                     s_scores_queue.MoveBack(MoveToUniquePtr(std::move(score_result.s_scores_)));
                     b_scores_queue.MoveBack(MoveToUniquePtr(std::move(score_result.b_scores_)));
                 }
@@ -125,7 +133,7 @@ namespace hrf {
         };
         
         // Threads to process sums/counts for s/b results. There will only
-        // be two of these, and they will each own own double[] and one int[]
+        // be two of these, and they will each own one double[] and one int[]
         std::unique_ptr<double[]> s_sums(new double[N_ROWS]);
         std::unique_ptr<double[]> b_sums(new double[N_ROWS]);
         std::unique_ptr<int[]> s_counts(new int[N_ROWS]);
@@ -172,6 +180,11 @@ namespace hrf {
         int* s_counts_raw = s_counts.get();
         int* b_counts_raw = b_counts.get();
         
+        // We'll have N_CORES+2 threads running. It's a little inefficient to
+        // have more threads than cores, but the 2 extra sum_and_counter
+        // threads aren't expected to have nearly as much to do as the
+        // N_CORES scorer threads, so most of the CPU time will be spent
+        // in those threads.
         auto scorer_threads = StartThreads(parallel_scorer, N_CORES);
         std::thread s_accumulator(sum_and_counter,
                                   std::ref(s_scores_queue),
@@ -182,13 +195,22 @@ namespace hrf {
                                   b_sums_raw,
                                   b_counts_raw);
         
+        // Can't CompleteAdding on (s|b)_scores_queue until all
+        // scorer threads have returned.
         JoinAll(scorer_threads);
         s_scores_queue.CompleteAdding();
         b_scores_queue.CompleteAdding();
         
+        // now that (s|b)_scores_queue have had CompleteAdding
+        // called, (s|b)_accumulator threads can finish their
+        // work and return.
         s_accumulator.join();
         b_accumulator.join();
         
+        // finally consolidate sums and counts from accumulator
+        // (sum_and_count) threads into a single score. This should
+        // be a reasonably fast once-through so we'll do it single-
+        // threaded in the main thread.
         std::vector<double> s_scores(N_ROWS, NaN);
         std::vector<double> b_scores(N_ROWS, NaN);
         for (int i=0; i<N_ROWS; ++i) {
