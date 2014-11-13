@@ -200,7 +200,7 @@ TEST(JobQueueTests, RawPointers2) {
 TEST(JobQueueTests, RawPointers) {
     
     const int N_JOBS = 10000;
-    const int N_CONSUMERS = 1;
+    const int N_CONSUMERS = 10;
     std::vector<bkp::OperationCounter> ops(boost::counting_iterator<int>(0),
                                            boost::counting_iterator<int>(N_JOBS));
     std::vector<bool> has_been_seen(N_JOBS, false);
