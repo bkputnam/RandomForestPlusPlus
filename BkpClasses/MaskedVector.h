@@ -18,6 +18,21 @@
 #include <boost/iterator/transform_iterator.hpp>
 
 namespace bkp {
+    
+    // MaskedVector<T> represents a view into a std::vector<T>
+    // It uses a private std::vector<T> as a backing store,
+    // and may represent the entirety of that vector, or just
+    // a subset of it. Different MaskedVectors may use the
+    // same backing vector and may or may not represent different
+    // subsets of that vector. The interface typically tries to
+    // avoid exposing the backing store directly, however.
+    //
+    // A MaskedVector may be subsetted using the Filter function.
+    // The returned MaskedVector will use the same backing store
+    // as the parent, and will only take O(m) space where m
+    // is the size of the subset (implicitly, m <= n <= t where
+    // n is the size of the parent vector and t is the size of
+    // the backing vector).
     template<typename T>
     class MaskedVector {
     private:

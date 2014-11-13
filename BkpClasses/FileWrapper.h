@@ -16,25 +16,23 @@
 
 namespace bkp {
     
-    /*
-     Wrapper for file IO operations. Methods generally
-     delegate to printf-suite functions and take the
-     same parameters.
-     
-     This class is intended to comply with the spirit
-     of the Google C++ Style Guide, while also providing
-     benefits like automatic file closing on destruction,
-     to prevent resource leaks. Learning curve is expected
-     to negligibly more than learning printf-suite itself,
-     since the functions are basically just copied from
-     there and delegate to them under the hood.
-     
-     Relevant part of the Style Guide:
-     http://google-styleguide.googlecode.com/svn/trunk/cppguide.html#Streams
-     
-     NOTE: this class will probably always be incomplete;
-     I will only implement the parts I need, as I need them.
-     */
+    // Wrapper for file IO operations. Methods generally
+    // delegate to printf-suite functions and take the
+    // same parameters.
+    //
+    // This class is intended to comply with the spirit
+    // of the Google C++ Style Guide, while also providing
+    // benefits like automatic file closing on destruction,
+    // to prevent resource leaks. Learning curve is expected
+    // to negligibly more than learning printf-suite itself,
+    // since the functions are basically just copied from
+    // there and delegate to them under the hood.
+    //
+    // Relevant part of the Style Guide:
+    // http://google-styleguide.googlecode.com/svn/trunk/cppguide.html#Streams
+    //
+    // NOTE: this class will probably always be incomplete;
+    // I will only implement the parts I need, as I need them.
     class FileWrapper {
     private:
         FILE* f_;
