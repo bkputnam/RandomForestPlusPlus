@@ -77,9 +77,11 @@ TEST(TreeTrainerTests, FindBestSplit) {
                 mock::shared_vector({1.0, 10.0, 100.0}),
                 mock::shared_vector({50.0, 50.0, 500.0}));
     
+    hrf::trainer::SplitErrorCode error;
     double split, entropy;
-    std::tie(split, entropy) = hrf::trainer::FindBestSplit(training_set, 0);
+    std::tie(error, split, entropy) = hrf::trainer::FindBestSplit(training_set, 0);
     
+    EXPECT_EQ(hrf::trainer::SplitErrorCode::NO_ERROR, error);
     EXPECT_GT(split, 4.0);
     EXPECT_LE(split, 30.0);
     EXPECT_GT(entropy, 0.0);
@@ -219,8 +221,8 @@ TEST(TreeTrainerTests, GlobalLocalDimSwap) {
     double s_volume = (t.split_val_ - 0.1    )*(50.0 - 10.0)*(500.0-100.0);
     double b_volume = (10000.5 - t.split_val_)*(50.0 - 10.0)*(500.0-100.0);
     
-    EXPECT_EQ(b_volume, upper_child.volume_);
-    EXPECT_EQ(s_volume, lower_child.volume_);
+    EXPECT_DOUBLE_EQ(b_volume, upper_child.volume_);
+    EXPECT_DOUBLE_EQ(s_volume, lower_child.volume_);
     
     double s_density = 3.0 / s_volume;
     double b_density = 2.0 / b_volume;
@@ -247,8 +249,8 @@ TEST(TreeTrainerTests, GlobalLocalDimSwap) {
     auto size = expected_score.size();
     ASSERT_EQ(size, score.size());
     for (auto i = decltype(size){0}; i<size; ++i) {
-        EXPECT_EQ(expected_score.s_scores_[i], score.s_scores_[i]);
-        EXPECT_EQ(expected_score.b_scores_[i], score.b_scores_[i]);
+        EXPECT_DOUBLE_EQ(expected_score.s_scores_[i], score.s_scores_[i]);
+        EXPECT_DOUBLE_EQ(expected_score.b_scores_[i], score.b_scores_[i]);
     }
 }
 
