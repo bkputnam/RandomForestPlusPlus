@@ -31,10 +31,10 @@ using bkp::MaskedVector;
 using hrf::HiggsCsvRow;
 using hrf::HiggsTrainingCsvRow;
 
-const bool PARALLEL = false;
+const bool PARALLEL = true;
 const double VALIDATION_PCT = 0.2; // 20%
 const double COLS_PER_MODEL = 3;
-const int NUM_TREES = 100;
+const int NUM_TREES = 2500;
 const bool USE_SCORE_CACHER = true;
 const std::string OUTFILE = "/Users/bkputnam/Desktop/hrf_output.csv";
 
