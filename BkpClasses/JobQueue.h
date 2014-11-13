@@ -9,7 +9,6 @@
 #ifndef __RandomForest____JobQueue__
 #define __RandomForest____JobQueue__
 
-#include <memory>
 #include <deque>
 #include <mutex>
 #include <atomic>
@@ -22,7 +21,7 @@ namespace bkp {
     private:
         
         // Our internal job store
-        std::deque<std::unique_ptr<TJob>> deque_;
+        std::deque<TJob> deque_;
         
         // anything that modifies deque_ should hold a unique_lock
         // on deque_mutex_. Can also be used with deque_cv_ to
@@ -48,12 +47,12 @@ namespace bkp {
         // it will return a pair of 'true' and the result (which also happens
         // to be a pair<bool, something>). Otherwise it will return 'false'
         // and an unspecified value.
-        inline std::pair<bool, std::pair<bool, std::unique_ptr<TJob>>> TryPopFrontHelper() {
+        inline std::pair<bool, std::pair<bool, TJob>> TryPopFrontHelper() {
             
-            std::pair<bool, std::pair<bool, std::unique_ptr<TJob>>> result;
+            std::pair<bool, std::pair<bool, TJob>> result;
             bool& any_success = result.first;
             bool& pop_success = result.second.first;
-            std::unique_ptr<TJob>& pop_result = result.second.second;
+            TJob& pop_result = result.second.second;
             
             if (!deque_.empty()) {
                 any_success = true;
@@ -64,18 +63,9 @@ namespace bkp {
             else if(is_adding_complete_) {
                 any_success = true;
                 pop_success = false;
-                pop_result = nullptr; // unnecessary but clearer
             }
             else {
                 any_success = false;
-                
-                // This should never really be an issue (if any_success is false,
-                // you shouldn't assume the other two results have anything meaningful)
-                // but maybe it will help someone with debugging.
-                #ifdef NDEBUG
-                pop_success = false;
-                pop_result = nullptr;
-                #endif
             }
             
             return result;
@@ -84,7 +74,8 @@ namespace bkp {
     public:
         
         JobQueue() :
-        is_adding_complete_(false)
+        is_adding_complete_(false),
+        deque_mutex_()
         { }
         
         // Attempt to pop a value from the queue. If it succeeds, it will
@@ -94,10 +85,10 @@ namespace bkp {
         // This will typically only fail if CompleteAdding() was called before
         // this call (immediate fail), or if it is called after this call without any new
         // items being added beforehand (possibly delayed fail).
-        std::pair<bool, std::unique_ptr<TJob>> TryPopFront() {
+        std::pair<bool, TJob> TryPopFront() {
             
             // the thing we'll be returning
-            std::pair<bool, std::unique_ptr<TJob>> result;
+            std::pair<bool, TJob> result;
             
             // if TryPopFrontHelper succeeds it will set any_success
             // to true and populate result from above. Otherwise it
@@ -130,7 +121,22 @@ namespace bkp {
         // Push an item onto the queue. This call contains an assertion to check
         // that CompleteAdding() has not been called. Barring that assertion failure
         // however, this call will never fail.
-        void PushBack(std::unique_ptr<TJob> job) {
+        void CopyBack(TJob job) {
+            {
+                std::unique_lock<std::mutex> deque_lock(deque_mutex_);
+                assert(!is_adding_complete_); // calling PushBack after calling CompleteAdding is an error
+                deque_.push_back(job);
+                
+            } // release deque_lock
+            
+            // notify one waiting read thread that it can stop
+            deque_cv_.notify_one();
+        }
+        
+        // Push an item onto the queue. This call contains an assertion to check
+        // that CompleteAdding() has not been called. Barring that assertion failure
+        // however, this call will never fail.
+        void MoveBack(TJob&& job) {
             {
                 std::unique_lock<std::mutex> deque_lock(deque_mutex_);
                 assert(!is_adding_complete_); // calling PushBack after calling CompleteAdding is an error

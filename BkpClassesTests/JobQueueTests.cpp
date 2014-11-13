@@ -8,6 +8,7 @@
 
 #include <gtest/gtest.h>
 #include <thread>
+#include <boost/iterator/counting_iterator.hpp>
 
 #include "JobQueue.h"
 #include "OperationCounter.h"
@@ -17,14 +18,14 @@ TEST(JobQueueTests, Basic) {
     const int N_JOBS = 10000;
     const int N_CONSUMERS = 10;
     
-    bkp::JobQueue<bkp::OperationCounter> job_queue;
+    bkp::JobQueue<std::unique_ptr<bkp::OperationCounter>> job_queue;
     std::vector<bool> is_consumed(N_JOBS, false);
     std::atomic<int> consumed_count(0);
     std::vector<bool> consumer_thread_exited(N_CONSUMERS, false);
     
     auto producer_fn = [&job_queue]() {
         for (int i=0; i<N_JOBS; ++i) {
-            job_queue.PushBack(std::unique_ptr<bkp::OperationCounter>(new bkp::OperationCounter(i)));
+            job_queue.MoveBack(std::unique_ptr<bkp::OperationCounter>(new bkp::OperationCounter(i)));
         }
         job_queue.CompleteAdding();
     };
@@ -75,7 +76,7 @@ TEST(JobQueueTests, Basic2) {
     const int N_JOBS = 10000;
     const int N_CONSUMERS = 10;
     
-    bkp::JobQueue<bkp::OperationCounter> job_queue;
+    bkp::JobQueue<std::unique_ptr<bkp::OperationCounter>> job_queue;
     std::vector<bool> is_consumed(N_JOBS, false);
     std::atomic<int> consumed_count(0);
     std::vector<bool> consumer_thread_exited(N_CONSUMERS, false);
@@ -83,7 +84,7 @@ TEST(JobQueueTests, Basic2) {
     // This is the main difference between this test and 'Basic' - make sure the job
     // queue is filled prior to starting.
     for (int i=0; i<N_JOBS; ++i) {
-        job_queue.PushBack(std::unique_ptr<bkp::OperationCounter>(new bkp::OperationCounter(i)));
+        job_queue.MoveBack(std::unique_ptr<bkp::OperationCounter>(new bkp::OperationCounter(i)));
     }
     job_queue.CompleteAdding();
     
@@ -128,7 +129,7 @@ TEST(JobQueueTests, Basic2) {
 TEST(JobQueueTests, TryPopFrontWaitsCorrectly) {
     
     std::atomic<bool> got_value(false);
-    bkp::JobQueue<bkp::OperationCounter> job_queue;
+    bkp::JobQueue<std::unique_ptr<bkp::OperationCounter>> job_queue;
     
     auto consumer_fn = [&got_value, &job_queue]() {
         auto value = job_queue.TryPopFront();
@@ -143,9 +144,101 @@ TEST(JobQueueTests, TryPopFrontWaitsCorrectly) {
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
     EXPECT_EQ(false, got_value);
     
-    job_queue.PushBack(std::unique_ptr<bkp::OperationCounter>(new bkp::OperationCounter(1)));
+    job_queue.MoveBack(std::unique_ptr<bkp::OperationCounter>(new bkp::OperationCounter(1)));
     
     consumer_thread.join();
     EXPECT_EQ(true, got_value);
 }
 
+TEST(JobQueueTests, RawPointers2) {
+    
+    const int N_JOBS = 10000;
+    const int N_CONSUMERS = 10;
+    std::vector<bkp::OperationCounter> ops(boost::counting_iterator<int>(0),
+                                           boost::counting_iterator<int>(N_JOBS));
+    std::vector<bool> has_been_seen(N_JOBS, false);
+    
+    bkp::JobQueue<bkp::OperationCounter*> jobs;
+    for (auto& op : ops) {
+        jobs.CopyBack(&op);
+    }
+    jobs.CompleteAdding();
+    
+    auto consumer_fn = [&jobs, &has_been_seen]() {
+        bool success;
+        bkp::OperationCounter* job;
+        auto tied_result = std::tie(success, job);
+        
+        while (!jobs.IsComplete()) {
+            tied_result = jobs.TryPopFront();
+            if (success) {
+                has_been_seen[job->data] = true;
+            }
+        }
+    };
+    
+    for (bool b : has_been_seen) {
+        ASSERT_EQ(false, b);
+    }
+    
+    std::vector<std::thread> consumer_threads;
+    for (int i=0; i<N_CONSUMERS; ++i) {
+        consumer_threads.push_back(std::thread(consumer_fn));
+    }
+    
+    for (auto& thread : consumer_threads) {
+        thread.join();
+    }
+    
+    for (bool b : has_been_seen) {
+        EXPECT_EQ(true, b);
+    }
+    EXPECT_EQ(true, jobs.IsComplete());
+    EXPECT_EQ(N_JOBS, ops.size());
+}
+
+TEST(JobQueueTests, RawPointers) {
+    
+    const int N_JOBS = 10000;
+    const int N_CONSUMERS = 1;
+    std::vector<bkp::OperationCounter> ops(boost::counting_iterator<int>(0),
+                                           boost::counting_iterator<int>(N_JOBS));
+    std::vector<bool> has_been_seen(N_JOBS, false);
+    
+    bkp::JobQueue<bkp::OperationCounter*> jobs;
+    
+    auto consumer_fn = [&jobs, &has_been_seen]() {
+        bool success;
+        bkp::OperationCounter* job;
+        auto tied_result = std::tie(success, job);
+        
+        while (!jobs.IsComplete()) {
+            tied_result = jobs.TryPopFront();
+            if (success) {
+                has_been_seen[job->data] = true;
+            }
+        }
+    };
+    
+    for (bool b : has_been_seen) {
+        ASSERT_EQ(false, b);
+    }
+    
+    std::vector<std::thread> consumer_threads;
+    for (int i=0; i<N_CONSUMERS; ++i) {
+        consumer_threads.push_back(std::thread(consumer_fn));
+    }
+    
+    for (auto& op : ops) {
+        jobs.CopyBack(&op);
+    }
+    jobs.CompleteAdding();
+    
+    for (auto& thread : consumer_threads) {
+        thread.join();
+    }
+    
+    for (bool b : has_been_seen) {
+        ASSERT_EQ(true, b);
+    }
+}

@@ -323,11 +323,11 @@
 			children = (
 				3DB6729B1A0AE8A500967801 /* ExclusiveWriterTests.cpp */,
 				3D9250B81A07FC3A003255BF /* FileWrapperTests.cpp */,
+				3DC1D0111A0D862D00FB6DCB /* JobQueueTests.cpp */,
 				3D9250C31A07FC8B003255BF /* main.cpp */,
 				3D9250BA1A07FC3A003255BF /* MaskedVectorTests.cpp */,
 				3D9250BB1A07FC3A003255BF /* RandUtilsTests.cpp */,
 				3D9250BC1A07FC3A003255BF /* testfile.txt */,
-				3DC1D0111A0D862D00FB6DCB /* JobQueueTests.cpp */,
 			);
 			path = BkpClassesTests;
 			sourceTree = "<group>";
@@ -416,12 +416,12 @@
 				3DB672981A0AD25600967801 /* ExclusiveWriter.h */,
 				3D94517D1A01A23E00F73BCA /* FileWrapper.cpp */,
 				3D94517E1A01A23E00F73BCA /* FileWrapper.h */,
+				3DC1D00E1A0D5F0800FB6DCB /* JobQueue.h */,
 				3D6DE68F19F16BE500B87BDF /* MaskedVector.h */,
 				3D98090E19E9A5F40016267F /* OperationCounter.cpp */,
 				3D98090F19E9A5F40016267F /* OperationCounter.h */,
 				3D9BE35619EF0FCF00536407 /* RandUtils.cpp */,
 				3D9BE35719EF0FCF00536407 /* RandUtils.h */,
-				3DC1D00E1A0D5F0800FB6DCB /* JobQueue.h */,
 			);
 			path = BkpClasses;
 			sourceTree = "<group>";
