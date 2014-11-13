@@ -14,6 +14,8 @@ const int NUM_FEATURES = hrf::HiggsCsvRow::NUM_FEATURES;
 
 TEST(MockTests, MakeDataHelperFnTest) {
     
+    // test that unspecified data will be filled in
+    // with 0's
     auto data1 = mock::PartialData({1.0, 2.0, 3.0});
     decltype(data1) expected1({
         1.0, 2.0, 3.0, 0.0, 0.0,
@@ -27,6 +29,7 @@ TEST(MockTests, MakeDataHelperFnTest) {
         EXPECT_EQ(expected1[i], data1[i]);
     }
     
+    // test that 'overspecified' data is ignored
     auto data2 = mock::PartialData({
         1.0, 2.0, 3.0, 4.0, 5.0,
         6.0, 7.0, 8.0, 9.0, 10.0,

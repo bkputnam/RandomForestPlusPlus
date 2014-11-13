@@ -12,6 +12,7 @@
 #include "Mock.h"
 #include "TreeTrainer.h"
 
+// helper method: factored out because this was repeated a couple different times
 bkp::MaskedVector<const hrf::HiggsTrainingCsvRow> DefaultTrainingSet() {
     std::vector<const hrf::HiggsTrainingCsvRow> data_vector({
         hrf::HiggsTrainingCsvRow(1, mock::PartialDataRandFill({1.0, 10.0, 100.0}),
@@ -28,6 +29,8 @@ bkp::MaskedVector<const hrf::HiggsTrainingCsvRow> DefaultTrainingSet() {
     return bkp::MaskedVector<const hrf::HiggsTrainingCsvRow>(std::move(data_vector));
 }
 
+// Really basic tests: make sure the TreeCreator makes the right amount of trees,
+// check that they have been trained by ensuring that root Trees have child Trees.
 TEST(TreeCreatorTests, Basic) {
     
     auto training_set = DefaultTrainingSet();
@@ -48,6 +51,9 @@ TEST(TreeCreatorTests, Basic) {
     }
 }
 
+// Essentially the same as Basic, but testing the MakeTreesParallel method.
+// A little bit of extra prime number shenanigans to make the test more
+// robust.
 TEST(TreeCreatorTests, Parallel) {
     
     auto training_set = DefaultTrainingSet();
@@ -59,7 +65,11 @@ TEST(TreeCreatorTests, Parallel) {
     // Make a large, prime number of trees. This is so that even if I change
     // the batch size later I'm guaranteed to hit the final-odd-sized-batch
     // logic (unless I make the batch size a multiple of LARGE_PRIME which
-    // seems unlikely).
+    // seems unlikely). For example if LARGE_PRIME is 2707 and the internal
+    // batch size is 100, we'll get 27 batches of 100 and one batch of 7.
+    // We just want to make sure that that one last batch isn't 0-sized or
+    // else the logic to create it won't get tested (it gets skipped entirely
+    // in that case).
     auto forest = tree_factory.MakeTreesParallel(LARGE_PRIME);
     
     ASSERT_NE(nullptr, forest.get());

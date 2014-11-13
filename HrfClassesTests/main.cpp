@@ -11,6 +11,7 @@
 
 #include "RandUtils.h"
 
+// Google Test boilerplate
 int main(int argc, char * argv[]) {
     
     bkp::random::Seed(0); // fix seed for reproduceable results (used in MockRows)

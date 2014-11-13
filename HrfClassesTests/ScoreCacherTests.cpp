@@ -12,6 +12,11 @@
 #include "ScoreCacher.h"
 #include "Mock.h"
 
+// Test that a ScoreCacher will correctly return the same thing
+// that the wrapped IScorer will. Also test that it caches
+// "correctly" in that if we pass a second row set it will still
+// return the cached result from the first set (this is "expected
+// bad behavior")
 TEST(ScoreCacherTests, IScorerTest) {
     
     std::unique_ptr<hrf::IScorer> scorer(new hrf::DummyScorer(10.0, 20.0));
@@ -36,6 +41,10 @@ TEST(ScoreCacherTests, IScorerTest) {
     EXPECT_EQ(3, result_2.b_scores_.size());
 }
 
+// Test the case where we don't pass an IScorer to the ScoreCacher,
+// but instead pass a ScoreResult directly. Like IScorerTest,
+// also test that the result is being cached by ensuring that
+// it is "incorrectly returned for a different row set.
 TEST(ScoreCacherTests, ScoreResultTest) {
     
     const int N_ROWS = 5;
@@ -61,7 +70,7 @@ TEST(ScoreCacherTests, ScoreResultTest) {
         EXPECT_EQ(i * -100.0 + 200.0, result.b_scores_[i]);
     }
     
-    // againt checking for bogus sizes to ensure caching
+    // again checking for bogus sizes to ensure caching
     auto result_2 = cacher.Score(mock::MockRows(N_ROWS * 2));
     EXPECT_EQ(N_ROWS, result.s_scores_.size());
     EXPECT_EQ(N_ROWS, result.b_scores_.size());

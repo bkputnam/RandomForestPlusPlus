@@ -25,6 +25,7 @@ TEST(TreeTests, Volume) {
     EXPECT_EQ(expected_volume, t.volume_);
 }
 
+// test that leaf trees accept scores properly
 TEST(TreeTests, LeafTest) {
     
     std::vector<int> target_features({0,1,2});
@@ -46,6 +47,9 @@ TEST(TreeTests, LeafTest) {
     }
 }
 
+// manually split tree, set scores of children, test that
+// scored-data is sent to correct child and recieves correct
+// score
 TEST(TreeTests, SplitTest) {
     
     hrf::Tree t(std::vector<int>({0, 1, 2}),

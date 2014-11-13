@@ -11,6 +11,7 @@
 
 namespace mock {
     
+    // private helper fn: create NUM_FEATURES random data points
     std::array<double, hrf::HiggsCsvRow::NUM_FEATURES> RandData() {
         return bkp::random::RandDouble<hrf::HiggsCsvRow::NUM_FEATURES>(10.0, 20.0);
     }

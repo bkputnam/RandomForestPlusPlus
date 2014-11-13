@@ -13,6 +13,8 @@
 #include "ScoreAverager.h"
 #include "Mock.h"
 
+// helper fn: removes a lot of the boilerplate associated with making a
+// std::unique_ptr<ScoreCacher>
 std::unique_ptr<hrf::ScoreCacher> make_scorer(std::initializer_list<double> s_scores,
                                               std::initializer_list<double> b_scores)
 {
@@ -28,10 +30,15 @@ std::unique_ptr<hrf::ScoreCacher> make_scorer(std::initializer_list<double> s_sc
     );
 }
 
+// helper fn: compute the gmean of 3 variables, using the 'normal'
+// formula instead of the sum-of-logs one
 double gmean(double a, double b, double c) {
     return std::pow(a * b * c, 1.0 / 3.0);
 }
 
+// Basic test; compute some expected geometric means and make
+// sure the ScoreAverager computes the same thing, to within
+// rounding error
 TEST(ScoreAveragerTests, Basic) {
     
     const int N_ROWS = 3;
@@ -42,7 +49,9 @@ TEST(ScoreAveragerTests, Basic) {
     auto score_3 = make_scorer({3.14, 1.59, 2.65},
                                {3.58, 9.79, 1.23});
     
-    auto gmeans = make_scorer(
+    // compute our expected values, and store them in a
+    // ScoreResult for ease of comparison
+    auto expected_gmeans = make_scorer(
         {
             gmean(1.0, 2.0, 3.14),
             gmean(1.5, 4.0, 1.59),
@@ -59,19 +68,24 @@ TEST(ScoreAveragerTests, Basic) {
     models.push_back(std::move(score_1));
     models.push_back(std::move(score_2));
     models.push_back(std::move(score_3));
-    std::unique_ptr<const std::vector<std::unique_ptr<hrf::IScorer>>> models_ptr(new std::vector<std::unique_ptr<hrf::IScorer>>(std::move(models)));
+    
+    std::unique_ptr<const std::vector<std::unique_ptr<hrf::IScorer>>> models_ptr(
+        new std::vector<std::unique_ptr<hrf::IScorer>>(std::move(models))
+    );
     
     hrf::ScoreAverager averager(std::move(models_ptr));
     
-    auto result = averager.Score(mock::MockRows(N_ROWS));
+    auto result = averager.Score(mock::MockRows(N_ROWS), false);
     
     for (int i=0; i<N_ROWS; ++i) {
-        EXPECT_DOUBLE_EQ(gmeans.s_scores_[i], result.s_scores_[i]);
+        EXPECT_DOUBLE_EQ(expected_gmeans.s_scores_[i], result.s_scores_[i]);
+        EXPECT_DOUBLE_EQ(expected_gmeans.b_scores_[i], result.b_scores_[i]);
     }
 }
 
-
-
+// The only difference between this and the Basic test is that this one
+// passes true to the 'parallel' parameter, which should invoke the parallel
+// version of the gmean algorithm.
 TEST(ScoreAveragerTests, BasicParallel) {
     
     const int N_ROWS = 3;
@@ -82,7 +96,9 @@ TEST(ScoreAveragerTests, BasicParallel) {
     auto score_3 = make_scorer({3.14, 1.59, 2.65},
                                {3.58, 9.79, 1.23});
     
-    auto gmeans = make_scorer(
+    // compute our expected values, and store them in a
+    // ScoreResult for ease of comparison
+    auto expected_gmeans = make_scorer(
                               {
                                   gmean(1.0, 2.0, 3.14),
                                   gmean(1.5, 4.0, 1.59),
@@ -99,13 +115,17 @@ TEST(ScoreAveragerTests, BasicParallel) {
     models.push_back(std::move(score_1));
     models.push_back(std::move(score_2));
     models.push_back(std::move(score_3));
-    std::unique_ptr<const std::vector<std::unique_ptr<hrf::IScorer>>> models_ptr(new std::vector<std::unique_ptr<hrf::IScorer>>(std::move(models)));
+    
+    std::unique_ptr<const std::vector<std::unique_ptr<hrf::IScorer>>> models_ptr(
+        new std::vector<std::unique_ptr<hrf::IScorer>>(std::move(models))
+    );
     
     hrf::ScoreAverager averager(std::move(models_ptr));
     
     auto result = averager.Score(mock::MockRows(N_ROWS), true);
     
     for (int i=0; i<N_ROWS; ++i) {
-        EXPECT_DOUBLE_EQ(gmeans.s_scores_[i], result.s_scores_[i]);
+        EXPECT_DOUBLE_EQ(expected_gmeans.s_scores_[i], result.s_scores_[i]);
+        EXPECT_DOUBLE_EQ(expected_gmeans.b_scores_[i], result.b_scores_[i]);
     }
 }

@@ -11,15 +11,26 @@
 #include "TreeTrainer.h"
 #include "Mock.h"
 
+
 TEST(TreeTrainerTests, Entropy) {
     
+    // trivial tests - all the same gives an entropy of 0,
+    // evenly split between two choices gives an entropy
+    // of 1 bit.
     EXPECT_EQ(0.0, hrf::trainer::CalcEntropy(0, 1));
     EXPECT_EQ(1.0, hrf::trainer::CalcEntropy(1, 1));
+    
+    // less trivial example; 3-5 split over two choices.
+    // expected answer comes from entering "11100000"
+    // into this web site:
+    // http://www.shannonentropy.netmark.pl/calculate
     EXPECT_NEAR(0.95443,
                 hrf::trainer::CalcEntropy(3, 5),
                 0.000005);
 }
 
+// test that FindBestSplitDim actually finds the best split dim
+// (we've rigged it to be dim=0 in this case)
 TEST(TreeTrainerTests, FindBestSplitDim) {
     
     std::vector<const hrf::HiggsTrainingCsvRow> data_vector({
@@ -52,7 +63,7 @@ TEST(TreeTrainerTests, FindBestSplitDim) {
 }
 
 TEST(TreeTrainerTests, FindBestRandomSplit) {
-    // I have no idea how to test this function. Fortunately, it's pretty
+    // TODO - I have no idea how to test this function. Fortunately, it's pretty
     // simple (pick a random local dim) and farms most of its work off to
     // FindBestSplit which is quite testable.
 }
@@ -163,16 +174,15 @@ TEST(TreeTrainerTests, TrainBestDim) {
     }
 }
 
+// This test is a tweaked copy of TrainBestDim
+// It is made to catch a bug where we were using a local dim
+// index in hrf::Tree when we should have been converting to
+// a global index. The bug never manifested itself in tests
+// because I always used {0, 1, 2} as the target_features_
+// which mean that the local dim was always the same as the
+// global dim. This test shuffles the local dims to ensure
+// the bug presents itself, if present.
 TEST(TreeTrainerTests, GlobalLocalDimSwap) {
-    
-    // This test is a tweaked copy of TrainBestDim
-    // It is made to catch a bug where we were using a local dim
-    // index in hrf::Tree when we should have been converting to
-    // a global index. The bug never manifested itself in tests
-    // because I always used {0, 1, 2} as the target_features_
-    // which mean that the local dim was always the same as the
-    // global dim. This test shuffles the local dims to ensure
-    // the bug presents itself, if present.
     
     std::vector<const hrf::HiggsTrainingCsvRow> data_vector({
         hrf::HiggsTrainingCsvRow(1, mock::PartialData({0.1, 10.0, 100.0}),
