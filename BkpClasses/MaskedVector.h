@@ -176,9 +176,11 @@ namespace bkp {
             auto filtered_size = std::count_if(filter.begin(), filter.end(), [](bool b) { return b; });
             PVector resultPtrs(filtered_size);
             
+            int result_index = 0;
             for (int i=0; i<size; ++i) {
                 if (filter[i]) {
-                    resultPtrs[i] = masked_data_[i];
+                    resultPtrs[result_index] = masked_data_[i];
+                    ++result_index;
                 }
             }
             
